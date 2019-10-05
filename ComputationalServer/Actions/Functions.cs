@@ -17,17 +17,16 @@ namespace ComputationalServer.Actions
             }
             return P = (q * W.Mu) / (4.0 * Math.PI * W.H0 * W.K) * (W.Ksi + IntegralCalculator.EIntegral(arg));
         }
-        public static void GetTimesAndPressures(List<Models.Well> wells, out List<double> times, out List<double> pressures, out List<double> indexes)
+
+        public static void GetTimesAndPressures(List<Models.Well> wells, out List<double> times, out List<double> pressures, out List<int> indexes)
         {
             times = new List<double>();
             pressures= new List<double>();
-            indexes = new List<double>();
+            indexes = new List<int>();
             if (wells.Count == 1)
             {
                 List<double> tOne = new List<double>(wells[0].N);
                 List<double> pOne = new List<double>(wells[0].N);
-                int index = 0;
-                bool flag = false;
                 double step = (wells[0].Time2- wells[0].Time1) / (wells[0].N - 1);
                 for (int i = 0; i < wells[0].N; i++)
                 {
@@ -37,11 +36,11 @@ namespace ComputationalServer.Actions
                 {
                     if (tOne[i] == 0.0)
                     {
-                        pOne.Add(0);
+                        pOne.Add(0 + wells[0].P0);
                     }
                     else
                     {
-                        pOne.Add(Pressure(wells[0], wells[0].Q, tOne[i]));
+                        pOne.Add(Pressure(wells[0], wells[0].Q, tOne[i]) + wells[0].P0);
                     }
                 }
                 pressures = pOne;
@@ -71,18 +70,18 @@ namespace ComputationalServer.Actions
                 {
                     if (times[i] == 0.0)
                     {
-                        pOne.Add(0.0);
+                        pOne.Add(0.0 + wells[0].P0);
                     }
                     else
                     {
-                        pOne.Add(Pressure(wells[0], wells[0].Q, times[i]));
+                        pOne.Add(Pressure(wells[0], wells[0].Q, times[i]) + wells[0].P0);
 
                         if ((times[i] >= wells[1].Time1) && (i >= wells[0].N))
                         {
                             counter1++;
                             {
                                 pTwo.Add(Pressure(wells[0], wells[0].Q, times[i])
-                                        + Pressure(wells[0], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1));
+                                        + Pressure(wells[0], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1) + wells[0].P0);
 
                             }
                         }
@@ -121,7 +120,6 @@ namespace ComputationalServer.Actions
                 times.RemoveAt(wells[0].N);        
             }
 
-
             if (wells.Count == 3)
             {
                 List<double> tOne = new List<double>(wells[0].N);
@@ -156,11 +154,11 @@ namespace ComputationalServer.Actions
                 {
                     if (times[i] == 0.0)
                     {
-                        pOne.Add(0.0);
+                        pOne.Add(0.0 + wells[0].P0);
                     }
                     else
                     {
-                        pOne.Add(Pressure(wells[0], wells[0].Q, times[i]));
+                        pOne.Add(Pressure(wells[0], wells[0].Q, times[i]) + wells[0].P0);
                         if (times[i] >= wells[1].Time1)
                         {
                             if (ind_flag1 == false)
@@ -170,7 +168,8 @@ namespace ComputationalServer.Actions
                             }
 
                             pTwo.Add(Pressure(wells[0],wells[0].Q, times[i])
-                                + Pressure(wells[1], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1));
+                                + Pressure(wells[1], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1) 
+                                + wells[0].P0);
                         }
                         if ((times[i] >= wells[2].Time1) && (i >= wells[1].N))
                         {
@@ -181,8 +180,8 @@ namespace ComputationalServer.Actions
                             }
                             pThree.Add(Pressure(wells[0], wells[0].Q, times[i])
                                   + Pressure(wells[1], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1)
-                                  + Pressure(wells[1], wells[2].Q - wells[1].Q, times[i] - wells[2].Time1));
-
+                                  + Pressure(wells[1], wells[2].Q - wells[1].Q, times[i] - wells[2].Time1)
+                                   + wells[0].P0);
                         }
                     }
                 }
@@ -210,21 +209,21 @@ namespace ComputationalServer.Actions
                 List<double> P2s = new List<double>((times.Count - 1)-(index2));
                 for (int i = 0; i < (index2 - index1); i++)
                 {
-                    T2f[i] = times[i + index1];
-                    P2f[i] = pTwo[i + index1];
+                    T2f.Add(times[i + index1]);
+                    P2f.Add(pTwo[i + index1]);
                 }
                 for (int i = 0; i != (times.Count - 1) - index2; i++)
                 {
-                    T2s[i] = times[i + index2];
-                    P2s[i] = pTwo[i + index2];
+                    T2s.Add(times[i + index2]);
+                    P2s.Add(pTwo[i + index2 - wells[0].N+1]);
                 }
 
                 List<double> T3new = new List<double>(times.Count - 1 - index2);
                 List<double> P3new = new List<double>(times.Count - 1 - index2);
                 for (int i = 0; i != times.Count - (index2 + 1); i++)
                 {
-                    T3new[i] = times[i + index2];
-                    P3new[i] = pThree[i + index2];
+                    T3new.Add(times[i + index2]);
+                    P3new.Add(pThree[i]);
                 }
 
                 
@@ -235,12 +234,138 @@ namespace ComputationalServer.Actions
                 indexes.Add(pressures.Count);
                 pressures.AddRange(P3new);
                 pressures.RemoveAt(wells[0].N + wells[1].N - 1);         
-                indexes.Add(pressures.size());                                   
+                indexes.Add(pressures.Count);                                   
                 times.RemoveAt(wells[0].N);                                     
                 times.RemoveAt(wells[0].N + wells[1].N - 1);             
                 
             }
 
+        }
+
+        #region Prepare slae
+        public static void PrepareEqPressures(int count, List<double> pressures, List<int> indexes, out List<double> eqPressures, double P0)
+        {
+            eqPressures = new List<double>();
+            switch(count)
+            {
+                case 1:
+                    for (int i = 0; i != pressures.Count; i++)
+                        eqPressures.Add(pressures[pressures.Count - 1] - P0);
+                    break;
+                case 2:
+                    for (int i = 0; i != indexes[0]; i++)
+                        eqPressures.Add(pressures[indexes[0] - 1] - P0);
+                    for (int i = indexes[0]; i != pressures.Count; i++)
+                        eqPressures.Add(pressures[indexes[1] - 1] - P0);
+                    break;
+                case 3:
+                    for (int i = 0; i != indexes[0]; i++)
+                        eqPressures.Add(pressures[indexes[0] - 1] - P0);
+                    for (int i = indexes[0]; i != indexes[1]; i++)
+                        eqPressures.Add(pressures[indexes[1] - 1] - P0);
+                    for (int i = indexes[1]; i != indexes[2]; i++)
+                        eqPressures.Add(pressures[indexes[2] - 1] - P0);
+                    break;
+            }
+            eqPressures.RemoveAt(0);
+        }
+
+        public static void PrepareCoefs(List<double> times, List<Models.Well> wells,  out List<List<double>> coefs)
+        {
+            coefs = new List<List<double>>(times.Count-1);
+            for (int i = 0; i < times.Count-1; i++)
+                coefs.Add(new List<double>());  
+            int n = 1;
+            for (int i = 0; i != times.Count-1; i++)
+            {
+                int k = 1;
+                for (int j = 0; j != times.Count-1; j++)
+                {
+                    if (k <= n)
+                    {
+                        double E1, E2, arg1, arg2;
+                        arg1 = Math.Pow(wells[0].Rs, 2) * 1.0 / (4 * wells[0].Kappa * (times[n] - times[k - 1]));
+                        if (k == n)
+                        {
+                            arg2 = 0.0;
+                        }
+                        else
+                        {
+                            arg2 = Math.Pow(wells[0].Rs, 2) * 1.0 / (4 * wells[0].Kappa * (times[n] - times[k]));
+                        }
+                        if (arg1 < 1)
+                        {
+                            E1 = IntegralCalculator.PolyApproxExpIntegral2(arg1);
+                        }
+                        else
+                        {
+                            E1 = IntegralCalculator.PolyApproxExpIntegral1(arg1);
+                        }
+                        if (k == n)
+                        {
+                            E1 = E1 + wells[0].Ksi;
+                        }
+                        if ((arg2 < 1) && (arg2 > 0.0))
+                        {
+                            E2 = IntegralCalculator.PolyApproxExpIntegral2(arg2);
+                        }
+                        else
+                        {
+                            E2 = 0;
+                        }
+                        coefs[i].Add(((wells[0].Mu * 1.0) / (4.0 * Math.PI * wells[0].K * wells[0].H0)) * (E1 - E2));
+                    }
+                    else
+                    {
+                        coefs[i].Add(0);
+                    }
+                    k++;
+                }
+                n++;
+            }
+        }
+        #endregion
+
+        #region SLAE solve method
+        public static void GaussSeidel(List<List<double>> A, List<double> B, List<double> X)
+        {
+            List<double> prev = new List<double>();
+            do
+            {
+                prev = X.ToList();
+                for (int i = 0; i < X.Count; i++)
+                {
+                    double var = 0;
+                    for (int j = 0; j < i; j++)
+                        var += (A[i][j] * X[j]);
+                    for (int j = i + 1; j < X.Count; j++)
+                        var += (A[i][j] * prev[j]);
+                    X[i] = (B[i] - var) / A[i][i];
+                }
+            }
+            while (!Converge(X, prev));
+        }
+            
+        private static bool Converge(List<double> xk, List<double> xkp)
+        {
+            double eps = 0.000001;
+            double norm = 0;
+            for (int i = 0; i < xk.Count; i++)
+                norm += (xk[i] - xkp[i]) * (xk[i] - xkp[i]);
+            return (Math.Sqrt(norm) < eps);
+        }
+        #endregion
+
+        public static void GetConsumtions(List<double> times, List<Models.Well> wells, int count, List<double> pressures, List<int> indexes, out List<double> consumptions)
+        {
+            consumptions = new List<double>();
+            for (int i = 0; i < times.Count-1; i++)
+                consumptions.Add(0);
+            List<List<double>> coefs;
+            List<double> eqPressures;
+            PrepareEqPressures(count, pressures, indexes, out eqPressures);
+            PrepareCoefs(times, wells, out coefs);
+            GaussSeidel(coefs, eqPressures, consumptions);
         }
     }
 }
