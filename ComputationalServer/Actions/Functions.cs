@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComputationalServer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,11 +19,13 @@ namespace ComputationalServer.Actions
             return P = (q * W.Mu) / (4.0 * Math.PI * W.H0 * W.K) * (W.Ksi + IntegralCalculator.EIntegral(arg));
         }
 
-        public static void GetTimesAndPressures(List<Models.Well> wells, out List<double> times, out List<double> pressures, out List<int> indexes)
+        public static void GetTimesAndPressures(List<Models.Well> wells, out List<double> times, 
+            out List<double> pressures, out List<int> indexes, out PressuresAndTimes pressuresAndTimes)
         {
             times = new List<double>();
             pressures= new List<double>();
             indexes = new List<int>();
+            pressuresAndTimes = new PressuresAndTimes();
             if (wells.Count == 1)
             {
                 List<double> tOne = new List<double>(wells[0].N);
@@ -44,7 +47,9 @@ namespace ComputationalServer.Actions
                     }
                 }
                 pressures = pOne;
-                times = tOne;               
+                times = tOne;
+                pressuresAndTimes.Pressures1= pressures;
+                pressuresAndTimes.Times1=times;
             }
 
             if (wells.Count == 2)
@@ -117,7 +122,14 @@ namespace ComputationalServer.Actions
                 pressures.AddRange(P2new);
                 pressures.RemoveAt(wells[0].N);
                 indexes.Add(pressures.Count);
-                times.RemoveAt(wells[0].N);        
+                times.RemoveAt(wells[0].N);
+
+                pressuresAndTimes.Pressures1f=P1f;
+                pressuresAndTimes.Times1f    =T1f;
+                pressuresAndTimes.Pressures1s=P1s;
+                pressuresAndTimes.Times1s    =T1s;
+                pressuresAndTimes.Pressures2 =P2new;
+                pressuresAndTimes.Times2     =T2new;
             }
 
             if (wells.Count == 3)
@@ -210,14 +222,13 @@ namespace ComputationalServer.Actions
                 for (int i = 0; i < (index2 - index1); i++)
                 {
                     T2f.Add(times[i + index1]);
-                    P2f.Add(pTwo[i + index1]);
+                    P2f.Add(pTwo[i]);
                 }
                 for (int i = 0; i != (times.Count - 1) - index2; i++)
                 {
                     T2s.Add(times[i + index2]);
                     P2s.Add(pTwo[i + index2 - wells[0].N+1]);
                 }
-
                 List<double> T3new = new List<double>(times.Count - 1 - index2);
                 List<double> P3new = new List<double>(times.Count - 1 - index2);
                 for (int i = 0; i != times.Count - (index2 + 1); i++)
@@ -236,8 +247,18 @@ namespace ComputationalServer.Actions
                 pressures.RemoveAt(wells[0].N + wells[1].N - 1);         
                 indexes.Add(pressures.Count);                                   
                 times.RemoveAt(wells[0].N);                                     
-                times.RemoveAt(wells[0].N + wells[1].N - 1);             
-                
+                times.RemoveAt(wells[0].N + wells[1].N - 1);
+
+                pressuresAndTimes.Pressures1f=P1f;
+                pressuresAndTimes.Times1f    =T1f;
+                pressuresAndTimes.Pressures1s=P1s;
+                pressuresAndTimes.Times1s    =T1s;
+                pressuresAndTimes.Pressures2f=P2f;
+                pressuresAndTimes.Times2f    =T2f;
+                pressuresAndTimes.Pressures2s=P2s;
+                pressuresAndTimes.Times2s    =T2s;
+                pressuresAndTimes.Pressures3 =P3new;
+                pressuresAndTimes.Times3     =T3new;
             }
 
         }
@@ -356,14 +377,14 @@ namespace ComputationalServer.Actions
         }
         #endregion
 
-        public static void GetConsumtions(List<double> times, List<Models.Well> wells, int count, List<double> pressures, List<int> indexes, out List<double> consumptions)
+        public static void GetConsumtions(List<double> times, List<Models.Well> wells, int count, List<double> pressures, List<int> indexes, out List<double> consumptions, double P0)
         {
             consumptions = new List<double>();
             for (int i = 0; i < times.Count-1; i++)
                 consumptions.Add(0);
             List<List<double>> coefs;
             List<double> eqPressures;
-            PrepareEqPressures(count, pressures, indexes, out eqPressures);
+            PrepareEqPressures(count, pressures, indexes, out eqPressures, P0);
             PrepareCoefs(times, wells, out coefs);
             GaussSeidel(coefs, eqPressures, consumptions);
         }

@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientDesktop"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:pr ="clr-namespace:ClientDesktop.Layouts"
+        xmlns:vms ="clr-namespace:ClientDesktop.ViewModels"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        Title="Dissertation" Height="800" Width="1200">
+    <Window.DataContext>
+        <vms:PlotViewModel/>
+    </Window.DataContext>
+    <Grid x:Name="MainGrid">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="518*"></ColumnDefinition>
+                <ColumnDefinition Width="675*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TabControl Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,-0.4,720.4" Grid.RowSpan="2">
+                <TabItem x:Name="PressureTI" Width="150" Height="50" Header="Pressure" FontSize="20"/>
+
+                <TabItem x:Name="ConsumptionTI" Width="150" Height="50" Header="Consumption" FontSize="20"/>
+
+            </TabControl>
+            <!--<oxy:Plot x:Name="PlotOxy" Title="{Binding Title}" Grid.Column="0" Grid.Row="1" Margin="0,0.4,1.4,316.4"  >
+                <oxy:Plot.Series >
+                    <oxy:LineSeries x:Name = "FirstLS" ItemsSource ="{Binding PressureTime1}" BorderBrush="Black" />
+                    -->
+            <!--<oxy:LineSeries x:Name = "FirstFLS" ItemsSource ="{Binding PressureTime1f}" BorderBrush="Black" />
+                    <oxy:LineSeries x:Name = "FirstSLS" ItemsSource ="{Binding PressureTime1s}" BorderBrush="Blue" />
+                    <oxy:LineSeries x:Name = "SecondLS"  ItemsSource ="{Binding PressureTime2}"  BorderBrush="Crimson"/>
+                    <oxy:LineSeries x:Name = "SecondFLS" ItemsSource ="{Binding PressureTime2f}" />
+                    <oxy:LineSeries x:Name = "SecondSLS" ItemsSource ="{Binding PressureTime2s}" />
+                    <oxy:LineSeries x:Name = "ThirdLS" ItemsSource ="{Binding PressureTime3}" />-->
+            <!--
+                </oxy:Plot.Series>
+            </oxy:Plot>-->
+            <oxy:PlotView x:Name="Plot" Model ="{Binding MyModel}"  Grid.Column="0" Grid.Row="1" Margin="0,0.4,1.4,316.4" />
+
+
+            <pr:PressureCalcLayout x:Name="Addition" Grid.Column="1" Grid.Row="1" Margin="2.6,0.6,9.6,316.8"/>
+            <Button x:Name="CalculatePressuresButton" Grid.Column="0" Grid.Row ="2" Grid.ColumnSpan="2" Margin="518,0.2,421.6,0.2" Click="CalculatePressuresButton_Click"/>
+            <Button x:Name="ClearButton" Grid.Column="1" Grid.Row ="2" Margin="258.6,0.2,162.6,0.2" Click="ClearButton_Click" >
+                <TextBlock Text="Clear"/>
+            </Button>
+        </Grid>
     </Grid>
+
+
 </Window>
