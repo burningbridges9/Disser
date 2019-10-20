@@ -24,6 +24,7 @@ namespace ClientDesktop
     {
         public static WellViewModel wellViewModel;
         public PlotViewModel plotViewModel;
+        public static List<Gradient> Gradients;
         public MainWindow()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
@@ -31,14 +32,11 @@ namespace ClientDesktop
             wellViewModel = new WellViewModel();
             plotViewModel = new PlotViewModel();
             this.DataContext = plotViewModel;
-
-           // PlotOxy.DataContext = plotViewModel;
         }
 
         private async void CalculatePressuresButton_Click(object sender, RoutedEventArgs e)
         {
             PressuresAndTimes pressuresAndTimes = await SendWellsForPressures();
-            IList<DataPoint> points = new List<DataPoint>();
             var model = new PlotModel { LegendSymbolLength = 24 };
             switch (wellViewModel.Wells.Count)
             {
@@ -157,7 +155,7 @@ namespace ClientDesktop
             WellsList wellsList = new WellsList { Wells = wellViewModel.Wells };
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
-            string apiUrl = "https://localhost:44308/api/values";
+            string apiUrl = "https://localhost:44308/api/values/pressures";
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
             var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
@@ -173,6 +171,59 @@ namespace ClientDesktop
         {
             plotViewModel.MyModel.Series.Clear();
             plotViewModel.MyModel.InvalidatePlot(true);
+            Clear();
+        }
+
+        private async void CalculateConsumptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConsumptionsAndTimes consumptionsAndTimes = await SendWellsForConsumptions();
+            var model = new PlotModel { LegendSymbolLength = 24 };
+            model.Series.Add(new LineSeries
+            {
+                Color = OxyColors.SkyBlue,
+                MarkerType = MarkerType.None,
+                MarkerStrokeThickness = 1.5
+            });
+            foreach (var pt in consumptionsAndTimes.Consumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+            {
+                (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 *24.0 * 3600.0));
+            }
+            model.Series.Add(new LineSeries
+            {
+                Color = OxyColors.Red,
+                MarkerType = MarkerType.None,
+                MarkerStrokeThickness = 1.5
+            });
+            foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+            {
+                (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+            }
+            plotViewModel.MyModel = model;
+        }
+
+        async Task<ConsumptionsAndTimes> SendWellsForConsumptions()
+        {
+            WellsList wellsList = new WellsList { Wells = wellViewModel.Wells };
+            var serializedProduct = JsonConvert.SerializeObject(wellsList);
+            HttpClient httpClient = new HttpClient();
+            string apiUrl = "https://localhost:44308/api/values";
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+            var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+            request.Content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");//CONTENT-TYPE header
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var res = await httpClient.PostAsync(apiUrl, content);
+            string responseBody = await res.Content.ReadAsStringAsync();
+            ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
+            return consumptionsAndTimes;
+        }
+
+        async void Clear()
+        {
+            HttpClient httpClient = new HttpClient();
+            string apiUrl = "https://localhost:44308/api/values";
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, apiUrl);
+            var res = await httpClient.DeleteAsync(apiUrl);
         }
     }
 }

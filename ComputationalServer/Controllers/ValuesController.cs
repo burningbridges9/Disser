@@ -13,7 +13,12 @@ namespace ComputationalServer.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        List<Models.Well> wells = new List<Models.Well>();
+        static List<Models.Well> wells              = new List<Models.Well>();
+        static List<double>      times              = new List<double>();
+        static List<double>      pressures          = new List<double>();
+        static List<double>      consumptions       = new List<double>();
+        static List<double>      staticConsumptions = new List<double>();
+        static List<int>         indexes            = new List<int>();
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -86,19 +91,32 @@ namespace ComputationalServer.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post(WellsList wellsList)
+        [Route("{pressures}")]
+        public IActionResult GetPressures(WellsList wellsList)
         {
             //Models.Well ws = JsonConvert.DeserializeObject<Models.Well>(value);
+            
             wells.AddRange(wellsList.Wells);
-            List<double> times;
-            List<double> pressures;
-            List<double> consumptions;
-            List<int> indexes;
+            
             PressuresAndTimes pressuresAndTimes;
             Actions.Functions.GetTimesAndPressures(wells, out times, out pressures, out indexes, out pressuresAndTimes);
             //Actions.Functions.GetConsumtions(times, wells, wells.Count, pressures, indexes, out consumptions, wells[0].P0);
 
             return new JsonResult(pressuresAndTimes);
+        }
+        [HttpPost]
+        public IActionResult GetConsumptions(WellsList wellsList)
+        {
+            //Models.Well ws = JsonConvert.DeserializeObject<Models.Well>(value);
+            //wells.AddRange(wellsList.Wells);
+
+            ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes();
+            //Actions.Functions.GetTimesAndPressures(wells, out times, out pressures, out indexes, out pressuresAndTimes);
+            Actions.Functions.GetConsumtions(times, wells, wells.Count, pressures, indexes, out consumptions, out staticConsumptions, wells[0].P0);
+            consumptionsAndTimes.Times = times;
+            consumptionsAndTimes.Consumptions = consumptions;
+            consumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            return new JsonResult(consumptionsAndTimes);
         }
 
         // PUT api/values/5
@@ -108,9 +126,16 @@ namespace ComputationalServer.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public IActionResult Delete()
         {
+            wells.Clear();
+            times.Clear();
+            pressures.Clear();
+            consumptions.Clear();
+            staticConsumptions.Clear();
+            indexes.Clear();
+            return Ok();
         }
     }
 }

@@ -377,9 +377,23 @@ namespace ComputationalServer.Actions
         }
         #endregion
 
-        public static void GetConsumtions(List<double> times, List<Models.Well> wells, int count, List<double> pressures, List<int> indexes, out List<double> consumptions, double P0)
+        public static void GetConsumtions(List<double> times, List<Models.Well> wells, int count, List<double> pressures, 
+            List<int> indexes, out List<double> consumptions, out List<double> staticConsumptions, double P0)
         {
             consumptions = new List<double>();
+            staticConsumptions = new List<double>();
+            for (int i = 0; i != indexes[0]; i++)
+            {
+                staticConsumptions.Add(wells[0].Q);
+            }
+            for (int i = indexes[0]; i < indexes[1] + 1; i++)
+            {
+                staticConsumptions.Add(wells[1].Q);
+            }
+            for (int i = indexes[1]; i < times.Count - 1; i++)
+            {
+                staticConsumptions.Add(wells[2].Q);
+            }
             for (int i = 0; i < times.Count-1; i++)
                 consumptions.Add(0);
             List<List<double>> coefs;
