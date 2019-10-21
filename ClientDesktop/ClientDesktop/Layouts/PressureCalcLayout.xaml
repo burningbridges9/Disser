@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="100*"></ColumnDefinition>
                 <ColumnDefinition Width="129*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="TextBoxQ"  Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+            <TextBox x:Name="TextBoxQ" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
             <TextBox x:Name="TextBoxP" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83"  />
             <TextBox x:Name="TextBoxP0" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
             <TextBox x:Name="TextBoxT1" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />

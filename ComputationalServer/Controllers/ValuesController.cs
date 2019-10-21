@@ -13,12 +13,13 @@ namespace ComputationalServer.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        static List<Models.Well> wells              = new List<Models.Well>();
+        static List<Well> wells              = new List<Well>();
         static List<double>      times              = new List<double>();
         static List<double>      pressures          = new List<double>();
         static List<double>      consumptions       = new List<double>();
         static List<double>      staticConsumptions = new List<double>();
         static List<int>         indexes            = new List<int>();
+        static List<Gradient> gradients = new List<Gradient>();
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -91,8 +92,8 @@ namespace ComputationalServer.Controllers
 
         // POST api/values
         [HttpPost]
-        [Route("{pressures}")]
-        public IActionResult GetPressures(WellsList wellsList)
+        [Route("pressures")]
+        public IActionResult GetPressures([FromBody] WellsList wellsList)
         {
             //Models.Well ws = JsonConvert.DeserializeObject<Models.Well>(value);
             
@@ -104,26 +105,102 @@ namespace ComputationalServer.Controllers
 
             return new JsonResult(pressuresAndTimes);
         }
+
         [HttpPost]
+        [Route("consumptions")]
         public IActionResult GetConsumptions(WellsList wellsList)
         {
-            //Models.Well ws = JsonConvert.DeserializeObject<Models.Well>(value);
-            //wells.AddRange(wellsList.Wells);
-
             ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes();
-            //Actions.Functions.GetTimesAndPressures(wells, out times, out pressures, out indexes, out pressuresAndTimes);
-            Actions.Functions.GetConsumtions(times, wells, wells.Count, pressures, indexes, out consumptions, out staticConsumptions, wells[0].P0);
+            Actions.Functions.GetConsumtions(times, wells, wells.Count, pressures, indexes, out consumptions, wells[0].P0);
+            List<double> staticConsumptions = new List<double>();
+            Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
             consumptionsAndTimes.Times = times;
             consumptionsAndTimes.Consumptions = consumptions;
             consumptionsAndTimes.StaticConsumptions = staticConsumptions;
             return new JsonResult(consumptionsAndTimes);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("gradient")]
+        public IActionResult GradientMethod([FromBody] Gradient gradient)
         {
+            List<Well> gradientWells = new List<Well>();
+            foreach (var v in wells)
+                gradientWells.Add(new Well
+                {
+                    
+                    Q = v.Q,
+                    P       = v.P ,
+                    P0      = v.P0 ,
+                    Time1   = v.Time1 ,
+                    Time2   = v.Time2 ,
+                    H0      = v.H0 ,
+                    K       = v.K ,
+                    Kappa   = v.Kappa ,
+                    Ksi     = v.Ksi ,
+                    Mu      = v.Mu ,
+                    Rs      = v.Rs ,
+                    Rw      = v.Rw ,
+                    N       = v.N ,
+                });
+            for (int i = 0; i < gradientWells.Count; i++)
+            {
+                gradientWells[i].K = gradient.ChangedK;
+                gradientWells[i].Kappa = gradient.ChangedKappa;
+                gradientWells[i].Ksi = gradient.ChangedKsi;
+                gradientWells[i].P0 = gradient.ChangedP0;
+            }
+            gradients.Add(gradient);
+            GradientAndConsumptions gradientAndConsumptions = new GradientAndConsumptions() { Gradient = gradient };
+            Actions.Functions.GetNextGradientIteration(gradient, gradientWells, times, pressures, indexes, out gradientAndConsumptions);
+            List<double> staticConsumptions = new List<double>();
+            Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
+            gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            return new JsonResult(gradientAndConsumptions);
         }
+
+        [HttpPost]
+        [Route("initialfmin")]
+        public IActionResult InitialFmin([FromBody] Gradient gradient)
+        {
+            List<Well> gradientWells = new List<Well>();
+            foreach (var v in wells)
+                gradientWells.Add(new Well
+                {
+
+                    Q = v.Q,
+                    P = v.P,
+                    P0 = v.P0,
+                    Time1 = v.Time1,
+                    Time2 = v.Time2,
+                    H0 = v.H0,
+                    K = v.K,
+                    Kappa = v.Kappa,
+                    Ksi = v.Ksi,
+                    Mu = v.Mu,
+                    Rs = v.Rs,
+                    Rw = v.Rw,
+                    N = v.N,
+                });
+            for (int i = 0; i < gradientWells.Count; i++)
+            {
+                gradientWells[i].K = gradient.ChangedK;
+                gradientWells[i].Kappa = gradient.ChangedKappa;
+                gradientWells[i].Ksi = gradient.ChangedKsi;
+                gradientWells[i].P0 = gradient.ChangedP0;
+            }
+            gradients.Add(gradient);
+            GradientAndConsumptions gradientAndConsumptions = new GradientAndConsumptions() { Gradient = gradient };
+            Actions.Functions.GetNextGradientIteration(gradient, gradientWells, times, pressures, indexes, out gradientAndConsumptions);
+            List<double> staticConsumptions = new List<double>();
+            Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
+            gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            return new JsonResult(gradientAndConsumptions);
+        }
+
+        
+
+        
 
         // DELETE api/values/5
         [HttpDelete]

@@ -20,10 +20,10 @@ namespace ClientDesktop.Models
         public double GradientKappa { get; set; }
         public double GradientKsi { get; set; }
         public double GradientP0 { get; set; }
-        public bool UsedK { get; set; }
-        public bool UsedKappa { get; set; }
-        public bool UsedKsi { get; set; }
-        public bool UsedP0 { get; set; }
+        public bool? UsedK { get; set; }
+        public bool? UsedKappa { get; set; }
+        public bool? UsedKsi { get; set; }
+        public bool? UsedP0 { get; set; }
         public double Lambda { get; set; }
         public double F { get; set; }
     }

@@ -21,59 +21,58 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="79*"></ColumnDefinition>
                 <ColumnDefinition Width="106*"></ColumnDefinition>
-                <ColumnDefinition Width="20*"></ColumnDefinition>
-                <ColumnDefinition Width="154*"></ColumnDefinition>
-                <ColumnDefinition Width="114*"></ColumnDefinition>
-                <ColumnDefinition Width="156*"></ColumnDefinition>
+                <ColumnDefinition Width="0"></ColumnDefinition>
+                <ColumnDefinition Width="110*"></ColumnDefinition>
+                <ColumnDefinition Width="120*"></ColumnDefinition>
+                <ColumnDefinition Width="110*"></ColumnDefinition>
                 <ColumnDefinition Width="130*"></ColumnDefinition>
-                <ColumnDefinition Width="18*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Fmin"                  Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"       />
-            <TextBox x:Name="Lambda" Text="0"       Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83" />
+            <TextBox x:Name="Fmin"   Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="F->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Lambda" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
-            <TextBox x:Name="gradK" HorizontalAlignment="Center"      Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="20" TextAlignment="Center"                 />
-            <TextBox x:Name="gradKappa" HorizontalAlignment="Center"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="20" TextAlignment="Center"                       />
-            <TextBox x:Name="gradKsi" HorizontalAlignment="Center"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="20" TextAlignment="Center"                 />
-            <TextBox x:Name="gradP0" HorizontalAlignment="Center"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="90" FontSize="20" TextAlignment="Center"              />
+            <TextBox x:Name="gradK" HorizontalAlignment="Center"      Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
+            <TextBox x:Name="gradKappa" HorizontalAlignment="Center"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"                       />
+            <TextBox x:Name="gradKsi" HorizontalAlignment="Center"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
+            <TextBox x:Name="gradP0" HorizontalAlignment="Center"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"              />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                          />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                     />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                        />
 
 
-            <TextBox x:Name="CurrentK"              Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-            <TextBox x:Name="CurrentKappa" Text="0" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83" />
-            <TextBox x:Name="CurrentKsi" Text="0"   Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-            <TextBox x:Name="CurrentP0" Text="0"    Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"       />
-            <TextBox x:Name="BeginK" Text="5"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-            <TextBox x:Name="BeginKappa" Text="4"   Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"      />
-            <TextBox x:Name="BeginKsi"  Text="10"   Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"   />
-            <TextBox x:Name="BeginP0" Text="1"      Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"       />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" Text="Cur.K = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                  />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Kappa = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Ksi = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"          />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="3" TextWrapping="Wrap" Text="Cur.P0 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"              />
+            <TextBox x:Name="CurrentK"              Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+            <TextBox x:Name="CurrentKappa"  Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
+            <TextBox x:Name="CurrentKsi"   Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+            <TextBox x:Name="CurrentP0"    Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="BeginK"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+            <TextBox x:Name="BeginKappa"    Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="110"      />
+            <TextBox x:Name="BeginKsi"     Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"   />
+            <TextBox x:Name="BeginP0"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="110"       />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" Text="Cur.K " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                  />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Kappa "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Ksi " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"          />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="3" TextWrapping="Wrap" Text="Cur.P0 " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"              />
 
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" Text="delta K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"              />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" Text="delta Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"         />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" Text="delta Ksi" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"            />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" Text="delta P0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"             />
 
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" Text="Beg.K = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"            />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Kappa = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"       />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Ksi = "     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="5" TextWrapping="Wrap" Text="Beg.P0 = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"         />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" Text="Beg.K "    VerticalAlignment="Center" Height="27" Width="114"    FontSize="20" TextAlignment="Center"            />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Kappa " VerticalAlignment="Center" Height="27" Width="114"   FontSize="20" TextAlignment="Center"       />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Ksi "     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="5" TextWrapping="Wrap" Text="Beg.P0 "    VerticalAlignment="Center" Height="27" Width="114"   FontSize="20" TextAlignment="Center"         />
 
-            <TextBox x:Name="deltaK" HorizontalAlignment="Center"      Grid.Row="0"     Grid.Column="4" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="20" TextAlignment="Center" />
-            <TextBox x:Name="deltaKappa" HorizontalAlignment="Center"  Grid.Row="1"     Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="20" TextAlignment="Center"                 />
-            <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2"     Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="20" TextAlignment="Center"          />
-            <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3"     Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="90" FontSize="20" TextAlignment="Center"       />
+            <TextBox x:Name="deltaK" HorizontalAlignment="Center"      Grid.Row="0" Text ="10^(-3) * K"    Grid.Column="4" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="110" FontSize="14" TextAlignment="Center" />
+            <TextBox x:Name="deltaKappa" HorizontalAlignment="Center"  Grid.Row="1" Text ="10^(-3) * Kappa"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="110" FontSize="14" TextAlignment="Center"                 />
+            <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2" Text ="10^(-3) * Ksi"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="110" FontSize="14" TextAlignment="Center"          />
+            <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3" Text ="10^(-3) * P0"    Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="110" FontSize="14" TextAlignment="Center"       />
 
-            <CheckBox  HorizontalAlignment="Left" Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0" Height="15"  Width="50"  />
-            <CheckBox  HorizontalAlignment="Left" Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Height="15"  Width="76"/>
-            <CheckBox  HorizontalAlignment="Left" Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Height="15"  Width="58"/>
-            <CheckBox  HorizontalAlignment="Left" Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Height="15"  Width="56"  />
+            <CheckBox x:Name="UsedK" HorizontalAlignment="Left" Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0" Height="15"  Width="50"  />
+            <CheckBox x:Name="UsedKappa" HorizontalAlignment="Left" Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Height="15"  Width="76"/>
+            <CheckBox x:Name="UsedKsi" HorizontalAlignment="Left" Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Height="15"  Width="58"/>
+            <CheckBox x:Name="UsedP0" HorizontalAlignment="Left" Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Height="15"  Width="56"  />
 
 
             <!--<Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Click="NextStep_Click"  >
