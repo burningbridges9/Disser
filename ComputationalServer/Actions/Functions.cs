@@ -548,6 +548,7 @@ namespace ComputationalServer.Actions
                                                        // подсчет градиента
             #endregion
 
+            #region gradient projections evaluation
             double gradientK =0;
             double gradientKappa = 0;
             double gradientKsi = 0;
@@ -653,6 +654,8 @@ namespace ComputationalServer.Actions
                     break;
                     #endregion
             }
+            #endregion
+
             Gradient nextGradient = new Gradient
             {
                 Lambda = gradient.Lambda,
@@ -661,231 +664,18 @@ namespace ComputationalServer.Actions
                 GradientKsi = gradientKsi,
                 GradientP0 = gradientP0
             };
-            // подсчет корректного шага из условия колчиество символов (k|kappa|ksi + delta)+grad(k|kappa|ksi)
 
+            #region adaptive step evaluation
             int i1 = (gradient.UsedK ?? false) ? 1 : 0;
             int i2 = (gradient.UsedKappa ?? false) ? 1 : 0;
             int i3 = (gradient.UsedKsi ?? false) ? 1 : 0;
             int i4 = (gradient.UsedP0 ?? false) ? 1 : 0;
-            int kNum = 0;
-            int kappaNum = 0;
-            int ksiNum = 0;
-            int p0Num = 0;
-            if ((bool)gradient.UsedK)
-                {
-                    int count1 = 0;
-                    int count2 = 0;
-                    if (Math.Abs(gradient.ChangedK + gradient.DeltaK) < 1 && Math.Abs(gradient.ChangedK + gradient.DeltaK) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedK + gradient.DeltaK);
-                        while (tempVal < 1)
-                        {
-                            count1--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradient.ChangedK + gradient.DeltaK) > 1 && Math.Abs(gradient.ChangedK + gradient.DeltaK) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedK + gradient.DeltaK);
-                        while (tempVal > 1)
-                        {
-                            count1++;
-                            tempVal /= 10;
-                        }
-                    }
-
-                    if (Math.Abs(gradientK) < 1 && Math.Abs(gradientK) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientK);
-                        while (tempVal < 1)
-                        {
-                            count2--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientK) > 1 && Math.Abs(gradientK) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientK);
-                        while (tempVal > 1)
-                        {
-                            count2++;
-                            tempVal /= 10;
-                        }
-                    }
-                    kNum = count1 - count2;
-                }
-            if ((bool)gradient.UsedKappa)
-                {
-                    int count1 = 0;
-                    int count2 = 0;
-                    if (Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa) < 1 && Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa);
-                        while (tempVal < 1)
-                        {
-                            count1--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa) > 1 && Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedKappa + gradient.DeltaKappa);
-                        while (tempVal > 1)
-                        {
-                            count1++;
-                            tempVal /= 10;
-                        }
-                    }
-
-                    if (Math.Abs(gradientKappa) < 1 && Math.Abs(gradientKappa) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientKappa);
-                        while (tempVal < 1)
-                        {
-                            count2--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientKappa) > 1 && Math.Abs(gradientKappa) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientKappa);
-                        while (tempVal > 1)
-                        {
-                            count2++;
-                            tempVal /= 10;
-                        }
-                    }
-                    kappaNum = count1 - count2;
-                }
-            if ((bool)gradient.UsedKsi)
-                {
-                    int count1 = 0;
-                    int count2 = 0;
-                    if (Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi) < 1 && Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi);
-                        while (tempVal < 1)
-                        {
-                            count1--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi) > 1 && Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedKsi + gradient.DeltaKsi);
-                        while (tempVal > 1)
-                        {
-                            count1++;
-                            tempVal /= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientKsi) < 1 && Math.Abs(gradientKsi) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientKsi);
-                        while (tempVal < 1)
-                        {
-                            count2--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientKsi) > 1 && Math.Abs(gradientKsi) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientKsi);
-                        while (tempVal > 1)
-                        {
-                            count2++;
-                            tempVal /= 10;
-                        }
-                    }
-                    ksiNum = count1 - count2;
-                }
-            if ((bool)gradient.UsedP0)
-                {
-                    int count1 = 0;
-                    int count2 = 0;
-                    if (Math.Abs(gradient.ChangedP0 + gradient.DeltaP0) < 1 && Math.Abs(gradient.ChangedP0 + gradient.DeltaP0) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedP0 + gradient.DeltaP0);
-                        while (tempVal < 1)
-                        {
-                            count1--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradient.ChangedP0 + gradient.DeltaP0) > 1 && Math.Abs(gradient.ChangedP0 + gradient.DeltaP0) != 0)
-                    {
-                        double tempVal = Math.Abs(gradient.ChangedP0 + gradient.DeltaP0);
-                        while (tempVal > 1)
-                        {
-                            count1++;
-                            tempVal /= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientP0) < 1 && Math.Abs(gradientP0) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientP0);
-                        while (tempVal < 1)
-                        {
-                            count2--;
-                            tempVal *= 10;
-                        }
-                    }
-                    if (Math.Abs(gradientP0) > 1 && Math.Abs(gradientP0) != 0)
-                    {
-                        double tempVal = Math.Abs(gradientP0);
-                        while (tempVal > 1)
-                        {
-                            count2++;
-                            tempVal /= 10;
-                        }
-                    }
-                    p0Num = count1 - count2;
-                }
-            int maxDegree = 0;
-            bool b1 = false;
-            bool b2 = false;
-            bool b3 = false;
-            bool b4 = false;
-            if (maxDegree < Math.Abs(kNum))
-                {
-                    b1 = true;
-                    b2 = b3 = false;
-                    maxDegree = Math.Abs(kNum);
-                }
-            if (maxDegree < Math.Abs(kappaNum))
-                {
-                    b2 = true;
-                    b1 = b3 = false;
-                    maxDegree = Math.Abs(kappaNum);
-                }
-            if (maxDegree < Math.Abs(ksiNum))
-                {
-                    b3 = true;
-                    b2 = b1 = false;
-                    maxDegree = Math.Abs(ksiNum);
-                }
-            if (maxDegree < Math.Abs(p0Num))
-                {
-                    b4 = true;
-                    b3 = b2 = b1 = false;
-                    maxDegree = Math.Abs(p0Num);
-                }
-            if (b1 == true)
-            {
-                nextGradient.Lambda *= Math.Pow(10, kNum);
-            }
-            if (b2 == true)
-            {
-                nextGradient.Lambda *= Math.Pow(10, kappaNum);
-            }
-            if (b3 == true)
-            {
-                nextGradient.Lambda *= Math.Pow(10, ksiNum);
-            }
-            if (b4 == true)
-            {
-                nextGradient.Lambda *= Math.Pow(10, p0Num);
-            }
+            int kNum = DegreeEvaluation(gradient.UsedK, gradientK, gradient.ChangedK, gradient.DeltaK);
+            int kappaNum = DegreeEvaluation(gradient.UsedKappa, gradientKappa, gradient.ChangedKappa, gradient.DeltaKappa);
+            int ksiNum = DegreeEvaluation(gradient.UsedKsi, gradientKsi, gradient.ChangedKsi, gradient.DeltaKsi);
+            int p0Num = DegreeEvaluation(gradient.UsedP0, gradientP0, gradient.ChangedP0, gradient.DeltaP0);
+            nextGradient.Lambda *= Math.Pow(10, MaxDegreeEvaluation(kNum, kappaNum, ksiNum, p0Num));
+            #endregion
 
             double kNext = gradient.ChangedK - i1 * nextGradient.Lambda * gradientK;
             double kappaNext = gradient.ChangedKappa - i2 * nextGradient.Lambda * gradientKappa;
@@ -908,14 +698,11 @@ namespace ComputationalServer.Actions
                     Qk1wells[i].P0 = nextGradient.ChangedP0;
                 }
                 List<double> Qk1;
-                GetConsumtions(times, Qk1wells, gradientWells.Count, pressures,
-                    indexes, out Qk1, Qk1wells[0].P0); // Q_k+1
-
+                GetConsumtions(times, Qk1wells, gradientWells.Count, pressures, indexes, out Qk1, Qk1wells[0].P0); 
                 double Fmin=0;
                 switch (gradientWells.Count)
                 {
                     case 1:
-                        //                  (Q1 - Q_{k+1})^2
                         Fmin = Math.Pow((gradientWells[0].Q - Qk1.Last()), 2);
                         Fmin = Math.Sqrt(Fmin / (Math.Pow(gradientWells[0].Q, 2)));
                         break;
@@ -939,14 +726,103 @@ namespace ComputationalServer.Actions
             }
         }
 
-        //private int DegreeEvaluation(bool? usedProjection, )
-        //{
-        //    return 0;
-        //}
-
-        private int CorrectNextStepEvaluation()
+        private static int DegreeEvaluation(bool? usedProjection, double gradientValue, double changedValue, double deltaValue)
         {
-            return 0;
+            int degree = 0;
+            if ((bool)usedProjection)
+            {
+                int count1 = 0;
+                int count2 = 0;
+                if (Math.Abs(changedValue + deltaValue) < 1 && (changedValue + deltaValue) != 0)
+                {
+                    double tempVal = Math.Abs(changedValue + deltaValue);
+                    while (tempVal < 1)
+                    {
+                        count1--;
+                        tempVal *= 10;
+                    }
+                }
+                if (Math.Abs(changedValue + deltaValue) > 1 && (changedValue + deltaValue) != 0)
+                {
+                    double tempVal = Math.Abs(changedValue + deltaValue);
+                    while (tempVal > 1)
+                    {
+                        count1++;
+                        tempVal /= 10;
+                    }
+                }
+
+                if (Math.Abs(gradientValue) < 1 && gradientValue != 0)
+                {
+                    double tempVal = Math.Abs(gradientValue);
+                    while (tempVal < 1)
+                    {
+                        count2--;
+                        tempVal *= 10;
+                    }
+                }
+                if (Math.Abs(gradientValue) > 1 && gradientValue != 0)
+                {
+                    double tempVal = Math.Abs(gradientValue);
+                    while (tempVal > 1)
+                    {
+                        count2++;
+                        tempVal /= 10;
+                    }
+                }
+                degree = count1 - count2;
+            }
+            return degree;
+        }
+
+        private static int MaxDegreeEvaluation(int kNum, int kappaNum, int ksiNum, int p0Num)
+        {
+            int maxDegree = 0;
+            bool b1 = false;
+            bool b2 = false;
+            bool b3 = false;
+            bool b4 = false;
+            if (maxDegree < Math.Abs(kNum))
+            {
+                b1 = true;
+                b2 = b3 = false;
+                maxDegree = Math.Abs(kNum);
+            }
+            if (maxDegree < Math.Abs(kappaNum))
+            {
+                b2 = true;
+                b1 = b3 = false;
+                maxDegree = Math.Abs(kappaNum);
+            }
+            if (maxDegree < Math.Abs(ksiNum))
+            {
+                b3 = true;
+                b2 = b1 = false;
+                maxDegree = Math.Abs(ksiNum);
+            }
+            if (maxDegree < Math.Abs(p0Num))
+            {
+                b4 = true;
+                b3 = b2 = b1 = false;
+                maxDegree = Math.Abs(p0Num);
+            }
+            //if (b1 == true)
+            //{
+            //    nextGradient.Lambda *= Math.Pow(10, kNum);
+            //}
+            //if (b2 == true)
+            //{
+            //    nextGradient.Lambda *= Math.Pow(10, kappaNum);
+            //}
+            //if (b3 == true)
+            //{
+            //    nextGradient.Lambda *= Math.Pow(10, ksiNum);
+            //}
+            //if (b4 == true)
+            //{
+            //    nextGradient.Lambda *= Math.Pow(10, p0Num);
+            //}
+            return maxDegree;
         }
     }
 }
