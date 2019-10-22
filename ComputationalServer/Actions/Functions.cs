@@ -242,7 +242,7 @@ namespace ComputationalServer.Actions
                 }
 
                 
-                pressures = P1f;
+                pressures.AddRange(P1f);
                 wells[0].P = P1f.Last();
                 indexes.Add(pressures.Count);
                 pressures.AddRange(P2f);
@@ -659,12 +659,15 @@ namespace ComputationalServer.Actions
             Gradient nextGradient = new Gradient
             {
                 Lambda = gradient.Lambda,
-                GradientK =gradientK,
+                GradientK = gradientK,
                 GradientKappa = gradientKappa,
                 GradientKsi = gradientKsi,
-                GradientP0 = gradientP0
+                GradientP0 = gradientP0,
+                UsedK = gradient.UsedK ,
+                UsedKappa =    gradient.UsedKappa,
+                UsedKsi =      gradient.UsedKsi,
+                UsedP0 = gradient.UsedP0,
             };
-
             #region adaptive step evaluation
             int i1 = (gradient.UsedK ?? false) ? 1 : 0;
             int i2 = (gradient.UsedKappa ?? false) ? 1 : 0;
@@ -778,6 +781,7 @@ namespace ComputationalServer.Actions
         private static int MaxDegreeEvaluation(int kNum, int kappaNum, int ksiNum, int p0Num)
         {
             int maxDegree = 0;
+            int returnVal = 0;
             bool b1 = false;
             bool b2 = false;
             bool b3 = false;
@@ -785,26 +789,30 @@ namespace ComputationalServer.Actions
             if (maxDegree < Math.Abs(kNum))
             {
                 b1 = true;
-                b2 = b3 = false;
+                b2 = b3 = b4 = false;
                 maxDegree = Math.Abs(kNum);
+                returnVal = kNum;
             }
             if (maxDegree < Math.Abs(kappaNum))
             {
                 b2 = true;
-                b1 = b3 = false;
+                b1 = b3 = b4 = false;
                 maxDegree = Math.Abs(kappaNum);
+                returnVal = kappaNum;
             }
             if (maxDegree < Math.Abs(ksiNum))
             {
                 b3 = true;
-                b2 = b1 = false;
+                b2 = b1 = b4 = false;
                 maxDegree = Math.Abs(ksiNum);
+                returnVal = ksiNum;
             }
             if (maxDegree < Math.Abs(p0Num))
             {
                 b4 = true;
                 b3 = b2 = b1 = false;
                 maxDegree = Math.Abs(p0Num);
+                returnVal = p0Num;
             }
             //if (b1 == true)
             //{
@@ -822,7 +830,7 @@ namespace ComputationalServer.Actions
             //{
             //    nextGradient.Lambda *= Math.Pow(10, p0Num);
             //}
-            return maxDegree;
+            return returnVal;
         }
     }
 }

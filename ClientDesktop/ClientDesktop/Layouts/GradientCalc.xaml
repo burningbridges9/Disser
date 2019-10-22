@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid x:Name="Parameters">
+        <Grid x:Name="Parameters" DataContext="{Binding GradientToShow}">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="110*"></ColumnDefinition>
                 <ColumnDefinition Width="130*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Fmin"   Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="Fmin"   Text = "{Binding Path=F}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
             <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="F->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Lambda" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />

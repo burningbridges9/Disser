@@ -121,7 +121,7 @@ namespace ComputationalServer.Controllers
         }
 
         [HttpPost]
-        [Route("gradient")]
+        [Route("nextgradient")]
         public IActionResult GradientMethod([FromBody] Gradient gradient)
         {
             List<Well> gradientWells = new List<Well>();
@@ -153,50 +153,16 @@ namespace ComputationalServer.Controllers
             gradients.Add(gradient);
             GradientAndConsumptions gradientAndConsumptions = new GradientAndConsumptions() { Gradient = gradient };
             Actions.Functions.GetNextGradientIteration(gradient, gradientWells, times, pressures, indexes, out gradientAndConsumptions);
-            List<double> staticConsumptions = new List<double>();
-            Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
-            gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
-            return new JsonResult(gradientAndConsumptions);
-        }
-
-        [HttpPost]
-        [Route("initialfmin")]
-        public IActionResult InitialFmin([FromBody] Gradient gradient)
-        {
-            List<Well> gradientWells = new List<Well>();
-            foreach (var v in wells)
-                gradientWells.Add(new Well
-                {
-
-                    Q = v.Q,
-                    P = v.P,
-                    P0 = v.P0,
-                    Time1 = v.Time1,
-                    Time2 = v.Time2,
-                    H0 = v.H0,
-                    K = v.K,
-                    Kappa = v.Kappa,
-                    Ksi = v.Ksi,
-                    Mu = v.Mu,
-                    Rs = v.Rs,
-                    Rw = v.Rw,
-                    N = v.N,
-                });
-            for (int i = 0; i < gradientWells.Count; i++)
+            if (gradientAndConsumptions.ConsumptionsAndTimes != null)
             {
-                gradientWells[i].K = gradient.ChangedK;
-                gradientWells[i].Kappa = gradient.ChangedKappa;
-                gradientWells[i].Ksi = gradient.ChangedKsi;
-                gradientWells[i].P0 = gradient.ChangedP0;
+                List<double> staticConsumptions = new List<double>();
+                Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
+                gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
             }
-            gradients.Add(gradient);
-            GradientAndConsumptions gradientAndConsumptions = new GradientAndConsumptions() { Gradient = gradient };
-            Actions.Functions.GetNextGradientIteration(gradient, gradientWells, times, pressures, indexes, out gradientAndConsumptions);
-            List<double> staticConsumptions = new List<double>();
-            Actions.Functions.PrepareStaticConsumptions(wells.Count, wells, indexes, staticConsumptions, times);
-            gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
             return new JsonResult(gradientAndConsumptions);
         }
+
+       
 
         
 

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +27,31 @@ namespace ClientDesktop.Models
         public bool? UsedKsi { get; set; }
         public bool? UsedP0 { get; set; }
         public double Lambda { get; set; }
+        
         public double F { get; set; }
+        //{
+        //    get
+        //    {
+        //        return _F;
+        //    }
+
+        //    set
+        //    {
+        //        if (value == _F)
+        //            return;
+
+        //        _F = value;
+        //        OnPropertyChanged("_F");
+        //    }
+
+        //}
+        //[JsonIgnore]
+        //private double _F;
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        //protected void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }
