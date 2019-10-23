@@ -86,9 +86,9 @@ namespace ClientDesktop
                 //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
                 //    break;
                 case 3:
-                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1f.Count - 2]), 2)
-                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1s.Count - 2]), 2)
-                            + Math.Pow((wellViewModel.Wells[2].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1s.Count + PressuresAndTimes.Pressures1f.Count -3]), 2);
+                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1f.Count - 1]), 2)
+                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1s.Count - 1]), 2)
+                            + Math.Pow((wellViewModel.Wells[2].Q - ConsumptionsAndTimes.Consumptions.Last()), 2);
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2) + Math.Pow(wellViewModel.Wells[2].Q, 2)));
                     break;
             }

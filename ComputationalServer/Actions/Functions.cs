@@ -175,7 +175,7 @@ namespace ComputationalServer.Actions
                     else
                     {
                         pOne.Add(Pressure(wells[0], wells[0].Q, times[i]) + wells[0].P0);
-                        if (times[i] >= wells[1].Time1)
+                        if (times[i] > wells[1].Time1 || i > wells[0].N-1)
                         {
                             if (ind_flag1 == false)
                             {
@@ -187,7 +187,7 @@ namespace ComputationalServer.Actions
                                 + Pressure(wells[1], wells[1].Q - wells[0].Q, times[i] - wells[1].Time1) 
                                 + wells[0].P0);
                         }
-                        if ((times[i] >= wells[2].Time1) && (i >= wells[1].N))
+                        if ((times[i] > wells[2].Time1) || (i > wells[0].N + wells[1].N - 1))
                         {
                             if (ind_flag2 == false)
                             {
@@ -208,12 +208,12 @@ namespace ComputationalServer.Actions
                 List<double> T1f = new List<double>(index1 + 1);
                 List<double> T1s = new List<double>(times.Count - (index1 + 1));
 
-                for (int i = 0; i < index1 + 1; i++)
+                for (int i = 0; i < index1; i++)
                 {
                     P1f.Add(pOne[i]);
                     T1f.Add(times[i]);
                 }
-                for (int i = 0; i < times.Count - (index1 + 2); i++)
+                for (int i = 0; i < times.Count - (index1); i++)
                 {
                     P1s.Add(pOne[i + index1]);
                     T1s.Add(times[i + index1]);
@@ -228,14 +228,14 @@ namespace ComputationalServer.Actions
                     T2f.Add(times[i + index1]);
                     P2f.Add(pTwo[i]);
                 }
-                for (int i = 0; i != (times.Count - 1) - index2; i++)
+                for (int i = 0; i != (times.Count) - index2; i++)
                 {
                     T2s.Add(times[i + index2]);
-                    P2s.Add(pTwo[i + index2 - wells[0].N+1]);
+                    P2s.Add(pTwo[i + index2 - wells[0].N]);
                 }
                 List<double> T3new = new List<double>(times.Count - 1 - index2);
                 List<double> P3new = new List<double>(times.Count - 1 - index2);
-                for (int i = 0; i != times.Count - (index2 + 1); i++)
+                for (int i = 0; i != times.Count - (index2); i++)
                 {
                     T3new.Add(times[i + index2]);
                     P3new.Add(pThree[i]);
@@ -319,15 +319,15 @@ namespace ComputationalServer.Actions
                     }
                     break;
                 case 3:
-                    for (int i = 0; i != indexes[0]; i++)
+                    for (int i = 0; i != wells[0].N; i++)
                     {
                         staticConsumptions.Add(wells[0].Q);
                     }
-                    for (int i = indexes[0]; i < indexes[1] + 1; i++)
+                    for (int i = 0; i < wells[1].N; i++)
                     {
                         staticConsumptions.Add(wells[1].Q);
                     }
-                    for (int i = indexes[1]; i < times.Count - 1; i++)
+                    for (int i = 0; i < wells[2].N; i++)
                     {
                         staticConsumptions.Add(wells[2].Q);
                     }
