@@ -42,6 +42,9 @@ namespace ClientDesktop
 
         private async void CalculatePressuresButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ConsumptionsAndTimes==null || ConsumptionsAndTimes?.Consumptions.Count == 0)
+                for (int i = 0; i < wellViewModel.Wells.Count; i++)
+                    wellViewModel.Wells[i].Mode = Mode.Direct;
             PressuresAndTimes = await SendWellsForPressures();
             PlotTimePressures(PressuresAndTimes);
         }      
@@ -55,6 +58,9 @@ namespace ClientDesktop
 
         private async void CalculateConsumptionsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (PressuresAndTimes?.Pressures1f.Count == 0)
+                for (int i = 0; i < wellViewModel.Wells.Count; i++)
+                    wellViewModel.Wells[i].Mode = Mode.Reverse;
             ConsumptionsAndTimes = await SendWellsForConsumptions();
             PlotTimeConsumptions(ConsumptionsAndTimes);
             CalculateInitialFmin();
@@ -86,8 +92,8 @@ namespace ClientDesktop
                 //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
                 //    break;
                 case 3:
-                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1f.Count - 1]), 2)
-                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[PressuresAndTimes.Pressures1s.Count - 1]), 2)
+                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N - 1]), 2)
+                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N + wellViewModel.Wells[1].N - 2]), 2)
                             + Math.Pow((wellViewModel.Wells[2].Q - ConsumptionsAndTimes.Consumptions.Last()), 2);
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2) + Math.Pow(wellViewModel.Wells[2].Q, 2)));
                     break;
@@ -105,6 +111,21 @@ namespace ClientDesktop
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, apiUrl);
             var res = await httpClient.DeleteAsync(apiUrl);
             GradientsAndConsumptions.Clear();
+
+            PressuresAndTimes.Pressures1f.Clear();
+            PressuresAndTimes.Pressures1s.Clear();
+            PressuresAndTimes.Pressures2f.Clear();
+            PressuresAndTimes.Pressures2s.Clear();
+            PressuresAndTimes.Pressures3.Clear();
+            PressuresAndTimes.Times1f.Clear();
+            PressuresAndTimes.Times1s.Clear();
+            PressuresAndTimes.Times2f.Clear();
+            PressuresAndTimes.Times2s.Clear();
+            PressuresAndTimes.Times3.Clear();
+            ConsumptionsAndTimes.Consumptions.Clear();
+            ConsumptionsAndTimes.StaticConsumptions.Clear();
+            ConsumptionsAndTimes.Times.Clear();
+
             IsFirstTimeGradientClicked = false;
         }
 
@@ -212,7 +233,7 @@ namespace ClientDesktop
         #region Send to server
         async Task<PressuresAndTimes> SendWellsForPressures()
         {
-            WellsList wellsList = new WellsList { Wells = wellViewModel.Wells };
+            WellsList wellsList = new WellsList(wellViewModel.Wells);
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -225,11 +246,15 @@ namespace ClientDesktop
             var res = await httpClient.PostAsync(apiUrl, content);
             string responseBody = await res.Content.ReadAsStringAsync();
             PressuresAndTimes pressuresAndTimes = JsonConvert.DeserializeObject<PressuresAndTimes>(responseBody);
+            // make check
+                wellViewModel.Wells[0].P = pressuresAndTimes.Pressures1f.Last();
+                wellViewModel.Wells[1].P = pressuresAndTimes.Pressures2f.Last();
+                wellViewModel.Wells[2].P = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
         async Task<ConsumptionsAndTimes> SendWellsForConsumptions()
         {
-            WellsList wellsList = new WellsList { Wells = wellViewModel.Wells };
+            WellsList wellsList = new WellsList(wellViewModel.Wells);
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -246,7 +271,13 @@ namespace ClientDesktop
         }
         async Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
         {
-            var serializedProduct = JsonConvert.SerializeObject(gradient);
+            WellsList wellsList = new WellsList(wellViewModel.Wells);
+            GradientAndWellsList gradientAndWellsList = new GradientAndWellsList
+            {
+                Gradient = gradient,
+                WellsList = wellsList,
+            };
+            var serializedProduct = JsonConvert.SerializeObject(gradientAndWellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
             string apiUrl = "https://localhost:44308/api/values/nextgradient";

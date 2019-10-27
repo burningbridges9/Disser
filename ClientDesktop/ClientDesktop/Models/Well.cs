@@ -35,5 +35,7 @@ namespace ClientDesktop.Models
         public double Ksi { get; set; }
         [JsonProperty("N")]
         public int N { get; set; }
+        [JsonProperty("Mode")]
+        public Mode Mode { get; set; }
     }
 }

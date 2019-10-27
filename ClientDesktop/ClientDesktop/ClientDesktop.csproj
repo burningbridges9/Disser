@@ -76,6 +76,8 @@
     <Compile Include="Models\ConsumptionsAndTimes.cs" />
     <Compile Include="Models\Gradient.cs" />
     <Compile Include="Models\GradientAndConsumptions.cs" />
+    <Compile Include="Models\GradientAndWellsList.cs" />
+    <Compile Include="Models\Mode.cs" />
     <Compile Include="Models\PressuresAndTimes.cs" />
     <Compile Include="Models\WellsList.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
