@@ -869,7 +869,7 @@ namespace ComputationalServer.Actions
 
                 }
 
-                nextGradient.F = Fmin;
+                nextGradient.FminQ = Fmin;
                 ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes { Times = GetTimes(gradientWells,false), Consumptions = Qk1 };
                 gradientAndConsumptions.ConsumptionsAndTimes = consumptionsAndTimes;
                 gradientAndConsumptions.Gradient = nextGradient;

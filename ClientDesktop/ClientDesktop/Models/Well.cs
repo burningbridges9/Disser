@@ -192,6 +192,7 @@ namespace ClientDesktop.Models
             set
             {
                 _CalculatedP = value;
+                ReCalculate();
                 OnPropertyChanged("CalculatedP");
             }
         }
@@ -205,12 +206,45 @@ namespace ClientDesktop.Models
             set
             {
                 _CalculatedQ = value;
+                ReCalculate();
                 OnPropertyChanged("CalculatedQ");
+            }
+        }
+
+        [JsonIgnore]
+        private double _CalcMP;
+        [JsonProperty("CalcMP")]
+        public double CalcMP
+        {
+            get { return _CalcMP; }
+            set
+            {
+                _CalcMP = value;
+                OnPropertyChanged("CalcMP");
+            }
+        }
+
+        [JsonIgnore]
+        private double _CalcMQ;
+        [JsonProperty("CalcMQ")]
+        public double CalcMQ
+        {
+            get { return _CalcMQ; }
+            set
+            {
+                _CalcMQ = value;
+                OnPropertyChanged("CalcMQ");
             }
         }
 
         [JsonProperty("Mode")]
         public Mode Mode { get; set; }
+
+        private void ReCalculate()
+        {
+            CalcMQ = CalculatedQ * (24.0 * 3600.0);
+            CalcMP = Math.Pow(10.0, -6) * CalculatedP;
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

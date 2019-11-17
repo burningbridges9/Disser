@@ -233,7 +233,7 @@ namespace ClientDesktop
         #region Send to server
         async static Task<PressuresAndTimes> SendWellsForPressures()
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells);
+            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -254,7 +254,7 @@ namespace ClientDesktop
         }
         async static Task<ConsumptionsAndTimes> SendWellsForConsumptions()
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells);
+            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -274,7 +274,7 @@ namespace ClientDesktop
         }
         async static Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells);
+            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
             GradientAndWellsList gradientAndWellsList = new GradientAndWellsList
             {
                 Gradient = gradient,

@@ -119,7 +119,7 @@ namespace ClientDesktop.Commands
 
         async Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
         {
-            WellsList wellsList = new WellsList(MainWindow.wellViewModel.Wells);
+            WellsList wellsList = new WellsList(MainWindow.wellViewModel.Wells.ToList());
             GradientAndWellsList gradientAndWellsList = new GradientAndWellsList
             {
                 Gradient = gradient,

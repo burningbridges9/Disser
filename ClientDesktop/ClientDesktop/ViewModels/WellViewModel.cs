@@ -55,7 +55,7 @@ namespace ClientDesktop.ViewModels
             }
         }
 
-        public List<Well> Wells { get; set; }
+        public ObservableCollection<Well> Wells { get; set; }
         public Well SelectedWell
         {
             get { return _selectedWell; }
@@ -68,7 +68,7 @@ namespace ClientDesktop.ViewModels
 
         public WellViewModel()
         {
-            Wells = new List<Well>();
+            Wells = new ObservableCollection<Well>();
         }
         //public void Add(Models.Well well)
         //{
