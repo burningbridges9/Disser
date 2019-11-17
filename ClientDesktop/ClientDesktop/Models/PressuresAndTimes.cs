@@ -28,5 +28,6 @@ namespace ClientDesktop.Models
         public List<double> Pressures3 { get; set; }
         public List<double> Times3 { get; set; }
         #endregion
+        public List<double> StaticPressures { get; set; }
     }
 }

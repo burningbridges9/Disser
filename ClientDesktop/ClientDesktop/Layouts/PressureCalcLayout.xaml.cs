@@ -1,5 +1,6 @@
 ﻿using ClientDesktop.Models;
 using ClientDesktop.Utils;
+using ClientDesktop.ViewModels;
 using OxyPlot;
 using OxyPlot.Series;
 using System;
@@ -24,8 +25,11 @@ namespace ClientDesktop.Layouts
     /// </summary>
     public partial class PressureCalcLayout : UserControl
     {
+        public static WellViewModel wellViewModel;
         public PressureCalcLayout()
         {
+            wellViewModel = new WellViewModel();
+            DataContext = wellViewModel;
             InitializeComponent();
         }
 
@@ -34,8 +38,8 @@ namespace ClientDesktop.Layouts
             Well well = new Well
             {
                 Q = 1.0 / (24.0 * 3600.0) * Convert.ToDouble(TextBoxQ.Text),
-                P = Math.Pow(10.0, -6) * Convert.ToDouble(TextBoxP.Text),
-                P0 = Math.Pow(10.0, -6) * Convert.ToDouble(TextBoxP0.Text),
+                P = Math.Pow(10.0, 6) * Convert.ToDouble(TextBoxP.Text),
+                P0 = Math.Pow(10.0, 6) * Convert.ToDouble(TextBoxP0.Text),
                 Time1 = 3600.0 * Convert.ToDouble(TextBoxT1.Text),
                 Time2 = 3600.0 * Convert.ToDouble(TextBoxT2.Text),
                 H0 = Convert.ToDouble(TextBoxH0.Text),
@@ -48,11 +52,11 @@ namespace ClientDesktop.Layouts
                 N = Convert.ToInt32(TextBoxN.Text),
             };
             TextBoxQ.Text = (Convert.ToDouble(TextBoxQ.Text) + 5).ToString();
-            //TextBoxP.Text = "";
+            TextBoxP.Text = (Convert.ToDouble(TextBoxP.Text) + 5).ToString();
             //TextBoxP0.Text = "";
             TextBoxT1.Text = (Convert.ToDouble(TextBoxT1.Text) + 5).ToString();
             TextBoxT2.Text = (Convert.ToDouble(TextBoxT2.Text) + 5).ToString();  
-            MainWindow.wellViewModel.Add(well);
+            //MainWindow.wellViewModel.Add(well);
         }
 
         private void SubmitDelete_Click(object sender, RoutedEventArgs e)

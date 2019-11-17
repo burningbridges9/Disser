@@ -28,7 +28,7 @@ namespace ClientDesktop.Models
         public bool? UsedP0 { get; set; }
         public double Lambda { get; set; }
         
-        public double F { get; set; }
+        public double FminQ { get; set; }
         //{
         //    get
         //    {

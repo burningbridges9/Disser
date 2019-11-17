@@ -34,6 +34,10 @@ namespace ComputationalServer.Models
         public double Ksi { get; set; }
         [JsonProperty("N")]
         public int N { get; set; }
+        [JsonProperty("CalculatedP")]
+        public double CalculatedP { get; set; }
+        [JsonProperty("CalculatedQ")]
+        public double CalculatedQ { get; set; }
         [JsonProperty("Mode")]
         public Mode Mode { get; set; }
     }

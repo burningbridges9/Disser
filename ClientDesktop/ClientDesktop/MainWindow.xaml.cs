@@ -14,6 +14,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Windows.Media;
+using ClientDesktop.Layouts;
 
 namespace ClientDesktop
 {
@@ -33,7 +34,7 @@ namespace ClientDesktop
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
-            wellViewModel = new WellViewModel();
+            wellViewModel = PressureCalcLayout.wellViewModel;
             plotViewModel = new PlotViewModel();
             GradientsAndConsumptions = new List<GradientAndConsumptions>();
             gradientToShow = new Gradient();
@@ -58,7 +59,7 @@ namespace ClientDesktop
 
         private async void CalculateConsumptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PressuresAndTimes?.Pressures1f.Count == 0)
+            if (PressuresAndTimes?.Pressures1f.Count == 0 || PressuresAndTimes==null)
                 for (int i = 0; i < wellViewModel.Wells.Count; i++)
                     wellViewModel.Wells[i].Mode = Mode.Reverse;
             ConsumptionsAndTimes = await SendWellsForConsumptions();
@@ -92,16 +93,16 @@ namespace ClientDesktop
                 //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
                 //    break;
                 case 3:
-                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N - 1]), 2)
-                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N + wellViewModel.Wells[1].N - 2]), 2)
+                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N - 2]), 2)
+                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N + wellViewModel.Wells[1].N - 1]), 2)
                             + Math.Pow((wellViewModel.Wells[2].Q - ConsumptionsAndTimes.Consumptions.Last()), 2);
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2) + Math.Pow(wellViewModel.Wells[2].Q, 2)));
                     break;
             }
-            GradientsAndConsumptions[0].Gradient.F = Fmin;
+            GradientsAndConsumptions[0].Gradient.FminQ = Fmin;
             GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
             gradientToShow = GradientsAndConsumptions.Last().Gradient;
-            GradientClc.Fmin.Text = gradientToShow.F.ToString();
+            GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
         }
 
         async void Clear()
@@ -112,19 +113,19 @@ namespace ClientDesktop
             var res = await httpClient.DeleteAsync(apiUrl);
             GradientsAndConsumptions.Clear();
 
-            PressuresAndTimes.Pressures1f.Clear();
-            PressuresAndTimes.Pressures1s.Clear();
-            PressuresAndTimes.Pressures2f.Clear();
-            PressuresAndTimes.Pressures2s.Clear();
-            PressuresAndTimes.Pressures3.Clear();
-            PressuresAndTimes.Times1f.Clear();
-            PressuresAndTimes.Times1s.Clear();
-            PressuresAndTimes.Times2f.Clear();
-            PressuresAndTimes.Times2s.Clear();
-            PressuresAndTimes.Times3.Clear();
-            ConsumptionsAndTimes.Consumptions.Clear();
-            ConsumptionsAndTimes.StaticConsumptions.Clear();
-            ConsumptionsAndTimes.Times.Clear();
+            PressuresAndTimes?.Pressures1f?.Clear();
+            PressuresAndTimes?.Pressures1s?.Clear();
+            PressuresAndTimes?.Pressures2f?.Clear();
+            PressuresAndTimes?.Pressures2s?.Clear();
+            PressuresAndTimes?.Pressures3?.Clear();
+            PressuresAndTimes?.Times1f?.Clear();
+            PressuresAndTimes?.Times1s?.Clear();
+            PressuresAndTimes?.Times2f?.Clear();
+            PressuresAndTimes?.Times2s?.Clear();
+            PressuresAndTimes?.Times3?.Clear();
+            ConsumptionsAndTimes?.Consumptions?.Clear();
+            ConsumptionsAndTimes?.StaticConsumptions?.Clear();
+            ConsumptionsAndTimes?.Times?.Clear();
 
             IsFirstTimeGradientClicked = false;
         }
@@ -138,7 +139,7 @@ namespace ClientDesktop
                 GradientsAndConsumptions.Last().Gradient.ChangedK = Convert.ToDouble(GradientClc.BeginK.Text) * Math.Pow(10.0, -15);
                 GradientsAndConsumptions.Last().Gradient.ChangedKappa = Convert.ToDouble(GradientClc.BeginKappa.Text) * (1.0 / 3600.0);
                 GradientsAndConsumptions.Last().Gradient.ChangedKsi = Convert.ToDouble(GradientClc.BeginKsi.Text);
-                GradientsAndConsumptions.Last().Gradient.ChangedP0 = Convert.ToDouble(GradientClc.BeginP0.Text) * Math.Pow(10.0, -6);
+                GradientsAndConsumptions.Last().Gradient.ChangedP0 = Convert.ToDouble(GradientClc.BeginP0.Text) * Math.Pow(10.0, 6);
 
                 GradientsAndConsumptions.Last().Gradient.DeltaK = 
                     wellViewModel.Wells[0].K * 
@@ -202,11 +203,11 @@ namespace ClientDesktop
                 GradientsAndConsumptions.Add(gradientAndConsumptions);
                 GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
                 gradientToShow = GradientsAndConsumptions.Last().Gradient;
-                GradientClc.Fmin.Text = gradientToShow.F.ToString();
+                GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
                 GradientClc.CurrentK.Text = (gradientToShow.ChangedK * Math.Pow(10.0, 15)).ToString();
                 GradientClc.CurrentKappa.Text = (gradientToShow.ChangedKappa * 3600).ToString();
                 GradientClc.CurrentKsi.Text = gradientToShow.ChangedKsi.ToString();
-                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, 6)).ToString();
+                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, -6)).ToString();
 
                 PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
             }
@@ -219,11 +220,11 @@ namespace ClientDesktop
                 GradientsAndConsumptions.RemoveAt(GradientsAndConsumptions.Count - 1);
                 GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
                 gradientToShow = GradientsAndConsumptions.Last().Gradient;
-                GradientClc.Fmin.Text = gradientToShow.F.ToString();
+                GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
                 GradientClc.CurrentK.Text = (gradientToShow.ChangedK * Math.Pow(10.0, 15)).ToString();
                 GradientClc.CurrentKappa.Text = (gradientToShow.ChangedKappa * 3600).ToString();
                 GradientClc.CurrentKsi.Text = gradientToShow.ChangedKsi.ToString();
-                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, 6)).ToString();
+                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, -6)).ToString();
                 PlotTimeConsumptions(GradientsAndConsumptions.Last().ConsumptionsAndTimes);
                 if (GradientsAndConsumptions.Count == 1)
                     IsFirstTimeGradientClicked = false;
@@ -247,9 +248,9 @@ namespace ClientDesktop
             string responseBody = await res.Content.ReadAsStringAsync();
             PressuresAndTimes pressuresAndTimes = JsonConvert.DeserializeObject<PressuresAndTimes>(responseBody);
             // make check
-                wellViewModel.Wells[0].P = pressuresAndTimes.Pressures1f.Last();
-                wellViewModel.Wells[1].P = pressuresAndTimes.Pressures2f.Last();
-                wellViewModel.Wells[2].P = pressuresAndTimes.Pressures3.Last();
+            wellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
+            wellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
+            wellViewModel.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
         async Task<ConsumptionsAndTimes> SendWellsForConsumptions()
@@ -267,6 +268,9 @@ namespace ClientDesktop
             var res = await httpClient.PostAsync(apiUrl, content);
             string responseBody = await res.Content.ReadAsStringAsync();
             ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
+            wellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0]-2];
+            wellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1]-1];
+            wellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2]-2];
             return consumptionsAndTimes;
         }
         async Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
@@ -279,7 +283,7 @@ namespace ClientDesktop
             };
             var serializedProduct = JsonConvert.SerializeObject(gradientAndWellsList);
             HttpClient httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
+            httpClient.Timeout = TimeSpan.FromMinutes(60);
             string apiUrl = "https://localhost:44308/api/values/nextgradient";
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
             var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
@@ -406,6 +410,22 @@ namespace ClientDesktop
                     {
                         (model.Series[4] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
                     }
+                    if (pressuresAndTimes.StaticPressures != null)
+                    {
+                        model.Series.Add(new LineSeries
+                        {
+                            Color = OxyColors.BlueViolet,
+                            MarkerType = MarkerType.Cross,
+                            MarkerStrokeThickness = 2.5
+                        });
+                        var tempTimes = new List<Double>();
+                        tempTimes.AddRange(pressuresAndTimes.Times1f);
+                        tempTimes.AddRange(pressuresAndTimes.Times1s);
+                        foreach (var pt in pressuresAndTimes.StaticPressures.Zip(tempTimes, Tuple.Create))
+                        {
+                            (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                        }
+                    }
                     plotViewModel.MyModel = model;
                     break;
             }
@@ -426,15 +446,18 @@ namespace ClientDesktop
             {
                 (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
             }
-            model.Series.Add(new LineSeries
+            if (consumptionsAndTimes.StaticConsumptions != null)
             {
-                Color = OxyColors.Red,
-                MarkerType = MarkerType.None,
-                MarkerStrokeThickness = 1.5
-            });
-            foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
-            {
-                (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+                model.Series.Add(new LineSeries
+                {
+                    Color = OxyColors.Red,
+                    MarkerType = MarkerType.None,
+                    MarkerStrokeThickness = 1.5
+                });
+                foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+                {
+                    (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+                }
             }
             plotViewModel.MyModel = model;
         }

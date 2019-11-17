@@ -70,6 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddWellCommand.cs" />
+    <Compile Include="Commands\DeleteAllWellCommand.cs" />
+    <Compile Include="Commands\RemoveLastWellCommand.cs" />
+    <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
+    <Compile Include="Commands\WellViewCommand.cs" />
     <Compile Include="Layouts\GradientCalc.xaml.cs">
       <DependentUpon>GradientCalc.xaml</DependentUpon>
     </Compile>

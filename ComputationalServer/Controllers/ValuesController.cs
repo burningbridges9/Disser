@@ -90,6 +90,10 @@ namespace ComputationalServer.Controllers
         {                       
             PressuresAndTimes pressuresAndTimes;
             Actions.Functions.GetTimesAndPressures(wellsList, out pressuresAndTimes);
+            List<double> staticPressures = new List<double>();
+            Actions.Functions.PrepareStaticPressures(wellsList, staticPressures);
+            if (wellsList.Wells[0].Mode == Mode.Reverse)
+                pressuresAndTimes.StaticPressures = staticPressures;
             return new JsonResult(pressuresAndTimes);
         }
 
@@ -104,7 +108,8 @@ namespace ComputationalServer.Controllers
             Actions.Functions.PrepareStaticConsumptions(wellsList, staticConsumptions);
             consumptionsAndTimes.Times = Actions.Functions.GetTimes(wellsList.Wells, false);
             consumptionsAndTimes.Consumptions = consumptions;
-            consumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            if (wellsList.Wells[0].Mode==Mode.Direct)
+                consumptionsAndTimes.StaticConsumptions = staticConsumptions;
             return new JsonResult(consumptionsAndTimes);
         }
 
@@ -159,7 +164,6 @@ namespace ComputationalServer.Controllers
             foreach (var v in gradientAndWellsList.WellsList.Wells)
                 gradientWells.Add(new Well
                 {
-
                     Q = v.Q,
                     P = v.P,
                     P0 = v.P0,
@@ -173,6 +177,9 @@ namespace ComputationalServer.Controllers
                     Rs = v.Rs,
                     Rw = v.Rw,
                     N = v.N,
+                    Mode = v.Mode,
+                    CalculatedP = v.CalculatedP,
+                    CalculatedQ = v.CalculatedQ,
                 });
             for (int i = 0; i < gradientWells.Count; i++)
             {
