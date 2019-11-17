@@ -72,8 +72,10 @@
     </ApplicationDefinition>
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
+    <Compile Include="Commands\GradientViewCommand.cs" />
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
+    <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
     <Compile Include="Layouts\GradientCalc.xaml.cs">
       <DependentUpon>GradientCalc.xaml</DependentUpon>
@@ -86,6 +88,8 @@
     <Compile Include="Models\PressuresAndTimes.cs" />
     <Compile Include="Models\WellsList.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
+    <Compile Include="ViewModels\GradientViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="ViewModels\WellViewModel.cs" />
     <Page Include="Layouts\GradientCalc.xaml">

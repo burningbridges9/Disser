@@ -4,10 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClientDesktop.Layouts"
+             xmlns:Converter="clr-namespace:ClientDesktop.Commands.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Converter:NextGradientConverter x:Key="nextGradientConverter"/>
+    </UserControl.Resources>
     <Grid>
-        <Grid x:Name="Parameters" DataContext="{Binding GradientToShow}">
+        <Grid x:Name="Parameters">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -16,6 +20,8 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -27,10 +33,12 @@
                 <ColumnDefinition Width="110*"></ColumnDefinition>
                 <ColumnDefinition Width="130*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Fmin"   Text = "{Binding Path=F}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-            <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="F->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Lambda" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
+            <TextBox x:Name="FQmin"   Text = "{Binding Path=FQmin}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="FPmin"   Text = "{Binding Path=FPmin}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="FP->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
             <TextBox x:Name="gradK" HorizontalAlignment="Center"      Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
             <TextBox x:Name="gradKappa" HorizontalAlignment="Center"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"                       />
             <TextBox x:Name="gradKsi" HorizontalAlignment="Center"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
@@ -75,12 +83,29 @@
             <CheckBox x:Name="UsedP0" HorizontalAlignment="Left" Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Height="15"  Width="56"  />
 
 
-            <!--<Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Click="NextStep_Click"  >
+            <Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Command="{Binding NextStep}">
                 <TextBlock Text="Next step"/>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource nextGradientConverter}" >
+                        <Binding Path="Text" ElementName="Lambda"/>
+                        <Binding Path="Text" ElementName="BeginK"/>
+                        <Binding Path="Text" ElementName="BeginKappa"/>
+                        <Binding Path="Text" ElementName="BeginKsi"/>
+                        <Binding Path="Text" ElementName="BeginP0"/>
+                        <Binding Path="Text" ElementName="deltaK"/>
+                        <Binding Path="Text" ElementName="deltaKappa"/>
+                        <Binding Path="Text" ElementName="deltaKsi"/>
+                        <Binding Path="Text" ElementName="deltaP0"/>
+                        <Binding Path="IsChecked" ElementName="UsedK"/>
+                        <Binding Path="IsChecked" ElementName="UsedKappa"/>
+                        <Binding Path="IsChecked" ElementName="UsedKsi"/>
+                        <Binding Path="IsChecked" ElementName="UsedP0"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
             </Button>
-            <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="4" Click="PreviousStep_Click"  >
+            <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
                 <TextBlock Text="Previous Step"/>
-            </Button>-->
+            </Button>
 
         </Grid>
     </Grid>

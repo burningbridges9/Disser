@@ -1,4 +1,5 @@
 ﻿using ClientDesktop.Models;
+using ClientDesktop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,36 +23,12 @@ namespace ClientDesktop.Layouts
     /// </summary>
     public partial class GradientCalc : UserControl
     {
-        
-        public Gradient GradientToShow { get; set; }
-        //{
-        //    get
-        //    {
-        //        return _GradientToShow;
-        //    }
-
-        //    set
-        //    {
-        //        if (value == _GradientToShow)
-        //            return;
-
-        //        _GradientToShow = value;
-        //        OnPropertyChanged("GradientToShow");
-        //    }
-
-        //}
-        //private Gradient _GradientToShow;
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //protected void OnPropertyChanged(string propertyName)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
-
+        public static GradientViewModel gradientViewModel;
         public GradientCalc()
         {
+            gradientViewModel = new GradientViewModel();
+            DataContext = gradientViewModel;
             InitializeComponent();
-            //DataContext = GradientToShow;
         }
 
     }

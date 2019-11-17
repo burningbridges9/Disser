@@ -24,9 +24,8 @@ namespace ClientDesktop
     public partial class MainWindow : Window
     {
         public static WellViewModel wellViewModel;
-        public PlotViewModel plotViewModel;
-        public static List<GradientAndConsumptions> GradientsAndConsumptions;
-        public Gradient gradientToShow;
+        public static PlotViewModel plotViewModel;
+        public static GradientViewModel gradientViewModel;
         public PressuresAndTimes PressuresAndTimes;
         public ConsumptionsAndTimes ConsumptionsAndTimes;
         public bool IsFirstTimeGradientClicked = false;
@@ -35,9 +34,8 @@ namespace ClientDesktop
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
             wellViewModel = PressureCalcLayout.wellViewModel;
+            gradientViewModel = GradientCalc.gradientViewModel;
             plotViewModel = new PlotViewModel();
-            GradientsAndConsumptions = new List<GradientAndConsumptions>();
-            gradientToShow = new Gradient();
             this.DataContext = plotViewModel;
         }
 
@@ -63,14 +61,15 @@ namespace ClientDesktop
                 for (int i = 0; i < wellViewModel.Wells.Count; i++)
                     wellViewModel.Wells[i].Mode = Mode.Reverse;
             ConsumptionsAndTimes = await SendWellsForConsumptions();
-            PlotTimeConsumptions(ConsumptionsAndTimes);
+            plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
             CalculateInitialFmin();
         }
 
         private void CalculateInitialFmin()
         {
-            if (GradientsAndConsumptions.Count != 0)
-                GradientsAndConsumptions.Clear();
+            
+            if (gradientViewModel.GradientsAndConsumptions.Count != 0)
+                gradientViewModel.GradientsAndConsumptions.Clear();
             Gradient g = new Gradient
             {
                 ChangedK = wellViewModel.Wells[0].K,
@@ -78,9 +77,9 @@ namespace ClientDesktop
                 ChangedKsi = wellViewModel.Wells[0].Ksi,
                 ChangedP0 = wellViewModel.Wells[0].P0
             };
-            GradientsAndConsumptions.Add(new GradientAndConsumptions());
-            GradientsAndConsumptions[0].Gradient = g;
-            GradientsAndConsumptions[0].ConsumptionsAndTimes = ConsumptionsAndTimes;
+            gradientViewModel.GradientsAndConsumptions.Add(new GradientAndConsumptions());
+            gradientViewModel.GradientsAndConsumptions[0].Gradient = g;
+            gradientViewModel.GradientsAndConsumptions[0].ConsumptionsAndTimes = ConsumptionsAndTimes;
             double Fmin = 0;
             switch (wellViewModel.Wells.Count)
             {
@@ -99,10 +98,10 @@ namespace ClientDesktop
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2) + Math.Pow(wellViewModel.Wells[2].Q, 2)));
                     break;
             }
-            GradientsAndConsumptions[0].Gradient.FminQ = Fmin;
-            GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-            gradientToShow = GradientsAndConsumptions.Last().Gradient;
-            GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
+            gradientViewModel.GradientsAndConsumptions[0].Gradient.FminQ = Fmin;
+            //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
+            gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().Gradient;
+            GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
 
         async void Clear()
@@ -111,7 +110,7 @@ namespace ClientDesktop
             string apiUrl = "https://localhost:44308/api/values";
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, apiUrl);
             var res = await httpClient.DeleteAsync(apiUrl);
-            GradientsAndConsumptions.Clear();
+            gradientViewModel.GradientsAndConsumptions.Clear();
 
             PressuresAndTimes?.Pressures1f?.Clear();
             PressuresAndTimes?.Pressures1s?.Clear();
@@ -132,107 +131,107 @@ namespace ClientDesktop
 
         private async void NextGradButton_Click(object sender, RoutedEventArgs e)
         {
-            Gradient g;
-            if (!IsFirstTimeGradientClicked)
-            {      
-                GradientsAndConsumptions.Last().Gradient.Lambda = Convert.ToDouble(GradientClc.Lambda.Text);
-                GradientsAndConsumptions.Last().Gradient.ChangedK = Convert.ToDouble(GradientClc.BeginK.Text) * Math.Pow(10.0, -15);
-                GradientsAndConsumptions.Last().Gradient.ChangedKappa = Convert.ToDouble(GradientClc.BeginKappa.Text) * (1.0 / 3600.0);
-                GradientsAndConsumptions.Last().Gradient.ChangedKsi = Convert.ToDouble(GradientClc.BeginKsi.Text);
-                GradientsAndConsumptions.Last().Gradient.ChangedP0 = Convert.ToDouble(GradientClc.BeginP0.Text) * Math.Pow(10.0, 6);
+            //Gradient g;
+            //if (!IsFirstTimeGradientClicked)
+            //{      
+            //    GradientsAndConsumptions.Last().Gradient.Lambda = Convert.ToDouble(GradientClc.Lambda.Text);
+            //    GradientsAndConsumptions.Last().Gradient.ChangedK = Convert.ToDouble(GradientClc.BeginK.Text) * Math.Pow(10.0, -15);
+            //    GradientsAndConsumptions.Last().Gradient.ChangedKappa = Convert.ToDouble(GradientClc.BeginKappa.Text) * (1.0 / 3600.0);
+            //    GradientsAndConsumptions.Last().Gradient.ChangedKsi = Convert.ToDouble(GradientClc.BeginKsi.Text);
+            //    GradientsAndConsumptions.Last().Gradient.ChangedP0 = Convert.ToDouble(GradientClc.BeginP0.Text) * Math.Pow(10.0, 6);
 
-                GradientsAndConsumptions.Last().Gradient.DeltaK = 
-                    wellViewModel.Wells[0].K * 
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaK.Text.Substring(GradientClc.deltaK.Text.IndexOf('-'),
-                    GradientClc.deltaK.Text.IndexOf(')') - GradientClc.deltaK.Text.IndexOf('-'))));
+            //    GradientsAndConsumptions.Last().Gradient.DeltaK = 
+            //        wellViewModel.Wells[0].K * 
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaK.Text.Substring(GradientClc.deltaK.Text.IndexOf('-'),
+            //        GradientClc.deltaK.Text.IndexOf(')') - GradientClc.deltaK.Text.IndexOf('-'))));
 
-                GradientsAndConsumptions.Last().Gradient.DeltaKappa =
-                    wellViewModel.Wells[0].Kappa *
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaKappa.Text.Substring(GradientClc.deltaKappa.Text.IndexOf('-'),
-                    GradientClc.deltaKappa.Text.IndexOf(')') - GradientClc.deltaKappa.Text.IndexOf('-'))));
+            //    GradientsAndConsumptions.Last().Gradient.DeltaKappa =
+            //        wellViewModel.Wells[0].Kappa *
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaKappa.Text.Substring(GradientClc.deltaKappa.Text.IndexOf('-'),
+            //        GradientClc.deltaKappa.Text.IndexOf(')') - GradientClc.deltaKappa.Text.IndexOf('-'))));
 
-                GradientsAndConsumptions.Last().Gradient.DeltaKsi = 
-                    wellViewModel.Wells[0].Ksi * 
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaKsi.Text.Substring(GradientClc.deltaKsi.Text.IndexOf('-'),
-                    GradientClc.deltaKsi.Text.IndexOf(')') - GradientClc.deltaKsi.Text.IndexOf('-'))));
+            //    GradientsAndConsumptions.Last().Gradient.DeltaKsi = 
+            //        wellViewModel.Wells[0].Ksi * 
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaKsi.Text.Substring(GradientClc.deltaKsi.Text.IndexOf('-'),
+            //        GradientClc.deltaKsi.Text.IndexOf(')') - GradientClc.deltaKsi.Text.IndexOf('-'))));
 
-                GradientsAndConsumptions.Last().Gradient.DeltaP0 = 
-                    wellViewModel.Wells[0].P0 * 
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaP0.Text.Substring(GradientClc.deltaP0.Text.IndexOf('-'),
-                    GradientClc.deltaP0.Text.IndexOf(')') - GradientClc.deltaP0.Text.IndexOf('-'))));
+            //    GradientsAndConsumptions.Last().Gradient.DeltaP0 = 
+            //        wellViewModel.Wells[0].P0 * 
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaP0.Text.Substring(GradientClc.deltaP0.Text.IndexOf('-'),
+            //        GradientClc.deltaP0.Text.IndexOf(')') - GradientClc.deltaP0.Text.IndexOf('-'))));
 
 
-                GradientsAndConsumptions.Last().Gradient.UsedK = GradientClc.UsedK.IsChecked;
-                GradientsAndConsumptions.Last().Gradient.UsedKappa = GradientClc.UsedKappa.IsChecked;
-                GradientsAndConsumptions.Last().Gradient.UsedKsi = GradientClc.UsedKsi.IsChecked;
-                GradientsAndConsumptions.Last().Gradient.UsedP0 = GradientClc.UsedP0.IsChecked;
+            //    GradientsAndConsumptions.Last().Gradient.UsedK = GradientClc.UsedK.IsChecked;
+            //    GradientsAndConsumptions.Last().Gradient.UsedKappa = GradientClc.UsedKappa.IsChecked;
+            //    GradientsAndConsumptions.Last().Gradient.UsedKsi = GradientClc.UsedKsi.IsChecked;
+            //    GradientsAndConsumptions.Last().Gradient.UsedP0 = GradientClc.UsedP0.IsChecked;
 
-                g = GradientsAndConsumptions.Last().Gradient;
-                IsFirstTimeGradientClicked = true;
-            }
-            else
-            {
-                g = GradientsAndConsumptions.Last().Gradient;
-                g.Lambda = Convert.ToDouble(GradientClc.Lambda.Text);
+            //    g = GradientsAndConsumptions.Last().Gradient;
+            //    IsFirstTimeGradientClicked = true;
+            //}
+            //else
+            //{
+            //    g = GradientsAndConsumptions.Last().Gradient;
+            //    g.Lambda = Convert.ToDouble(GradientClc.Lambda.Text);
 
-                g.DeltaK =
-                    wellViewModel.Wells[0].K *
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaK.Text.Substring(GradientClc.deltaK.Text.IndexOf('-'),
-                    GradientClc.deltaK.Text.IndexOf(')') - GradientClc.deltaK.Text.IndexOf('-'))));
+            //    g.DeltaK =
+            //        wellViewModel.Wells[0].K *
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaK.Text.Substring(GradientClc.deltaK.Text.IndexOf('-'),
+            //        GradientClc.deltaK.Text.IndexOf(')') - GradientClc.deltaK.Text.IndexOf('-'))));
 
-                g.DeltaKappa =
-                    wellViewModel.Wells[0].Kappa *
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaKappa.Text.Substring(GradientClc.deltaKappa.Text.IndexOf('-'),
-                    GradientClc.deltaKappa.Text.IndexOf(')') - GradientClc.deltaKappa.Text.IndexOf('-'))));
+            //    g.DeltaKappa =
+            //        wellViewModel.Wells[0].Kappa *
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaKappa.Text.Substring(GradientClc.deltaKappa.Text.IndexOf('-'),
+            //        GradientClc.deltaKappa.Text.IndexOf(')') - GradientClc.deltaKappa.Text.IndexOf('-'))));
 
-                g.DeltaKsi =
-                    wellViewModel.Wells[0].Ksi *
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaKsi.Text.Substring(GradientClc.deltaKsi.Text.IndexOf('-'),
-                    GradientClc.deltaKsi.Text.IndexOf(')') - GradientClc.deltaKsi.Text.IndexOf('-'))));
+            //    g.DeltaKsi =
+            //        wellViewModel.Wells[0].Ksi *
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaKsi.Text.Substring(GradientClc.deltaKsi.Text.IndexOf('-'),
+            //        GradientClc.deltaKsi.Text.IndexOf(')') - GradientClc.deltaKsi.Text.IndexOf('-'))));
 
-                g.DeltaP0 =
-                    wellViewModel.Wells[0].P0 *
-                    Math.Pow(10, Convert.ToDouble(GradientClc.deltaP0.Text.Substring(GradientClc.deltaP0.Text.IndexOf('-'),
-                    GradientClc.deltaP0.Text.IndexOf(')') - GradientClc.deltaP0.Text.IndexOf('-'))));
+            //    g.DeltaP0 =
+            //        wellViewModel.Wells[0].P0 *
+            //        Math.Pow(10, Convert.ToDouble(GradientClc.deltaP0.Text.Substring(GradientClc.deltaP0.Text.IndexOf('-'),
+            //        GradientClc.deltaP0.Text.IndexOf(')') - GradientClc.deltaP0.Text.IndexOf('-'))));
 
-            }
-            //this
-            GradientAndConsumptions gradientAndConsumptions = await SendWellsForGradient(g);
-            if (gradientAndConsumptions.ConsumptionsAndTimes != null)
-            {
-                GradientsAndConsumptions.Add(gradientAndConsumptions);
-                GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-                gradientToShow = GradientsAndConsumptions.Last().Gradient;
-                GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
-                GradientClc.CurrentK.Text = (gradientToShow.ChangedK * Math.Pow(10.0, 15)).ToString();
-                GradientClc.CurrentKappa.Text = (gradientToShow.ChangedKappa * 3600).ToString();
-                GradientClc.CurrentKsi.Text = gradientToShow.ChangedKsi.ToString();
-                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, -6)).ToString();
+            //}
+            ////this
+            //GradientAndConsumptions gradientAndConsumptions = await SendWellsForGradient(g);
+            //if (gradientAndConsumptions.ConsumptionsAndTimes != null)
+            //{
+            //    GradientsAndConsumptions.Add(gradientAndConsumptions);
+            //    //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
+            //    gradientToShow = GradientsAndConsumptions.Last().Gradient;
+            //    GradientClc.FQmin.Text = gradientToShow.FminQ.ToString();
+            //    GradientClc.CurrentK.Text = (gradientToShow.ChangedK * Math.Pow(10.0, 15)).ToString();
+            //    GradientClc.CurrentKappa.Text = (gradientToShow.ChangedKappa * 3600).ToString();
+            //    GradientClc.CurrentKsi.Text = gradientToShow.ChangedKsi.ToString();
+            //    GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, -6)).ToString();
 
-                PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
-            }
+            //    plotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
+            //}
         }
 
         private void PreviousGradButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GradientsAndConsumptions.Count > 1)
+            if (gradientViewModel.GradientsAndConsumptions.Count > 1)
             {
-                GradientsAndConsumptions.RemoveAt(GradientsAndConsumptions.Count - 1);
-                GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-                gradientToShow = GradientsAndConsumptions.Last().Gradient;
-                GradientClc.Fmin.Text = gradientToShow.FminQ.ToString();
-                GradientClc.CurrentK.Text = (gradientToShow.ChangedK * Math.Pow(10.0, 15)).ToString();
-                GradientClc.CurrentKappa.Text = (gradientToShow.ChangedKappa * 3600).ToString();
-                GradientClc.CurrentKsi.Text = gradientToShow.ChangedKsi.ToString();
-                GradientClc.CurrentP0.Text = (gradientToShow.ChangedP0 * Math.Pow(10.0, -6)).ToString();
-                PlotTimeConsumptions(GradientsAndConsumptions.Last().ConsumptionsAndTimes);
-                if (GradientsAndConsumptions.Count == 1)
+                gradientViewModel.GradientsAndConsumptions.RemoveAt(gradientViewModel.GradientsAndConsumptions.Count - 1);
+                //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
+                gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().Gradient;
+                GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
+                GradientClc.CurrentK.Text = (gradientViewModel.SelectedGradient.ChangedK * Math.Pow(10.0, 15)).ToString();
+                GradientClc.CurrentKappa.Text = (gradientViewModel.SelectedGradient.ChangedKappa * 3600).ToString();
+                GradientClc.CurrentKsi.Text = gradientViewModel.SelectedGradient.ChangedKsi.ToString();
+                GradientClc.CurrentP0.Text = (gradientViewModel.SelectedGradient.ChangedP0 * Math.Pow(10.0, -6)).ToString();
+                plotViewModel.PlotTimeConsumptions(gradientViewModel.GradientsAndConsumptions.Last().ConsumptionsAndTimes);
+                if (gradientViewModel.GradientsAndConsumptions.Count == 1)
                     IsFirstTimeGradientClicked = false;
             }
         }
 
         #region Send to server
-        async Task<PressuresAndTimes> SendWellsForPressures()
+        async static Task<PressuresAndTimes> SendWellsForPressures()
         {
             WellsList wellsList = new WellsList(wellViewModel.Wells);
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
@@ -253,7 +252,7 @@ namespace ClientDesktop
             wellViewModel.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
-        async Task<ConsumptionsAndTimes> SendWellsForConsumptions()
+        async static Task<ConsumptionsAndTimes> SendWellsForConsumptions()
         {
             WellsList wellsList = new WellsList(wellViewModel.Wells);
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
@@ -273,7 +272,7 @@ namespace ClientDesktop
             wellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2]-2];
             return consumptionsAndTimes;
         }
-        async Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
+        async static Task<GradientAndConsumptions> SendWellsForGradient(Gradient gradient)
         {
             WellsList wellsList = new WellsList(wellViewModel.Wells);
             GradientAndWellsList gradientAndWellsList = new GradientAndWellsList
@@ -431,36 +430,36 @@ namespace ClientDesktop
             }
         }
 
-        private void PlotTimeConsumptions(ConsumptionsAndTimes consumptionsAndTimes)
-        {
-            plotViewModel.MyModel.Series.Clear();
-            plotViewModel.MyModel.InvalidatePlot(true);
-            var model = new PlotModel { LegendSymbolLength = 24 };
-            model.Series.Add(new LineSeries
-            {
-                Color = OxyColors.SkyBlue,
-                MarkerType = MarkerType.None,
-                MarkerStrokeThickness = 1.5
-            });
-            foreach (var pt in consumptionsAndTimes.Consumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
-            {
-                (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
-            }
-            if (consumptionsAndTimes.StaticConsumptions != null)
-            {
-                model.Series.Add(new LineSeries
-                {
-                    Color = OxyColors.Red,
-                    MarkerType = MarkerType.None,
-                    MarkerStrokeThickness = 1.5
-                });
-                foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
-                {
-                    (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
-                }
-            }
-            plotViewModel.MyModel = model;
-        }
+        //public void PlotTimeConsumptions(ConsumptionsAndTimes consumptionsAndTimes)
+        //{
+        //    plotViewModel.MyModel.Series.Clear();
+        //    plotViewModel.MyModel.InvalidatePlot(true);
+        //    var model = new PlotModel { LegendSymbolLength = 24 };
+        //    model.Series.Add(new LineSeries
+        //    {
+        //        Color = OxyColors.SkyBlue,
+        //        MarkerType = MarkerType.None,
+        //        MarkerStrokeThickness = 1.5
+        //    });
+        //    foreach (var pt in consumptionsAndTimes.Consumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+        //    {
+        //        (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+        //    }
+        //    if (consumptionsAndTimes.StaticConsumptions != null)
+        //    {
+        //        model.Series.Add(new LineSeries
+        //        {
+        //            Color = OxyColors.Red,
+        //            MarkerType = MarkerType.None,
+        //            MarkerStrokeThickness = 1.5
+        //        });
+        //        foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+        //        {
+        //            (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+        //        }
+        //    }
+        //    plotViewModel.MyModel = model;
+        //}
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using ClientDesktop.Models;
+using OxyPlot;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -12,106 +13,6 @@ namespace ClientDesktop.ViewModels
 {
     public class PlotViewModel : INotifyPropertyChanged
     {
-        //public PlotViewModel()
-        //{
-        //    Title = "O";
-        //    PressureTime1 = new List<DataPoint>();
-        //    PressureTime1f = new List<DataPoint>();
-        //    PressureTime1s = new List<DataPoint>();
-        //    PressureTime2 = new List<DataPoint>();
-        //    PressureTime2f = new List<DataPoint>();
-        //    PressureTime2s = new List<DataPoint>();
-        //    PressureTime3 = new List<DataPoint>();
-        //}
-        //private string title;
-        //public string Title
-        //{
-        //    get { return title; }
-        //    set
-        //    {
-        //        title = value;
-        //        OnPropertyChanged("Title");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime1;      
-        //public IList<DataPoint> PressureTime1
-        //{
-        //    get { return pressuretime1; }
-        //    set
-        //    {
-        //        pressuretime1 = value;
-        //        OnPropertyChanged("PressureTime1");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime1f;
-        //public IList<DataPoint> PressureTime1f
-        //{
-        //    get { return pressuretime1f; }
-        //    set
-        //    {
-        //        pressuretime1f = value;
-        //        OnPropertyChanged("PressureTime1f");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime1s;
-        //public IList<DataPoint> PressureTime1s
-        //{
-        //    get { return pressuretime1s; }
-        //    set
-        //    {
-        //        pressuretime1s = value;
-        //        OnPropertyChanged("PressureTime1s");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime2;
-        //public IList<DataPoint> PressureTime2
-        //{
-        //    get { return pressuretime2; }
-        //    set
-        //    {
-        //        pressuretime2 = value;
-        //        OnPropertyChanged("PressureTime2");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime2f;
-        //public IList<DataPoint> PressureTime2f
-        //{
-        //    get { return pressuretime2f; }
-        //    set
-        //    {
-        //        pressuretime2f = value;
-        //        OnPropertyChanged("PressureTime2f");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime2s;
-        //public IList<DataPoint> PressureTime2s
-        //{
-        //    get { return pressuretime2s; }
-        //    set
-        //    {
-        //        pressuretime2s = value;
-        //        OnPropertyChanged("PressureTime2s");
-        //    }
-        //}
-
-        //private IList<DataPoint> pressuretime3;
-        //public IList<DataPoint> PressureTime3
-        //{
-        //    get { return pressuretime3; }
-        //    set
-        //    {
-        //        pressuretime3 = value;
-        //        OnPropertyChanged("PressureTime3");
-        //    }
-        //}
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string prop = "")
         {
@@ -155,6 +56,37 @@ namespace ClientDesktop.ViewModels
             MyModel.Series.Add(s2);
             MyModel.Series.Add(s3);
             MyModel.InvalidatePlot(true);
+        }
+
+        public void PlotTimeConsumptions(ConsumptionsAndTimes consumptionsAndTimes)
+        {
+            MyModel.Series.Clear();
+            MyModel.InvalidatePlot(true);
+            var model = new PlotModel { LegendSymbolLength = 24 };
+            model.Series.Add(new LineSeries
+            {
+                Color = OxyColors.SkyBlue,
+                MarkerType = MarkerType.None,
+                MarkerStrokeThickness = 1.5
+            });
+            foreach (var pt in consumptionsAndTimes.Consumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+            {
+                (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+            }
+            if (consumptionsAndTimes.StaticConsumptions != null)
+            {
+                model.Series.Add(new LineSeries
+                {
+                    Color = OxyColors.Red,
+                    MarkerType = MarkerType.None,
+                    MarkerStrokeThickness = 1.5
+                });
+                foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
+                {
+                    (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
+                }
+            }
+            MyModel = model;
         }
         private PlotModel myModel { get; set; }
         public PlotModel MyModel
