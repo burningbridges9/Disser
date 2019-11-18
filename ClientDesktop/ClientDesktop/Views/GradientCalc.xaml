@@ -21,7 +21,6 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
-
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -33,26 +32,26 @@
                 <ColumnDefinition Width="110*"></ColumnDefinition>
                 <ColumnDefinition Width="130*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="FQmin"   Text = "{Binding Path=FQmin}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-            <TextBox x:Name="FPmin"   Text = "{Binding Path=FPmin}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="FQmin"   Text = "{Binding Path=SelectedGradient.FminQ, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="FPmin"   Text = "{Binding Path=SelectedGradient.FminQ, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
             <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="FP->min" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"    />
-            <TextBox x:Name="gradK" HorizontalAlignment="Center"      Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
-            <TextBox x:Name="gradKappa" HorizontalAlignment="Center"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"                       />
-            <TextBox x:Name="gradKsi" HorizontalAlignment="Center"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
-            <TextBox x:Name="gradP0" HorizontalAlignment="Center"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"              />
+            <TextBox x:Name="gradK" HorizontalAlignment="Center"     Text ="{Binding Path=SelectedGradient.GradientK, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
+            <TextBox x:Name="gradKappa" HorizontalAlignment="Center" Text ="{Binding Path=SelectedGradient.GradientKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"                       />
+            <TextBox x:Name="gradKsi" HorizontalAlignment="Center"   Text ="{Binding Path=SelectedGradient.GradientKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="90" FontSize="14" TextAlignment="Center"                 />
+            <TextBox x:Name="gradP0" HorizontalAlignment="Center"    Text ="{Binding Path=SelectedGradient.GradientP0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="90" FontSize="14" TextAlignment="Center"              />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                          />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                      />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                     />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"                        />
 
 
-            <TextBox x:Name="CurrentK"              Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-            <TextBox x:Name="CurrentKappa"  Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-            <TextBox x:Name="CurrentKsi"   Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-            <TextBox x:Name="CurrentP0"    Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+            <TextBox x:Name="CurrentK"     Text ="{Binding Path=SelectedGradient.ChangedK, UpdateSourceTrigger=PropertyChanged}"     Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+            <TextBox x:Name="CurrentKappa" Text ="{Binding Path=SelectedGradient.ChangedKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
+            <TextBox x:Name="CurrentKsi"   Text ="{Binding Path=SelectedGradient.ChangedKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+            <TextBox x:Name="CurrentP0"    Text ="{Binding Path=SelectedGradient.ChangedP0, UpdateSourceTrigger=PropertyChanged}"     Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
             <TextBox x:Name="BeginK"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
             <TextBox x:Name="BeginKappa"    Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="110"      />
             <TextBox x:Name="BeginKsi"     Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"   />
@@ -77,10 +76,10 @@
             <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2" Text ="10^(-3) * Ksi"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center" Height="27"   Width="110" FontSize="14" TextAlignment="Center"          />
             <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3" Text ="10^(-3) * P0"    Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center" Height="27" Width="110" FontSize="14" TextAlignment="Center"       />
 
-            <CheckBox x:Name="UsedK" HorizontalAlignment="Left" Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0" Height="15"  Width="50"  />
-            <CheckBox x:Name="UsedKappa" HorizontalAlignment="Left" Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Height="15"  Width="76"/>
-            <CheckBox x:Name="UsedKsi" HorizontalAlignment="Left" Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Height="15"  Width="58"/>
-            <CheckBox x:Name="UsedP0" HorizontalAlignment="Left" Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Height="15"  Width="56"  />
+            <CheckBox x:Name="UsedK" HorizontalAlignment="Left" Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0"     Grid.ColumnSpan="2" Height="15"  Width="50"  />
+            <CheckBox x:Name="UsedKappa" HorizontalAlignment="Left" Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="15"  Width="76"/>
+            <CheckBox x:Name="UsedKsi" HorizontalAlignment="Left" Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0"   Grid.ColumnSpan="2" Height="15"  Width="58"/>
+            <CheckBox x:Name="UsedP0" HorizontalAlignment="Left" Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0"    Grid.ColumnSpan="2" Height="15"  Width="56"  />
 
 
             <Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Command="{Binding NextStep}">

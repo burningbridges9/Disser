@@ -77,7 +77,7 @@
     <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
     <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
-    <Compile Include="Layouts\GradientCalc.xaml.cs">
+    <Compile Include="Views\GradientCalc.xaml.cs">
       <DependentUpon>GradientCalc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ConsumptionsAndTimes.cs" />
@@ -92,11 +92,11 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="ViewModels\WellViewModel.cs" />
-    <Page Include="Layouts\GradientCalc.xaml">
+    <Page Include="Views\GradientCalc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Layouts\PressureCalcLayout.xaml">
+    <Page Include="Views\PressureCalcLayout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -108,7 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Layouts\PressureCalcLayout.xaml.cs">
+    <Compile Include="Views\PressureCalcLayout.xaml.cs">
       <DependentUpon>PressureCalcLayout.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">

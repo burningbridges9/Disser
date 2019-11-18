@@ -37,6 +37,19 @@ namespace ClientDesktop.ViewModels
             }
         }
 
+        private ICommand _previousStepCommand;
+        public ICommand PreviousStep
+        {
+            get
+            {
+                if (_previousStepCommand == null)
+                {
+                    _previousStepCommand = new PreviousStepCommand(this);
+                }
+                return _previousStepCommand;
+            }
+        }
+
         public List<GradientAndConsumptions> GradientsAndConsumptions;
 
         public List<Gradient> Gradients;

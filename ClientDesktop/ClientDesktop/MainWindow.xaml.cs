@@ -101,7 +101,7 @@ namespace ClientDesktop
             gradientViewModel.GradientsAndConsumptions[0].Gradient.FminQ = Fmin;
             //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
             gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().Gradient;
-            GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
+            //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
 
         async void Clear()
@@ -214,20 +214,20 @@ namespace ClientDesktop
 
         private void PreviousGradButton_Click(object sender, RoutedEventArgs e)
         {
-            if (gradientViewModel.GradientsAndConsumptions.Count > 1)
-            {
-                gradientViewModel.GradientsAndConsumptions.RemoveAt(gradientViewModel.GradientsAndConsumptions.Count - 1);
-                //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-                gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().Gradient;
-                GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
-                GradientClc.CurrentK.Text = (gradientViewModel.SelectedGradient.ChangedK * Math.Pow(10.0, 15)).ToString();
-                GradientClc.CurrentKappa.Text = (gradientViewModel.SelectedGradient.ChangedKappa * 3600).ToString();
-                GradientClc.CurrentKsi.Text = gradientViewModel.SelectedGradient.ChangedKsi.ToString();
-                GradientClc.CurrentP0.Text = (gradientViewModel.SelectedGradient.ChangedP0 * Math.Pow(10.0, -6)).ToString();
-                plotViewModel.PlotTimeConsumptions(gradientViewModel.GradientsAndConsumptions.Last().ConsumptionsAndTimes);
-                if (gradientViewModel.GradientsAndConsumptions.Count == 1)
-                    IsFirstTimeGradientClicked = false;
-            }
+            //if (gradientViewModel.GradientsAndConsumptions.Count > 1)
+            //{
+            //    gradientViewModel.GradientsAndConsumptions.RemoveAt(gradientViewModel.GradientsAndConsumptions.Count - 1);
+            //    //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
+            //    gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().Gradient;
+            //    GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
+            //    GradientClc.CurrentK.Text = (gradientViewModel.SelectedGradient.ChangedK * Math.Pow(10.0, 15)).ToString();
+            //    GradientClc.CurrentKappa.Text = (gradientViewModel.SelectedGradient.ChangedKappa * 3600).ToString();
+            //    GradientClc.CurrentKsi.Text = gradientViewModel.SelectedGradient.ChangedKsi.ToString();
+            //    GradientClc.CurrentP0.Text = (gradientViewModel.SelectedGradient.ChangedP0 * Math.Pow(10.0, -6)).ToString();
+            //    plotViewModel.PlotTimeConsumptions(gradientViewModel.GradientsAndConsumptions.Last().ConsumptionsAndTimes);
+            //    if (gradientViewModel.GradientsAndConsumptions.Count == 1)
+            //        IsFirstTimeGradientClicked = false;
+            //}
         }
 
         #region Send to server

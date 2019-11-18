@@ -15,54 +15,41 @@
     <Grid x:Name="MainGrid">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="700"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="518*"></ColumnDefinition>
                 <ColumnDefinition Width="675*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TabControl Grid.Row="0"  >
-                <TabItem x:Name="PressureTI" Width="150" Height="50" Header="Pressure" FontSize="20"/>
-
-                <TabItem x:Name="ConsumptionTI" Width="150" Height="50" Header="Consumption" FontSize="20"/>
-
+            <oxy:PlotView x:Name="Plot" Model ="{Binding MyModel}"  Grid.Column="0"/>
+            <TabControl Grid.Column="1" Grid.RowSpan="2">
+                <TabItem x:Name="PressureAndConsumption" Width="280" Height="50" Header="Pressure and Consumption" FontSize="20">
+                    <Grid>
+                        <pr:PressureCalcLayout x:Name="Addition" Grid.Column="1"/>
+                    </Grid>                    
+                </TabItem>
+                <TabItem x:Name="GradientTI" Width="150" Height="50" Header="Gradient" FontSize="20">
+                    <Grid>
+                        <pr:GradientCalc x:Name="GradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
-            <oxy:PlotView x:Name="Plot" Model ="{Binding MyModel}"  Grid.Column="0" Grid.Row="1" Margin="0,0.6,1.4,156.8" />
-
-
-            <Grid x:Name="DataValuesGrid" Grid.Column="1" Grid.Row="1">
-                <Grid.RowDefinitions>
-                        <RowDefinition Height="200"/>
-                        <RowDefinition Height="400"/>
-                        <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-            <pr:PressureCalcLayout x:Name="Addition" Grid.Column="0" Grid.Row ="0"/>
-            <pr:GradientCalc x:Name="GradientClc" Grid.Column="0"  Grid.Row="1"/>
-                <Grid x:Name="ButtonsGrid" Grid.Column="0" Grid.Row="2" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="CalculatePressuresButton" Grid.Column ="0"  Click="CalculatePressuresButton_Click">
-                        <TextBlock Text="Pressures"/>
-                    </Button>
-                    <Button x:Name="ClearButton" Grid.Column ="1"  Click="ClearButton_Click" >
-                        <TextBlock Text="Clear"/>
-                    </Button>
-                    <Button x:Name="CalculateConsumptionsButton"  Grid.Column ="2" Click="CalculateConsumptionsButton_Click">
-                        <TextBlock Text="Consumptions"/>
-                    </Button>
-                    <Button x:Name="NextGradButton" Grid.Column ="3"  Click="NextGradButton_Click" Grid.ColumnSpan="2" Height="50" Margin="0.4,0,134.2,0" VerticalAlignment="Top" >
-                        <TextBlock Text="Next step"/>
-                    </Button>
-                    <Button x:Name="PreviousGradButton"  Grid.Column ="4" Click="PreviousGradButton_Click" Height="50" Margin="0.2,0,0.2,0.4" VerticalAlignment="Bottom">
-                        <TextBlock Text="Previous step"/>
-                    </Button>
-                </Grid>
+            <Grid x:Name="ButtonsGrid" Grid.Column="0" Grid.Row="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="CalculatePressuresButton" Grid.Column ="0"  Click="CalculatePressuresButton_Click">
+                    <TextBlock Text="Pressures"/>
+                </Button>
+                <Button x:Name="ClearButton" Grid.Column ="1"  Click="ClearButton_Click" >
+                    <TextBlock Text="Clear"/>
+                </Button>
+                <Button x:Name="CalculateConsumptionsButton"  Grid.Column ="2" Click="CalculateConsumptionsButton_Click">
+                    <TextBlock Text="Consumptions"/>
+                </Button>
             </Grid>
         </Grid>
     </Grid>
