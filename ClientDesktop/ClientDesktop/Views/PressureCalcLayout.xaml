@@ -6,13 +6,102 @@
              xmlns:local="clr-namespace:ClientDesktop.Layouts"
              xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:Converter="clr-namespace:ClientDesktop.Commands.ValueConverters"
+             xmlns:WellConverter="clr-namespace:ClientDesktop.Commands.ValueConverters.WellConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Converter:AddWellConverter x:Key="addWellConverter"/>
+        <WellConverter:QConverter x:Key="qConverter" />
+        <WellConverter:PConverter x:Key="pConverter" />
+        <WellConverter:KConverter x:Key="kConverter" />
+        <WellConverter:KappaConverter x:Key="kappaConverter" />
+        <WellConverter:TimeConverter x:Key="timeConverter" />
+        <WellConverter:MuConverter x:Key="muConverter" />
+        <DataTemplate x:Key="listTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <Grid Grid.Row="0" x:Name="ParametersItem">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="114*"></ColumnDefinition>
+                        <ColumnDefinition Width="100*"></ColumnDefinition>
+                        <ColumnDefinition Width="109*"></ColumnDefinition>
+                        <ColumnDefinition Width="134*"></ColumnDefinition>
+                        <ColumnDefinition Width="114*"></ColumnDefinition>
+                        <ColumnDefinition Width="100*"></ColumnDefinition>
+                        <ColumnDefinition Width="129*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TextBoxQ"   Text="{Binding Path=Q, Converter={StaticResource qConverter}}" Grid.Column="1" HorizontalAlignment="Center" Height="23"                Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"     />
+                    <TextBlock x:Name="TextBoxP"   Text="{Binding Path=P, Converter={StaticResource pConverter}}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"               Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxP0"  Text="{Binding Path=P0, Converter={StaticResource pConverter}}"  Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"    />
+                    <TextBlock x:Name="TextBoxT1"  Text="{Binding Path=Time1, Converter={StaticResource timeConverter}}"  Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"    />
+                    <TextBlock x:Name="TextBoxT2"  Text="{Binding Path=Time2, Converter={StaticResource timeConverter}}"  Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"    />
+                    <TextBlock x:Name="TextBoxN"   Text="{Binding Path=N}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"             Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxCalculatedP" Text="{Binding Path=CalcMP}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"    />
+                    <TextBlock x:Name="TextBoxCalculatedQ" Text="{Binding Path=CalcMQ}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"  />
+
+                    <TextBlock x:Name="TextBoxMu"    Text="{Binding Path=Mu, Converter={StaticResource muConverter}}"   Grid.Column="5" HorizontalAlignment="Center" Height="23"    Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxKappa" Text="{Binding Path=Kappa, Converter={StaticResource kappaConverter}}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="40"   />
+                    <TextBlock x:Name="TextBoxK"     Text="{Binding Path=K, Converter={StaticResource kConverter}}"    Grid.Column="5"   HorizontalAlignment="Center" Height="23" Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="40"/>
+                    <TextBlock x:Name="TextBoxH0"    Text="{Binding Path=H0}"   Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxRw"    Text="{Binding Path=Rw}"     Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxRs"    Text="{Binding Path=Rs}"     Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="40"  />
+                    <TextBlock x:Name="TextBoxKsi"   Text="{Binding Path=Ksi}"   Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Center" Width="40"   />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Q = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="P = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="P0 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="t1 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="t2 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="N = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Calc Q = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Calc P = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="м^3/сут" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="час" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="час" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="2" TextWrapping="Wrap" Text="м^3/сут" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="4" TextWrapping="Wrap" Text="Mu = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="4" TextWrapping="Wrap" Text="Kappa = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" Text="K = "     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="4" TextWrapping="Wrap" Text="H0 = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="4" TextWrapping="Wrap" Text="Rw = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="4" TextWrapping="Wrap" Text="Rs = "    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="4" TextWrapping="Wrap" Text="Ksi = "   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="6" TextWrapping="Wrap" Text="сПз"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="6" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" Text="мД"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap"              VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                    
+                </Grid>
+                </Border>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <Grid x:Name="Parameters">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="Parameters">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -112,6 +201,18 @@
                 <!--Click="SubmitDelete_Click"-->
                 <TextBlock Text="Delete All"/>
             </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListBox x:Name="wellsList" ItemTemplate="{StaticResource listTemplate}" 
+                 SelectionChanged="WellsList_SelectionChanged"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </Grid>
     </Grid>
 </UserControl>

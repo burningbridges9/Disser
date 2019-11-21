@@ -31,6 +31,13 @@ namespace ClientDesktop.Layouts
             wellViewModel = new WellViewModel();
             DataContext = wellViewModel;
             InitializeComponent();
+            wellsList.ItemsSource = wellViewModel.Wells;
+        }
+
+        private void WellsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Well w = (Well)wellsList.SelectedItem;
+            MessageBox.Show(w.Q.ToString());
         }
     }
 }

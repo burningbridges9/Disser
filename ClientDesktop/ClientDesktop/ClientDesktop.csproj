@@ -76,6 +76,12 @@
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
     <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\KConverter.cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\KappaConverter.cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\TimeConverter.cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\MuConverter.cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\PConverter .cs" />
+    <Compile Include="Commands\ValueConverters\WellConverters\QConverter.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
     <Compile Include="Views\GradientCalc.xaml.cs">
       <DependentUpon>GradientCalc.xaml</DependentUpon>
