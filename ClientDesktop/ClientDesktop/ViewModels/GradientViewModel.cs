@@ -2,6 +2,7 @@
 using ClientDesktop.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -52,13 +53,13 @@ namespace ClientDesktop.ViewModels
 
         public List<GradientAndConsumptions> GradientsAndConsumptions;
 
-        public List<Gradient> Gradients;
+        public ObservableCollection<Gradient> Gradients;
 
         public bool IsFirstTimeGradientClicked;
 
         public GradientViewModel()
         {
-            Gradients = new List<Gradient>();
+            Gradients = new ObservableCollection<Gradient>();
             GradientsAndConsumptions = new List<GradientAndConsumptions>();
         }
 

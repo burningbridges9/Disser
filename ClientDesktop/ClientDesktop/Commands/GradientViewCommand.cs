@@ -105,6 +105,7 @@ namespace ClientDesktop.Commands
             if (gradientAndConsumptions.ConsumptionsAndTimes != null)
             {
                 _gvm.GradientsAndConsumptions.Add(gradientAndConsumptions);
+                _gvm.Gradients.Add(gradientAndConsumptions.Gradient);
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().Gradient;
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().Gradient;
                 MainWindow.plotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
@@ -151,6 +152,7 @@ namespace ClientDesktop.Commands
             if (_gvm.GradientsAndConsumptions.Count > 1)
             {
                 _gvm.GradientsAndConsumptions.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
+                _gvm.Gradients.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().Gradient;
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().Gradient;
                 //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();

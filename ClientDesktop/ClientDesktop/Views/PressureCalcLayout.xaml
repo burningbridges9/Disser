@@ -103,24 +103,24 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" x:Name="Parameters">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="114*"></ColumnDefinition>
-                <ColumnDefinition Width="100*"></ColumnDefinition>
-                <ColumnDefinition Width="109*"></ColumnDefinition>
-                <ColumnDefinition Width="134*"></ColumnDefinition>
-                <ColumnDefinition Width="114*"></ColumnDefinition>
-                <ColumnDefinition Width="100*"></ColumnDefinition>
-                <ColumnDefinition Width="129*"></ColumnDefinition>
+                <ColumnDefinition Width="114*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="109*"/>
+                <ColumnDefinition Width="134*"/>
+                <ColumnDefinition Width="114*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="129*"/>
             </Grid.ColumnDefinitions>
             <TextBox x:Name="TextBoxQ" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"                Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
             <TextBox x:Name="TextBoxP" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23"               Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83"  />
@@ -204,7 +204,6 @@
         </Grid>
         <Grid Grid.Row="1">
             <ListBox x:Name="wellsList" ItemTemplate="{StaticResource listTemplate}" 
-                 SelectionChanged="WellsList_SelectionChanged"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <ListBox.ItemsPanel>

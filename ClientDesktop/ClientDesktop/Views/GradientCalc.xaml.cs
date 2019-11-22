@@ -29,6 +29,7 @@ namespace ClientDesktop.Layouts
             gradientViewModel = new GradientViewModel();
             DataContext = gradientViewModel;
             InitializeComponent();
+            gradientList.ItemsSource = gradientViewModel.Gradients;
         }
 
     }
