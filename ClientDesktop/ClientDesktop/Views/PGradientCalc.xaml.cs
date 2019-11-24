@@ -21,12 +21,12 @@ namespace ClientDesktop.Layouts
     /// <summary>
     /// Interaction logic for GradientCalc.xaml
     /// </summary>
-    public partial class GradientCalc : UserControl
+    public partial class PGradientCalc : UserControl
     {
-        public static GradientViewModel gradientViewModel;
-        public GradientCalc()
+        public static PGradientViewModel gradientViewModel;
+        public PGradientCalc()
         {
-            gradientViewModel = new GradientViewModel();
+            gradientViewModel = new PGradientViewModel();
             DataContext = gradientViewModel;
             InitializeComponent();
             gradientList.ItemsSource = gradientViewModel.Gradients;

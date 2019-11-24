@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Models
+namespace ComputationalServer.Models
 {
-    public class GradientAndConsumptions
+    public class QGradientAndConsumptions
     {
-        public Gradient Gradient { get; set; }
+        public QGradient QGradient { get; set; }
         public ConsumptionsAndTimes ConsumptionsAndTimes { get; set; }
     }
 }

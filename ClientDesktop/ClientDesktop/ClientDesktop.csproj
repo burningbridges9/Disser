@@ -72,7 +72,8 @@
     </ApplicationDefinition>
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
-    <Compile Include="Commands\GradientViewCommand.cs" />
+    <Compile Include="Commands\PGradientViewCommand.cs" />
+    <Compile Include="Commands\QGradientViewCommand.cs" />
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
     <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
@@ -83,22 +84,34 @@
     <Compile Include="Commands\ValueConverters\WellConverters\PConverter .cs" />
     <Compile Include="Commands\ValueConverters\WellConverters\QConverter.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
-    <Compile Include="Views\GradientCalc.xaml.cs">
-      <DependentUpon>GradientCalc.xaml</DependentUpon>
+    <Compile Include="Models\PGradientAndPressures.cs" />
+    <Compile Include="Models\PGradient.cs" />
+    <Compile Include="Models\QGradient.cs" />
+    <Compile Include="Models\PGradientAndWellsList.cs" />
+    <Compile Include="Views\PGradientCalc.xaml.cs">
+      <DependentUpon>PGradientCalc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\PGradientViewModel.cs" />
+    <Compile Include="Views\QGradientCalc.xaml.cs">
+      <DependentUpon>QGradientCalc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ConsumptionsAndTimes.cs" />
     <Compile Include="Models\Gradient.cs" />
-    <Compile Include="Models\GradientAndConsumptions.cs" />
-    <Compile Include="Models\GradientAndWellsList.cs" />
+    <Compile Include="Models\QGradientAndConsumptions.cs" />
+    <Compile Include="Models\QGradientAndWellsList.cs" />
     <Compile Include="Models\Mode.cs" />
     <Compile Include="Models\PressuresAndTimes.cs" />
     <Compile Include="Models\WellsList.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
-    <Compile Include="ViewModels\GradientViewModel.cs" />
+    <Compile Include="ViewModels\QGradientViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="ViewModels\WellViewModel.cs" />
-    <Page Include="Views\GradientCalc.xaml">
+    <Page Include="Views\PGradientCalc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\QGradientCalc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

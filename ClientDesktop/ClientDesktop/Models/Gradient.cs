@@ -231,32 +231,6 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
-        private double _FminQ;
-        [JsonProperty("FminQ")]
-        public double FminQ
-        {
-            get { return _FminQ; }
-            set
-            {
-                _FminQ = value;
-                OnPropertyChanged("FminQ");
-            }
-        }
-
-        [JsonIgnore]
-        private double _FminP;
-        [JsonProperty("FminP")]
-        public double FminP
-        {
-            get { return _FminP; }
-            set
-            {
-                _FminP = value;
-                OnPropertyChanged("FminP");
-            }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

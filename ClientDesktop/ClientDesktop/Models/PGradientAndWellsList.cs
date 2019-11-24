@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputationalServer.Models
+namespace ClientDesktop.Models
 {
-    public class GradientAndWellsList
+    public class PGradientAndWellsList
     {
         [JsonProperty("Gradient")]
-        public Gradient Gradient { get; set; }
+        public PGradient Gradient { get; set; }
         [JsonProperty("WellsList")]
         public WellsList WellsList { get; set; }
     }

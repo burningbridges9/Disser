@@ -1,21 +1,17 @@
 ﻿using ClientDesktop.Commands;
 using ClientDesktop.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.ViewModels
+namespace ClientDesktop.Layouts
 {
-    public class GradientViewModel : INotifyPropertyChanged
+    public class PGradientViewModel : INotifyPropertyChanged
     {
-        private Gradient _selectedGradient;
-        public Gradient SelectedGradient
+        private PGradient _selectedGradient;
+        public PGradient SelectedGradient
         {
             get { return _selectedGradient; }
             set
@@ -25,42 +21,42 @@ namespace ClientDesktop.ViewModels
             }
         }
 
-        private ICommand _nextStepCommand;
+        private ICommand _nextStepPCommand;
         public ICommand NextStep
         {
             get
             {
-                if (_nextStepCommand == null)
+                if (_nextStepPCommand == null)
                 {
-                    _nextStepCommand = new NextStepCommand(this);
+                    _nextStepPCommand = new NextStepPCommand(this);
                 }
-                return _nextStepCommand;
+                return _nextStepPCommand;
             }
         }
 
-        private ICommand _previousStepCommand;
+        private ICommand _previousStepPCommand;
         public ICommand PreviousStep
         {
             get
             {
-                if (_previousStepCommand == null)
+                if (_previousStepPCommand == null)
                 {
-                    _previousStepCommand = new PreviousStepCommand(this);
+                    _previousStepPCommand = new PreviousStepPCommand(this);
                 }
-                return _previousStepCommand;
+                return _previousStepPCommand;
             }
         }
 
-        public List<GradientAndConsumptions> GradientsAndConsumptions;
+        public List<PGradientAndPressures> PGradientAndPressures;
 
         public ObservableCollection<Gradient> Gradients;
 
         public bool IsFirstTimeGradientClicked;
 
-        public GradientViewModel()
+        public PGradientViewModel()
         {
             Gradients = new ObservableCollection<Gradient>();
-            GradientsAndConsumptions = new List<GradientAndConsumptions>();
+            PGradientAndPressures = new List<PGradientAndPressures>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

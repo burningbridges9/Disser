@@ -158,7 +158,7 @@ namespace ComputationalServer.Controllers
 
         [HttpPost]
         [Route("nextgradient")]
-        public IActionResult GradientMethod([FromBody] GradientAndWellsList gradientAndWellsList)
+        public IActionResult GradientMethod([FromBody] QGradientAndWellsList gradientAndWellsList)
         {
             List<Well> gradientWells = new List<Well>();
             foreach (var v in gradientAndWellsList.WellsList.Wells)
@@ -188,7 +188,7 @@ namespace ComputationalServer.Controllers
                 gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
                 gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
             }
-            GradientAndConsumptions gradientAndConsumptions = new GradientAndConsumptions() { Gradient = gradientAndWellsList.Gradient };
+            QGradientAndConsumptions gradientAndConsumptions = new QGradientAndConsumptions() { QGradient = gradientAndWellsList.Gradient };
             Actions.Functions.GetNextGradientIteration(gradientAndWellsList, gradientWells, out gradientAndConsumptions);
             if (gradientAndConsumptions.ConsumptionsAndTimes != null)
             {
@@ -199,7 +199,48 @@ namespace ComputationalServer.Controllers
             return new JsonResult(gradientAndConsumptions);
         }
 
-
+        [HttpPost]
+        [Route("nextpgradient")]
+        public IActionResult PGradientMethod([FromBody] PGradientAndWellsList gradientAndWellsList)
+        {
+            List<Well> gradientWells = new List<Well>();
+            foreach (var v in gradientAndWellsList.WellsList.Wells)
+                gradientWells.Add(new Well
+                {
+                    Q = v.Q,
+                    P = v.P,
+                    P0 = v.P0,
+                    Time1 = v.Time1,
+                    Time2 = v.Time2,
+                    H0 = v.H0,
+                    K = v.K,
+                    Kappa = v.Kappa,
+                    Ksi = v.Ksi,
+                    Mu = v.Mu,
+                    Rs = v.Rs,
+                    Rw = v.Rw,
+                    N = v.N,
+                    Mode = v.Mode,
+                    CalculatedP = v.CalculatedP,
+                    CalculatedQ = v.CalculatedQ,
+                });
+            for (int i = 0; i < gradientWells.Count; i++)
+            {
+                gradientWells[i].K = gradientAndWellsList.Gradient.ChangedK;
+                gradientWells[i].Kappa = gradientAndWellsList.Gradient.ChangedKappa;
+                gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
+                gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
+            }
+            PGradientAndPressures pGradientAndPressures = new PGradientAndPressures() { PGradient = gradientAndWellsList.Gradient };
+            Actions.Functions.GetNextPGradientIteration(gradientAndWellsList, gradientWells, out pGradientAndPressures);
+            if (pGradientAndPressures.PressuresAndTimes != null)
+            {
+                List<double> staticConsumptions = new List<double>();
+                Actions.Functions.PrepareStaticPressures(gradientAndWellsList.WellsList, staticConsumptions);
+                pGradientAndPressures.PressuresAndTimes.StaticPressures = staticConsumptions;
+            }
+            return new JsonResult(pGradientAndPressures);
+        }
 
 
         // DELETE api/values/5

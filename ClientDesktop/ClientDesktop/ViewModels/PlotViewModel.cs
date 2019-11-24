@@ -88,6 +88,139 @@ namespace ClientDesktop.ViewModels
             }
             MyModel = model;
         }
+
+        public void PlotTimePressures(PressuresAndTimes pressuresAndTimes)
+        {
+            MyModel.Series.Clear();
+            MyModel.InvalidatePlot(true);
+            var model = new PlotModel { LegendSymbolLength = 24 };
+            switch (MainWindow.wellViewModel.Wells.Count)
+            {
+                case 1:
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.SkyBlue,
+                        MarkerType = MarkerType.None,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    foreach (var pt in pressuresAndTimes.Pressures1.Zip(pressuresAndTimes.Times1, Tuple.Create))
+                    {
+                        (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    MyModel = model;
+                    break;
+
+                case 2:
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.SkyBlue,
+                        MarkerType = MarkerType.None,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Blue,
+                        MarkerType = MarkerType.Cross,
+                        MarkerSize = 0.5,
+                        MarkerStroke = OxyColors.Blue,
+                        MarkerFill = OxyColors.Blue,
+                        MarkerStrokeThickness = 0.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Black,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    foreach (var pt in pressuresAndTimes.Pressures1f.Zip(pressuresAndTimes.Times1f, Tuple.Create))
+                    {
+                        (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures1s.Zip(pressuresAndTimes.Times1s, Tuple.Create))
+                    {
+                        (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures2.Zip(pressuresAndTimes.Times2, Tuple.Create))
+                    {
+                        (model.Series[2] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    MyModel = model;
+                    break;
+
+                case 3:
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.SkyBlue,
+                        MarkerType = MarkerType.None,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Blue,
+                        MarkerType = MarkerType.Cross,
+                        MarkerSize = 0.5,
+                        MarkerStroke = OxyColors.Blue,
+                        MarkerFill = OxyColors.Blue,
+                        MarkerStrokeThickness = 0.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Black,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Green,
+                        MarkerType = MarkerType.Cross,
+                        MarkerSize = 0.5,
+                        MarkerStroke = OxyColors.Green,
+                        MarkerFill = OxyColors.Green,
+                        MarkerStrokeThickness = 0.5
+                    });
+                    model.Series.Add(new LineSeries
+                    {
+                        Color = OxyColors.Red,
+                        MarkerStrokeThickness = 1.5
+                    });
+                    foreach (var pt in pressuresAndTimes.Pressures1f.Zip(pressuresAndTimes.Times1f, Tuple.Create))
+                    {
+                        (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures1s.Zip(pressuresAndTimes.Times1s, Tuple.Create))
+                    {
+                        (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures2f.Zip(pressuresAndTimes.Times2f, Tuple.Create))
+                    {
+                        (model.Series[2] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures2s.Zip(pressuresAndTimes.Times2s, Tuple.Create))
+                    {
+                        (model.Series[3] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    foreach (var pt in pressuresAndTimes.Pressures3.Zip(pressuresAndTimes.Times3, Tuple.Create))
+                    {
+                        (model.Series[4] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                    }
+                    if (pressuresAndTimes.StaticPressures != null)
+                    {
+                        model.Series.Add(new LineSeries
+                        {
+                            Color = OxyColors.BlueViolet,
+                            MarkerType = MarkerType.Cross,
+                            MarkerStrokeThickness = 2.5
+                        });
+                        var tempTimes = new List<Double>();
+                        tempTimes.AddRange(pressuresAndTimes.Times1f);
+                        tempTimes.AddRange(pressuresAndTimes.Times1s);
+                        foreach (var pt in pressuresAndTimes.StaticPressures.Zip(tempTimes, Tuple.Create))
+                        {
+                            (model.Series[5] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
+                        }
+                    }
+                    MyModel = model;
+                    break;
+            }
+        }
         private PlotModel myModel { get; set; }
         public PlotModel MyModel
         {

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ClientDesktop.Models
 {
-    public class GradientAndWellsList
+    public class QGradientAndWellsList
     {
         [JsonProperty("Gradient")]
-        public Gradient Gradient { get; set; }
+        public QGradient Gradient { get; set; }
         [JsonProperty("WellsList")]
         public WellsList WellsList { get; set; }
     }

@@ -29,9 +29,14 @@
                         <pr:PressureCalcLayout x:Name="Addition" Grid.Column="1"/>
                     </Grid>                    
                 </TabItem>
-                <TabItem x:Name="GradientTI" Width="150" Height="50" Header="Gradient" FontSize="20">
+                <TabItem x:Name="GradientTI" Width="150" Height="50" Header="Q Gradient" FontSize="20">
                     <Grid>
-                        <pr:GradientCalc x:Name="GradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
+                        <pr:QGradientCalc x:Name="GradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="PGradientTI" Width="150" Height="50" Header="P Gradient" FontSize="20">
+                    <Grid>
+                        <pr:PGradientCalc x:Name="PGradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </TabItem>
             </TabControl>
