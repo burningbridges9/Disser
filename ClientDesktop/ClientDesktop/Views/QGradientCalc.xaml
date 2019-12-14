@@ -168,7 +168,9 @@
             <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
                 <TextBlock Text="Previous Step"/>
             </Button>
-
+            <Button x:Name="Save"   Command="{Binding QSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="8"   Grid.Column="4">
+                <TextBlock Text="Save"/>
+            </Button>
         </Grid>
         <Grid x:Name="ListParameters" Grid.Row="1">    
             <ListBox x:Name="gradientList" ItemTemplate="{StaticResource listTemplate}" 

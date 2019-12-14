@@ -20,7 +20,7 @@ namespace ClientDesktop.Commands
         {
             if (_wvm.Wells.Count > 0)
                 _wvm.Wells.RemoveAt(_wvm.Wells.Count - 1);
-            _wvm.SelectedWell = _wvm.Wells.Last();
+            //_wvm.SelectedWell = _wvm.Wells.Last();
         }
     }
 }

@@ -566,7 +566,7 @@ namespace ComputationalServer.Actions
                 consumptions.Add(0);
             List<List<double>> coefs;
             List<double> eqPressures;
-            for (int i = 0; i < times.Count; i++)
+            for (int i = 0; i < wells.Wells.Count; i++)
             {
                 wells.Wells[i].P0 = wells.Wells[i].P0 / 1000000;
                 wells.Wells[i].CalculatedP = wells.Wells[i].CalculatedP / 1000000;
@@ -823,12 +823,12 @@ namespace ComputationalServer.Actions
                             + Math.Pow((gradientWells[1].Q - Qk[wlKWells.Indexes[1] - 1]), 2)
                             + Math.Pow((gradientWells[2].Q - Qk.Last()), 2))) / gradientAndWellsList.Gradient.DeltaP0;
 
-                        //gradientP0norm = ((Math.Pow((gradientWells[0].Q/1000000 - QP0DeltaNorm[wlKWells.Indexes[0] - 2]), 2) +
-                        //    Math.Pow((gradientWells[1].Q/1000000 - QP0DeltaNorm[wlKWells.Indexes[1] - 1]), 2)
+                        //gradientP0norm = ((Math.Pow((gradientWells[0].Q / 1000000 - QP0DeltaNorm[wlKWells.Indexes[0] - 2]), 2) +
+                        //    Math.Pow((gradientWells[1].Q / 1000000 - QP0DeltaNorm[wlKWells.Indexes[1] - 1]), 2)
                         //    + Math.Pow((gradientWells[2].Q / 1000000 - QP0DeltaNorm.Last()), 2))
                         //    - (Math.Pow((gradientWells[0].Q / 1000000 - QkNormed[wlKWells.Indexes[0] - 2]), 2)
                         //    + Math.Pow((gradientWells[1].Q / 1000000 - QkNormed[wlKWells.Indexes[1] - 1]), 2)
-                        //    + Math.Pow((gradientWells[2].Q / 1000000 - QkNormed.Last()), 2))) / (gradientAndWellsList.Gradient.DeltaP0*Math.Pow(10,-6));
+                        //    + Math.Pow((gradientWells[2].Q / 1000000 - QkNormed.Last()), 2))) / (gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10, -6));
                     }
                     break;
                     #endregion
@@ -855,8 +855,8 @@ namespace ComputationalServer.Actions
             int kNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedK, gradientK, gradientAndWellsList.Gradient.ChangedK, gradientAndWellsList.Gradient.DeltaK);
             int kappaNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedKappa, gradientKappa, gradientAndWellsList.Gradient.ChangedKappa, gradientAndWellsList.Gradient.DeltaKappa);
             int ksiNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedKsi, gradientKsi, gradientAndWellsList.Gradient.ChangedKsi, gradientAndWellsList.Gradient.DeltaKsi);
-            int p0Num = DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0, gradientAndWellsList.Gradient.ChangedP0, gradientAndWellsList.Gradient.DeltaP0);
-            int p0NumNorm = DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0norm, gradientAndWellsList.Gradient.ChangedP0*Math.Pow(10,-6), gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10, -6));
+            int p0Num = 0;// DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0, gradientAndWellsList.Gradient.ChangedP0, gradientAndWellsList.Gradient.DeltaP0);
+            //int p0NumNorm = DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0norm, gradientAndWellsList.Gradient.ChangedP0*Math.Pow(10,-6), gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10, -6));
             nextGradient.Lambda *= Math.Pow(10, MaxDegreeEvaluation(kNum, kappaNum, ksiNum, p0Num));
             #endregion
 
@@ -1123,7 +1123,7 @@ namespace ComputationalServer.Actions
                 #endregion
                 #region case 3
                 case 3:
-                    gradientK = ((Math.Pow((gradientWells[0].Q - PkDelta.Pressures1f.Last()), 2) +
+                    gradientK = ((Math.Pow((gradientWells[0].P - PkDelta.Pressures1f.Last()), 2) +
                             Math.Pow((gradientWells[1].P - PkDelta.Pressures2f.Last()), 2)
                             + Math.Pow((gradientWells[2].P - PkDelta.Pressures3.Last()), 2))
                             - (Math.Pow((gradientWells[0].P - Pk.Pressures1f.Last()), 2)

@@ -4,6 +4,7 @@ using ClientDesktop.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -158,6 +159,62 @@ namespace ClientDesktop.Commands
                 _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().PGradient;
                 if (_gvm.PGradientAndPressures.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
+                MainWindow.plotViewModel.PlotTimePressures(_gvm.PGradientAndPressures.Last().PressuresAndTimes);
+            }
+        }
+    }
+
+    public class SavePCommand : PGradientViewCommand
+    {
+        public SavePCommand(PGradientViewModel wvm) : base(wvm)
+        {
+        }
+        public override bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public override async void Execute(object parameter)
+        {
+            string path = Directory.GetCurrentDirectory();
+            string writePath = Path.Combine(path, "PressureGradient.json");
+            string text = JsonConvert.SerializeObject(parameter as PGradient);
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(text);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+
+    public class ClearGradientsPCommand : PGradientViewCommand
+    {
+        public ClearGradientsPCommand(PGradientViewModel wvm) : base(wvm)
+        {
+        }
+        public override bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public override async void Execute(object parameter)
+        {
+            if (_gvm.PGradientAndPressures.Count > 1)
+            {
+                _gvm.PGradientAndPressures.RemoveRange(0, _gvm.PGradientAndPressures.Count-1);
+                while (_gvm.Gradients.Count>1)
+                {
+                    _gvm.Gradients.RemoveAt(_gvm.Gradients.Count - 1);
+                }
+                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().PGradient;
+                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().PGradient;
+                _gvm.IsFirstTimeGradientClicked = false;
                 MainWindow.plotViewModel.PlotTimePressures(_gvm.PGradientAndPressures.Last().PressuresAndTimes);
             }
         }

@@ -15,6 +15,7 @@ using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Windows.Media;
 using ClientDesktop.Layouts;
+using System.IO;
 
 namespace ClientDesktop
 {
@@ -43,13 +44,13 @@ namespace ClientDesktop
 
         private async void CalculatePressuresButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ConsumptionsAndTimes==null || ConsumptionsAndTimes?.Consumptions.Count == 0)
+            if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
                 for (int i = 0; i < wellViewModel.Wells.Count; i++)
                     wellViewModel.Wells[i].Mode = Mode.Direct;
             PressuresAndTimes = await SendWellsForPressures();
             plotViewModel.PlotTimePressures(PressuresAndTimes);
             CalculateInitialFminP();
-        }      
+        }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -60,7 +61,7 @@ namespace ClientDesktop
 
         private async void CalculateConsumptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PressuresAndTimes?.Pressures1f.Count == 0 || PressuresAndTimes==null)
+            if (PressuresAndTimes?.Pressures1f.Count == 0 || PressuresAndTimes == null)
                 for (int i = 0; i < wellViewModel.Wells.Count; i++)
                     wellViewModel.Wells[i].Mode = Mode.Reverse;
             ConsumptionsAndTimes = await SendWellsForConsumptions();
@@ -68,9 +69,9 @@ namespace ClientDesktop
             CalculateInitialFminQ();
         }
 
-        private void CalculateInitialFminQ()
+        private double CalculateInitialFminQ()
         {
-            
+
             if (gradientViewModel.GradientsAndConsumptions.Count != 0)
                 gradientViewModel.GradientsAndConsumptions.Clear();
             QGradient g = new QGradient
@@ -105,6 +106,7 @@ namespace ClientDesktop
             //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
             gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().QGradient;
             gradientViewModel.Gradients.Add(gradientViewModel.GradientsAndConsumptions[0].QGradient);
+            return Fmin;
             //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
 
@@ -136,8 +138,8 @@ namespace ClientDesktop
                 //    break;
                 case 3:
                     Fmin = Math.Pow((wellViewModel.Wells[0].P - PressuresAndTimes.Pressures1f.Last()), 2)
-                            + Math.Pow((wellViewModel.Wells[1].Q - PressuresAndTimes.Pressures2f.Last()), 2)
-                            + Math.Pow((wellViewModel.Wells[2].Q - PressuresAndTimes.Pressures3.Last()), 2);
+                            + Math.Pow((wellViewModel.Wells[1].P - PressuresAndTimes.Pressures2f.Last()), 2)
+                            + Math.Pow((wellViewModel.Wells[2].P - PressuresAndTimes.Pressures3.Last()), 2);
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].P, 2) + Math.Pow(wellViewModel.Wells[1].P, 2) + Math.Pow(wellViewModel.Wells[2].P, 2)));
                     break;
             }
@@ -169,10 +171,9 @@ namespace ClientDesktop
             ConsumptionsAndTimes?.Consumptions?.Clear();
             ConsumptionsAndTimes?.StaticConsumptions?.Clear();
             ConsumptionsAndTimes?.Times?.Clear();
-
             IsFirstTimeGradientClicked = false;
         }
-        
+
         #region Send to server
         async static Task<PressuresAndTimes> SendWellsForPressures()
         {
@@ -210,9 +211,9 @@ namespace ClientDesktop
             var res = await httpClient.PostAsync(apiUrl, content);
             string responseBody = await res.Content.ReadAsStringAsync();
             ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
-            wellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0]-2];
-            wellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1]-1];
-            wellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2]-2];
+            wellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];
+            wellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];
+            wellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];
             return consumptionsAndTimes;
         }
         async static Task<QGradientAndConsumptions> SendWellsForGradient(QGradient gradient)
@@ -404,5 +405,161 @@ namespace ClientDesktop
         //    plotViewModel.MyModel = model;
         //}
         #endregion
+
+        private async void AutoButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<double> pZeros = new List<double>();
+            List<double> kappas = new List<double>();
+            List<double> ks = new List<double>();
+            List<double> kappasC = new List<double>();
+            List<double> ksC = new List<double>();
+            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
+            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
+            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
+            string writePath4 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminKP0.txt";
+            string writePath5 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminKappaP0.txt";
+
+
+            int kLeft = 2;
+            int kRight = 5;
+            int kappaLeft = 4;
+            int kappaRight = 12;
+            int p0Left = 0;
+            int p0Rigth = 20;
+
+            double n = 100;
+            double kStep = (kRight - kLeft) / n;
+            double kappaStep = (kappaRight - kappaLeft) / n;
+            double p0Step = (p0Rigth - p0Left) / n;
+
+            #region Fill arrays
+            using (StreamWriter sw1 = new StreamWriter(writePath1, false, Encoding.Default))
+            using (StreamWriter sw2 = new StreamWriter(writePath2, false, Encoding.Default))
+            using (StreamWriter sw3 = new StreamWriter(writePath3, false, Encoding.Default))
+            {
+                for (int k = 0; k <= n; k++)
+                {
+                    kappas.Add(kappaLeft + k * kappaStep);
+                    kappasC.Add((1.0 / 3600.0) * kappas[k]);
+                    ks.Add(kLeft + k * kStep);
+                    ksC.Add(Math.Pow(10.0, -15) * ks[k]);
+                    pZeros.Add(p0Left + k * p0Step);
+
+                    sw1.Write(ks[k] + " ");
+                    sw2.Write(kappas[k] + " ");
+                    sw3.Write(pZeros[k] + " ");
+                }
+            }
+            #endregion
+
+            #region Fmin K P0
+            //using (StreamWriter sw = new StreamWriter(writePath4, false, Encoding.Default))
+            //{
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        for (int j = 0; j <= n; j++)
+            //        {
+            //            for (int m = 1; m <= 3; m++)
+            //            {
+            //                #region Fill Obj
+            //                object Q = (5 * m).ToString();
+            //                object P = (5 * m).ToString();
+            //                object P0 = pZeros[i].ToString();
+            //                object T1 = (5 * (m-1)).ToString();
+            //                object T2 = (5 * m).ToString();
+            //                object H0 = (1).ToString();
+            //                object Mu = (5).ToString();
+            //                object Rw = (0.1).ToString();
+            //                object K = ks[j].ToString();
+            //                object Kappa = (4).ToString();
+            //                object Rs = (0.3).ToString();
+            //                object Ksi = (0).ToString();
+            //                object N = (100).ToString();
+            //                List<object> obj = new List<object>()
+            //                {
+            //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
+            //                };
+            //                #endregion
+            //                wellViewModel.Add.Execute(obj.ToArray<object>());
+            //            }
+
+            //            #region P calculation
+            //            if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
+            //                for (int k = 0; k < wellViewModel.Wells.Count; k++)
+            //                    wellViewModel.Wells[k].Mode = Mode.Direct;
+            //            PressuresAndTimes = await SendWellsForPressures();
+            //            //plotViewModel.PlotTimePressures(PressuresAndTimes);
+            //            #endregion
+            //            #region Q calculation
+            //            ConsumptionsAndTimes = await SendWellsForConsumptions();
+            //            //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
+            //            double min = CalculateInitialFminQ();
+            //            #endregion
+
+            //            sw.Write(min);
+            //            sw.Write(" ");
+
+            //            Clear();
+            //            wellViewModel.DeleteAllWellCommand.Execute(null);
+            //        }
+            //        sw.Write('\n');
+            //    }
+            //}
+            #endregion
+            #region Fmin Kappa P0
+            using (StreamWriter sw = new StreamWriter(writePath5, false, Encoding.Default))
+            {
+                for (int i = 0; i <= n; i++)
+                {
+                    for (int j = 0; j <= n; j++)
+                    {
+                        for (int m = 1; m <= 3; m++)
+                        {
+                            #region Fill Obj
+                            object Q = (5 * m).ToString();
+                            object P = (5 * m).ToString();
+                            object P0 = pZeros[i].ToString();
+                            object T1 = (5 * (m - 1)).ToString();
+                            object T2 = (5 * m).ToString();
+                            object H0 = (1).ToString();
+                            object Mu = (5).ToString();
+                            object Rw = (0.1).ToString();
+                            object K = (10).ToString();
+                            object Kappa = kappas[j].ToString();
+                            object Rs = (0.3).ToString();
+                            object Ksi = (0).ToString();
+                            object N = (100).ToString();
+                            List<object> obj = new List<object>()
+                            {
+                                Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
+                            };
+                            #endregion
+                            wellViewModel.Add.Execute(obj.ToArray<object>());
+                        }
+
+                        #region P calculation
+                        if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
+                            for (int k = 0; k < wellViewModel.Wells.Count; k++)
+                                wellViewModel.Wells[k].Mode = Mode.Direct;
+                        PressuresAndTimes = await SendWellsForPressures();
+                        //plotViewModel.PlotTimePressures(PressuresAndTimes);
+                        #endregion
+                        #region Q calculation
+                        ConsumptionsAndTimes = await SendWellsForConsumptions();
+                        //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
+                        double min = CalculateInitialFminQ();
+                        #endregion
+
+                        sw.Write(min);
+                        sw.Write(" ");
+
+                        Clear();
+                        wellViewModel.DeleteAllWellCommand.Execute(null);
+                    }
+                    sw.Write('\n');
+                }
+            }
+#endregion
+        }
     }
 }

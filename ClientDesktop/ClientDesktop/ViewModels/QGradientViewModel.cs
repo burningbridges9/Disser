@@ -51,6 +51,19 @@ namespace ClientDesktop.ViewModels
             }
         }
 
+        private ICommand _saveQCommand;
+        public ICommand QSave
+        {
+            get
+            {
+                if (_saveQCommand == null)
+                {
+                    _saveQCommand = new SaveQCommand(this);
+                }
+                return _saveQCommand;
+            }
+        }
+
         public List<QGradientAndConsumptions> GradientsAndConsumptions;
 
         public ObservableCollection<Gradient> Gradients;

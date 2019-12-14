@@ -45,6 +45,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="CalculatePressuresButton" Grid.Column ="0"  Click="CalculatePressuresButton_Click">
                     <TextBlock Text="Pressures"/>
@@ -54,6 +55,9 @@
                 </Button>
                 <Button x:Name="CalculateConsumptionsButton"  Grid.Column ="2" Click="CalculateConsumptionsButton_Click">
                     <TextBlock Text="Consumptions"/>
+                </Button>
+                <Button x:Name="AutoButton"  Grid.Column ="3" Click="AutoButton_Click">
+                    <TextBlock Text="Auto"/>
                 </Button>
             </Grid>
         </Grid>

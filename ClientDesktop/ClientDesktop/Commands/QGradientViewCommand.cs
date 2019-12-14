@@ -3,6 +3,7 @@ using ClientDesktop.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -157,6 +158,35 @@ namespace ClientDesktop.Commands
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
                 if (_gvm.GradientsAndConsumptions.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
+            }
+        }
+    }
+
+    public class SaveQCommand : QGradientViewCommand
+    {
+        public SaveQCommand(QGradientViewModel wvm) : base(wvm)
+        {
+        }
+        public override bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public override async void Execute(object parameter)
+        {
+            string path = Directory.GetCurrentDirectory();
+            string writePath = Path.Combine(path, "ConsumptionGradient.json");
+            string text = JsonConvert.SerializeObject(parameter as QGradient);
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(text);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
     }

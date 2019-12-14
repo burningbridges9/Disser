@@ -47,6 +47,19 @@ namespace ClientDesktop.Layouts
             }
         }
 
+        private ICommand _savePCommand;
+        public ICommand PSave
+        {
+            get
+            {
+                if (_savePCommand == null)
+                {
+                    _savePCommand = new SavePCommand(this);
+                }
+                return _savePCommand;
+            }
+        }
+
         public List<PGradientAndPressures> PGradientAndPressures;
 
         public ObservableCollection<Gradient> Gradients;

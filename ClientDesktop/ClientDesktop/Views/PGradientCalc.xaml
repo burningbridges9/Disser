@@ -18,6 +18,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="79*"></ColumnDefinition>
@@ -64,6 +65,7 @@
                         <TextBox   HorizontalAlignment="Center" Text="{Binding Path=DeltaKappa}"  Grid.Row="1"      Grid.Column="3" TextWrapping="Wrap"  VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"                 />
                         <TextBox   HorizontalAlignment="Center"   Text="{Binding Path=DeltaKsi}"    Grid.Row="2"    Grid.Column="3" TextWrapping="Wrap"  VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"          />
                         <TextBox   HorizontalAlignment="Center"    Text="{Binding Path=DeltaP0}"     Grid.Row="3"   Grid.Column="3" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"       />
+                        
                     </Grid>
                 </Border>
             </StackPanel>
@@ -167,6 +169,9 @@
             </Button>
             <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
                 <TextBlock Text="Previous Step"/>
+            </Button>
+            <Button x:Name="Save"   Command="{Binding PSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="8"   Grid.Column="4">
+                <TextBlock Text="Save"/>
             </Button>
 
         </Grid>
