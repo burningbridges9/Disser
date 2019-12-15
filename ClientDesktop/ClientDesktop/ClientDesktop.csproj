@@ -83,6 +83,7 @@
     <Compile Include="Commands\ValueConverters\WellConverters\MuConverter.cs" />
     <Compile Include="Commands\ValueConverters\WellConverters\PConverter .cs" />
     <Compile Include="Commands\ValueConverters\WellConverters\QConverter.cs" />
+    <Compile Include="Commands\MainViewCommand.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
     <Compile Include="Models\PGradientAndPressures.cs" />
     <Compile Include="Models\PGradient.cs" />

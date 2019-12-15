@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace ClientDesktop.Layouts
+namespace ClientDesktop.ViewModels
 {
     public class PGradientViewModel : INotifyPropertyChanged
     {

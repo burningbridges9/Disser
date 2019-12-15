@@ -82,22 +82,22 @@ namespace ClientDesktop.Commands
                 g.Lambda = Convert.ToDouble(parameters[0]);
 
                 g.DeltaK =
-                    MainWindow.wellViewModel.Wells[0].K *
+                    MainWindow.MainViewModel.WellViewModel.Wells[0].K *
                     Math.Pow(10, Convert.ToDouble(parameters[5].ToString().Substring(parameters[5].ToString().IndexOf('-'),
                     parameters[5].ToString().IndexOf(')') - parameters[5].ToString().IndexOf('-'))));
 
                 g.DeltaKappa =
-                    MainWindow.wellViewModel.Wells[0].Kappa *
+                    MainWindow.MainViewModel.WellViewModel.Wells[0].Kappa *
                     Math.Pow(10, Convert.ToDouble(parameters[6].ToString().Substring(parameters[6].ToString().IndexOf('-'),
                     parameters[6].ToString().IndexOf(')') - parameters[6].ToString().IndexOf('-'))));
 
                 g.DeltaKsi =
-                    MainWindow.wellViewModel.Wells[0].Ksi *
+                    MainWindow.MainViewModel.WellViewModel.Wells[0].Ksi *
                     Math.Pow(10, Convert.ToDouble(parameters[7].ToString().Substring(parameters[7].ToString().IndexOf('-'),
                     parameters[7].ToString().IndexOf(')') - parameters[7].ToString().IndexOf('-'))));
 
                 g.DeltaP0 =
-                    MainWindow.wellViewModel.Wells[0].P0 *
+                    MainWindow.MainViewModel.WellViewModel.Wells[0].P0 *
                     Math.Pow(10, Convert.ToDouble(parameters[8].ToString().Substring(parameters[8].ToString().IndexOf('-'),
                     parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
             }
@@ -109,13 +109,13 @@ namespace ClientDesktop.Commands
                 _gvm.Gradients.Add(gradientAndConsumptions.QGradient);
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
                 _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
-                MainWindow.plotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
+                MainWindow.MainViewModel.PlotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
             }
         }
 
         async Task<QGradientAndConsumptions> SendWellsForGradient(QGradient gradient)
         {
-            WellsList wellsList = new WellsList(MainWindow.wellViewModel.Wells.ToList());
+            WellsList wellsList = new WellsList(MainWindow.MainViewModel.WellViewModel.Wells.ToList());
             QGradientAndWellsList gradientAndWellsList = new QGradientAndWellsList
             {
                 Gradient = gradient,

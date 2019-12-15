@@ -23,7 +23,7 @@ namespace ClientDesktop.Layouts
     /// </summary>
     public partial class QGradientCalc : UserControl
     {
-        public static QGradientViewModel gradientViewModel;
+        public QGradientViewModel gradientViewModel;
         public QGradientCalc()
         {
             gradientViewModel = new QGradientViewModel();

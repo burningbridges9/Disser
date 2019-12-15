@@ -94,7 +94,7 @@ namespace ClientDesktop.ViewModels
             MyModel.Series.Clear();
             MyModel.InvalidatePlot(true);
             var model = new PlotModel { LegendSymbolLength = 24 };
-            switch (MainWindow.wellViewModel.Wells.Count)
+            switch (MainWindow.MainViewModel.WellViewModel.Wells.Count)
             {
                 case 1:
                     model.Series.Add(new LineSeries

@@ -24,68 +24,59 @@ namespace ClientDesktop
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static WellViewModel wellViewModel;
-        public static PlotViewModel plotViewModel;
-        public static QGradientViewModel gradientViewModel;
-        public static PGradientViewModel pGradientViewModel;
-        public PressuresAndTimes PressuresAndTimes;
-        public ConsumptionsAndTimes ConsumptionsAndTimes;
-        public bool IsFirstTimeGradientClicked = false;
+        public static MainViewModel MainViewModel { get; set; }
         public MainWindow()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
-            wellViewModel = PressureCalcLayout.wellViewModel;
-            gradientViewModel = QGradientCalc.gradientViewModel;
-            pGradientViewModel = PGradientCalc.gradientViewModel;
-            plotViewModel = new PlotViewModel();
-            this.DataContext = plotViewModel;
+            MainViewModel = new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel);
+            this.DataContext = MainViewModel;
         }
 
         private async void CalculatePressuresButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
-                for (int i = 0; i < wellViewModel.Wells.Count; i++)
-                    wellViewModel.Wells[i].Mode = Mode.Direct;
-            PressuresAndTimes = await SendWellsForPressures();
-            plotViewModel.PlotTimePressures(PressuresAndTimes);
+            if (MainViewModel.ConsumptionsAndTimes == null || MainViewModel.ConsumptionsAndTimes?.Consumptions.Count == 0)
+                for (int i = 0; i < MainViewModel.WellViewModel.Wells.Count; i++)
+                    MainViewModel.WellViewModel.Wells[i].Mode = Mode.Direct;
+            MainViewModel.PressuresAndTimes = await SendWellsForPressures();
+            MainViewModel.PlotViewModel.PlotTimePressures(MainViewModel.PressuresAndTimes);
             CalculateInitialFminP();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            plotViewModel.MyModel.Series.Clear();
-            plotViewModel.MyModel.InvalidatePlot(true);
+            MainViewModel.PlotViewModel.MyModel.Series.Clear();
+            MainViewModel.PlotViewModel.MyModel.InvalidatePlot(true);
             Clear();
         }
 
         private async void CalculateConsumptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PressuresAndTimes?.Pressures1f.Count == 0 || PressuresAndTimes == null)
-                for (int i = 0; i < wellViewModel.Wells.Count; i++)
-                    wellViewModel.Wells[i].Mode = Mode.Reverse;
-            ConsumptionsAndTimes = await SendWellsForConsumptions();
-            plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
+            if (MainViewModel.PressuresAndTimes?.Pressures1f.Count == 0 || MainViewModel.PressuresAndTimes == null)
+                for (int i = 0; i < MainViewModel.WellViewModel.Wells.Count; i++)
+                    MainViewModel.WellViewModel.Wells[i].Mode = Mode.Reverse;
+            MainViewModel.ConsumptionsAndTimes = await SendWellsForConsumptions();
+            MainViewModel.PlotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);
             CalculateInitialFminQ();
         }
 
         private double CalculateInitialFminQ()
         {
 
-            if (gradientViewModel.GradientsAndConsumptions.Count != 0)
-                gradientViewModel.GradientsAndConsumptions.Clear();
+            if (MainViewModel.QGradientViewModel.GradientsAndConsumptions.Count != 0)
+                MainViewModel.QGradientViewModel.GradientsAndConsumptions.Clear();
             QGradient g = new QGradient
             {
-                ChangedK = wellViewModel.Wells[0].K,
-                ChangedKappa = wellViewModel.Wells[0].Kappa,
-                ChangedKsi = wellViewModel.Wells[0].Ksi,
-                ChangedP0 = wellViewModel.Wells[0].P0
+                ChangedK = MainViewModel.WellViewModel.Wells[0].K,
+                ChangedKappa = MainViewModel.WellViewModel.Wells[0].Kappa,
+                ChangedKsi = MainViewModel.WellViewModel.Wells[0].Ksi,
+                ChangedP0 = MainViewModel.WellViewModel.Wells[0].P0
             };
-            gradientViewModel.GradientsAndConsumptions.Add(new QGradientAndConsumptions());
-            gradientViewModel.GradientsAndConsumptions[0].QGradient = g;
-            gradientViewModel.GradientsAndConsumptions[0].ConsumptionsAndTimes = ConsumptionsAndTimes;
+            MainViewModel.QGradientViewModel.GradientsAndConsumptions.Add(new QGradientAndConsumptions());
+            MainViewModel.QGradientViewModel.GradientsAndConsumptions[0].QGradient = g;
+            MainViewModel.QGradientViewModel.GradientsAndConsumptions[0].ConsumptionsAndTimes = MainViewModel.ConsumptionsAndTimes;
             double Fmin = 0;
-            switch (wellViewModel.Wells.Count)
+            switch (MainViewModel.WellViewModel.Wells.Count)
             {
                 //case 1:
                 //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
@@ -96,37 +87,36 @@ namespace ClientDesktop
                 //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
                 //    break;
                 case 3:
-                    Fmin = Math.Pow((wellViewModel.Wells[0].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N - 2]), 2)
-                            + Math.Pow((wellViewModel.Wells[1].Q - ConsumptionsAndTimes.Consumptions[wellViewModel.Wells[0].N + wellViewModel.Wells[1].N - 1]), 2)
-                            + Math.Pow((wellViewModel.Wells[2].Q - ConsumptionsAndTimes.Consumptions.Last()), 2);
-                    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2) + Math.Pow(wellViewModel.Wells[2].Q, 2)));
+                    Fmin = Math.Pow((MainViewModel.WellViewModel.Wells[0].Q - MainViewModel.ConsumptionsAndTimes.Consumptions[MainViewModel.WellViewModel.Wells[0].N - 2]), 2)
+                            + Math.Pow((MainViewModel.WellViewModel.Wells[1].Q - MainViewModel.ConsumptionsAndTimes.Consumptions[MainViewModel.WellViewModel.Wells[0].N + MainViewModel.WellViewModel.Wells[1].N - 1]), 2)
+                            + Math.Pow((MainViewModel.WellViewModel.Wells[2].Q - MainViewModel.ConsumptionsAndTimes.Consumptions.Last()), 2);
+                    Fmin = Math.Sqrt(Fmin / (Math.Pow(MainViewModel.WellViewModel.Wells[0].Q, 2) + Math.Pow(MainViewModel.WellViewModel.Wells[1].Q, 2) + Math.Pow(MainViewModel.WellViewModel.Wells[2].Q, 2)));
                     break;
             }
-            gradientViewModel.GradientsAndConsumptions[0].QGradient.FminQ = Fmin;
+            MainViewModel.QGradientViewModel.GradientsAndConsumptions[0].QGradient.FminQ = Fmin;
             //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-            gradientViewModel.SelectedGradient = gradientViewModel.GradientsAndConsumptions.Last().QGradient;
-            gradientViewModel.Gradients.Add(gradientViewModel.GradientsAndConsumptions[0].QGradient);
+            MainViewModel.QGradientViewModel.SelectedGradient = MainViewModel.QGradientViewModel.GradientsAndConsumptions.Last().QGradient;
+            MainViewModel.QGradientViewModel.Gradients.Add(MainViewModel.QGradientViewModel.GradientsAndConsumptions[0].QGradient);
             return Fmin;
             //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
 
         private void CalculateInitialFminP()
         {
-
-            if (pGradientViewModel.PGradientAndPressures.Count != 0)
-                pGradientViewModel.PGradientAndPressures.Clear();
+            if (MainViewModel.PGradientViewModel.PGradientAndPressures.Count != 0)
+                MainViewModel.PGradientViewModel.PGradientAndPressures.Clear();
             PGradient g = new PGradient
             {
-                ChangedK = wellViewModel.Wells[0].K,
-                ChangedKappa = wellViewModel.Wells[0].Kappa,
-                ChangedKsi = wellViewModel.Wells[0].Ksi,
-                ChangedP0 = wellViewModel.Wells[0].P0
+                ChangedK = MainViewModel.WellViewModel.Wells[0].K,
+                ChangedKappa = MainViewModel.WellViewModel.Wells[0].Kappa,
+                ChangedKsi = MainViewModel.WellViewModel.Wells[0].Ksi,
+                ChangedP0 = MainViewModel.WellViewModel.Wells[0].P0
             };
-            pGradientViewModel.PGradientAndPressures.Add(new PGradientAndPressures());
-            pGradientViewModel.PGradientAndPressures[0].PGradient = g;
-            pGradientViewModel.PGradientAndPressures[0].PressuresAndTimes = PressuresAndTimes;
+            MainViewModel.PGradientViewModel.PGradientAndPressures.Add(new PGradientAndPressures());
+            MainViewModel.PGradientViewModel.PGradientAndPressures[0].PGradient = g;
+            MainViewModel.PGradientViewModel.PGradientAndPressures[0].PressuresAndTimes = MainViewModel.PressuresAndTimes;
             double Fmin = 0;
-            switch (wellViewModel.Wells.Count)
+            switch (MainViewModel.WellViewModel.Wells.Count)
             {
                 //case 1:
                 //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
@@ -137,16 +127,16 @@ namespace ClientDesktop
                 //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
                 //    break;
                 case 3:
-                    Fmin = Math.Pow((wellViewModel.Wells[0].P - PressuresAndTimes.Pressures1f.Last()), 2)
-                            + Math.Pow((wellViewModel.Wells[1].P - PressuresAndTimes.Pressures2f.Last()), 2)
-                            + Math.Pow((wellViewModel.Wells[2].P - PressuresAndTimes.Pressures3.Last()), 2);
-                    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].P, 2) + Math.Pow(wellViewModel.Wells[1].P, 2) + Math.Pow(wellViewModel.Wells[2].P, 2)));
+                    Fmin = Math.Pow((MainViewModel.WellViewModel.Wells[0].P - MainViewModel.PressuresAndTimes.Pressures1f.Last()), 2)
+                            + Math.Pow((MainViewModel.WellViewModel.Wells[1].P - MainViewModel.PressuresAndTimes.Pressures2f.Last()), 2)
+                            + Math.Pow((MainViewModel.WellViewModel.Wells[2].P - MainViewModel.PressuresAndTimes.Pressures3.Last()), 2);
+                    Fmin = Math.Sqrt(Fmin / (Math.Pow(MainViewModel.WellViewModel.Wells[0].P, 2) + Math.Pow(MainViewModel.WellViewModel.Wells[1].P, 2) + Math.Pow(MainViewModel.WellViewModel.Wells[2].P, 2)));
                     break;
             }
-            pGradientViewModel.PGradientAndPressures[0].PGradient.FminP = Fmin;
+            MainViewModel.PGradientViewModel.PGradientAndPressures[0].PGradient.FminP = Fmin;
             //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
-            pGradientViewModel.SelectedGradient = pGradientViewModel.PGradientAndPressures.Last().PGradient;
-            pGradientViewModel.Gradients.Add(pGradientViewModel.PGradientAndPressures[0].PGradient);
+            MainViewModel.PGradientViewModel.SelectedGradient = MainViewModel.PGradientViewModel.PGradientAndPressures.Last().PGradient;
+            MainViewModel.PGradientViewModel.Gradients.Add(MainViewModel.PGradientViewModel.PGradientAndPressures[0].PGradient);
             //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
 
@@ -156,28 +146,26 @@ namespace ClientDesktop
             string apiUrl = "https://localhost:44308/api/values";
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, apiUrl);
             var res = await httpClient.DeleteAsync(apiUrl);
-            gradientViewModel.GradientsAndConsumptions.Clear();
+            MainViewModel.QGradientViewModel.GradientsAndConsumptions.Clear();
 
-            PressuresAndTimes?.Pressures1f?.Clear();
-            PressuresAndTimes?.Pressures1s?.Clear();
-            PressuresAndTimes?.Pressures2f?.Clear();
-            PressuresAndTimes?.Pressures2s?.Clear();
-            PressuresAndTimes?.Pressures3?.Clear();
-            PressuresAndTimes?.Times1f?.Clear();
-            PressuresAndTimes?.Times1s?.Clear();
-            PressuresAndTimes?.Times2f?.Clear();
-            PressuresAndTimes?.Times2s?.Clear();
-            PressuresAndTimes?.Times3?.Clear();
-            ConsumptionsAndTimes?.Consumptions?.Clear();
-            ConsumptionsAndTimes?.StaticConsumptions?.Clear();
-            ConsumptionsAndTimes?.Times?.Clear();
-            IsFirstTimeGradientClicked = false;
+            MainViewModel.PressuresAndTimes?.Pressures1f?.Clear();
+            MainViewModel.PressuresAndTimes?.Pressures1s?.Clear();
+            MainViewModel.PressuresAndTimes?.Pressures2f?.Clear();
+            MainViewModel.PressuresAndTimes?.Pressures2s?.Clear();
+            MainViewModel.PressuresAndTimes?.Pressures3?.Clear();
+            MainViewModel.PressuresAndTimes?.Times1f?.Clear();
+            MainViewModel.PressuresAndTimes?.Times1s?.Clear();
+            MainViewModel.PressuresAndTimes?.Times2f?.Clear();
+            MainViewModel.PressuresAndTimes?.Times2s?.Clear();
+            MainViewModel.PressuresAndTimes?.Times3?.Clear();
+            MainViewModel.ConsumptionsAndTimes?.Consumptions?.Clear();
+            MainViewModel.ConsumptionsAndTimes?.StaticConsumptions?.Clear();
+            MainViewModel.ConsumptionsAndTimes?.Times?.Clear();
         }
-
         #region Send to server
         async static Task<PressuresAndTimes> SendWellsForPressures()
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
+            WellsList wellsList = new WellsList(MainViewModel.WellViewModel.Wells.ToList());
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -191,14 +179,14 @@ namespace ClientDesktop
             string responseBody = await res.Content.ReadAsStringAsync();
             PressuresAndTimes pressuresAndTimes = JsonConvert.DeserializeObject<PressuresAndTimes>(responseBody);
             // make check
-            wellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
-            wellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
-            wellViewModel.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
+            MainViewModel.WellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
+            MainViewModel.WellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
+            MainViewModel.WellViewModel.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
         async static Task<ConsumptionsAndTimes> SendWellsForConsumptions()
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
+            WellsList wellsList = new WellsList(MainViewModel.WellViewModel.Wells.ToList());
             var serializedProduct = JsonConvert.SerializeObject(wellsList);
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
@@ -211,14 +199,14 @@ namespace ClientDesktop
             var res = await httpClient.PostAsync(apiUrl, content);
             string responseBody = await res.Content.ReadAsStringAsync();
             ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
-            wellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];
-            wellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];
-            wellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];
+            MainViewModel.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];
+            MainViewModel.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];
+            MainViewModel.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];
             return consumptionsAndTimes;
         }
         async static Task<QGradientAndConsumptions> SendWellsForGradient(QGradient gradient)
         {
-            WellsList wellsList = new WellsList(wellViewModel.Wells.ToList());
+            WellsList wellsList = new WellsList(MainViewModel.WellViewModel.Wells.ToList());
             QGradientAndWellsList gradientAndWellsList = new QGradientAndWellsList
             {
                 Gradient = gradient,
@@ -451,7 +439,6 @@ namespace ClientDesktop
                 }
             }
             #endregion
-
             #region Fmin K P0
             //using (StreamWriter sw = new StreamWriter(writePath4, false, Encoding.Default))
             //{
@@ -480,19 +467,19 @@ namespace ClientDesktop
             //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
             //                };
             //                #endregion
-            //                wellViewModel.Add.Execute(obj.ToArray<object>());
+            //                MainViewModel.wellViewModel.Add.Execute(obj.ToArray<object>());
             //            }
 
             //            #region P calculation
-            //            if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
+            //            if (MainViewModel.ConsumptionsAndTimes == null || MainViewModel.ConsumptionsAndTimes?.Consumptions.Count == 0)
             //                for (int k = 0; k < wellViewModel.Wells.Count; k++)
-            //                    wellViewModel.Wells[k].Mode = Mode.Direct;
-            //            PressuresAndTimes = await SendWellsForPressures();
+            //                    MainViewModel.wellViewModel.Wells[k].Mode = Mode.Direct;
+            //            MainViewModel.PressuresAndTimes = await SendWellsForPressures();
             //            //plotViewModel.PlotTimePressures(PressuresAndTimes);
             //            #endregion
             //            #region Q calculation
-            //            ConsumptionsAndTimes = await SendWellsForConsumptions();
-            //            //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
+            //            MainViewModel.ConsumptionsAndTimes = await SendWellsForConsumptions();
+            //            //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);
             //            double min = CalculateInitialFminQ();
             //            #endregion
 
@@ -500,7 +487,7 @@ namespace ClientDesktop
             //            sw.Write(" ");
 
             //            Clear();
-            //            wellViewModel.DeleteAllWellCommand.Execute(null);
+            //            MainViewModel.wellViewModel.DeleteAllWellCommand.Execute(null);
             //        }
             //        sw.Write('\n');
             //    }
@@ -534,18 +521,18 @@ namespace ClientDesktop
                                 Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
                             };
                             #endregion
-                            wellViewModel.Add.Execute(obj.ToArray<object>());
+                            MainViewModel.WellViewModel.Add.Execute(obj.ToArray<object>());
                         }
 
                         #region P calculation
-                        if (ConsumptionsAndTimes == null || ConsumptionsAndTimes?.Consumptions.Count == 0)
-                            for (int k = 0; k < wellViewModel.Wells.Count; k++)
-                                wellViewModel.Wells[k].Mode = Mode.Direct;
-                        PressuresAndTimes = await SendWellsForPressures();
+                        if (MainViewModel.ConsumptionsAndTimes == null || MainViewModel.ConsumptionsAndTimes?.Consumptions.Count == 0)
+                            for (int k = 0; k < MainViewModel.WellViewModel.Wells.Count; k++)
+                                MainViewModel.WellViewModel.Wells[k].Mode = Mode.Direct;
+                        MainViewModel.PressuresAndTimes = await SendWellsForPressures();
                         //plotViewModel.PlotTimePressures(PressuresAndTimes);
                         #endregion
                         #region Q calculation
-                        ConsumptionsAndTimes = await SendWellsForConsumptions();
+                        MainViewModel.ConsumptionsAndTimes = await SendWellsForConsumptions();
                         //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
                         double min = CalculateInitialFminQ();
                         #endregion
@@ -554,7 +541,7 @@ namespace ClientDesktop
                         sw.Write(" ");
 
                         Clear();
-                        wellViewModel.DeleteAllWellCommand.Execute(null);
+                        MainViewModel.WellViewModel.DeleteAllWellCommand.Execute(null);
                     }
                     sw.Write('\n');
                 }

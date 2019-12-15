@@ -25,7 +25,7 @@ namespace ClientDesktop.Layouts
     /// </summary>
     public partial class PressureCalcLayout : UserControl
     {
-        public static WellViewModel wellViewModel;
+        public WellViewModel wellViewModel;
         public PressureCalcLayout()
         {
             wellViewModel = new WellViewModel();

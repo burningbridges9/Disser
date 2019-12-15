@@ -23,7 +23,7 @@ namespace ClientDesktop.Layouts
     /// </summary>
     public partial class PGradientCalc : UserControl
     {
-        public static PGradientViewModel gradientViewModel;
+        public PGradientViewModel gradientViewModel;
         public PGradientCalc()
         {
             gradientViewModel = new PGradientViewModel();
