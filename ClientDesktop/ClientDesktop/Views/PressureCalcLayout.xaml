@@ -63,8 +63,8 @@
                     <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="t1 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
                     <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="t2 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
                     <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="N = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Calc Q = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Calc P = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Calc P = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                    <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Calc Q = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
 
                     <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="м^3/сут" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
                     <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
@@ -146,8 +146,8 @@
             <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="t1 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
             <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="t2 = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
             <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="N = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Calc Q = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Calc P = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Calc P = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Calc Q = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
 
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="м^3/сут" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
@@ -173,6 +173,26 @@
             <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap"              VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+            <Button x:Name="SubmitAddAuto" Grid.Row="8" Grid.Column="1" Command="{Binding AddAuto}">
+                <TextBlock Text="AddAuto"/>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource addWellConverter}">
+                        <Binding Path="Text" ElementName="TextBoxQ"/>
+                        <Binding Path="Text" ElementName="TextBoxP"/>
+                        <Binding Path="Text" ElementName="TextBoxP0"/>
+                        <Binding Path="Text" ElementName="TextBoxT1"/>
+                        <Binding Path="Text" ElementName="TextBoxT2"/>
+                        <Binding Path="Text" ElementName="TextBoxH0"/>
+                        <Binding Path="Text" ElementName="TextBoxMu"/>
+                        <Binding Path="Text" ElementName="TextBoxRw"/>
+                        <Binding Path="Text" ElementName="TextBoxK"/>
+                        <Binding Path="Text" ElementName="TextBoxKappa"/>
+                        <Binding Path="Text" ElementName="TextBoxRs"/>
+                        <Binding Path="Text" ElementName="TextBoxKsi"/>
+                        <Binding Path="Text" ElementName="TextBoxN"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
             <Button x:Name="SubmitAdd" Grid.Row="8" Grid.Column="2" Command="{Binding Add}">
                 <TextBlock Text="Add"/>
                 <Button.CommandParameter>

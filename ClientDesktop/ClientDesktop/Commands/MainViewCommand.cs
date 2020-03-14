@@ -67,7 +67,7 @@ namespace ClientDesktop.Commands
             return pressuresAndTimes;
         }
 
-        public void CalculateInitialFminP()
+        public double CalculateInitialFminP()
         {
             if (_mvm.PGradientViewModel.PGradientAndPressures.Count != 0)
                 _mvm.PGradientViewModel.PGradientAndPressures.Clear();
@@ -104,6 +104,7 @@ namespace ClientDesktop.Commands
             _mvm.PGradientViewModel.SelectedGradient = _mvm.PGradientViewModel.PGradientAndPressures.Last().PGradient;
             _mvm.PGradientViewModel.Gradients.Add(_mvm.PGradientViewModel.PGradientAndPressures[0].PGradient);
             //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
+            return Fmin;
         }
     }
 
@@ -141,9 +142,9 @@ namespace ClientDesktop.Commands
             var res = await httpClient.PostAsync(apiUrl, content);
             string responseBody = await res.Content.ReadAsStringAsync();
             ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
-            _mvm.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];
-            _mvm.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];
-            _mvm.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];
+            _mvm.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];//5.5099120064701842E-05
+            _mvm.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];//0.00011114639731946801
+            _mvm.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];//0.00016799535363899219
             return consumptionsAndTimes;
         }
 
@@ -175,7 +176,7 @@ namespace ClientDesktop.Commands
                 //    break;
                 case 3:
                     Fmin = Math.Pow((_mvm.WellViewModel.Wells[0].Q - _mvm.ConsumptionsAndTimes.Consumptions[_mvm.WellViewModel.Wells[0].N - 2]), 2)
-                            + Math.Pow((_mvm.WellViewModel.Wells[1].Q - _mvm.ConsumptionsAndTimes.Consumptions[_mvm.WellViewModel.Wells[0].N + _mvm.WellViewModel.Wells[1].N - 1]), 2)
+                            + Math.Pow((_mvm.WellViewModel.Wells[1].Q - _mvm.ConsumptionsAndTimes.Consumptions[_mvm.WellViewModel.Wells[0].N + _mvm.WellViewModel.Wells[1].N - 2]), 2)
                             + Math.Pow((_mvm.WellViewModel.Wells[2].Q - _mvm.ConsumptionsAndTimes.Consumptions.Last()), 2);
                     Fmin = Math.Sqrt(Fmin / (Math.Pow(_mvm.WellViewModel.Wells[0].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[1].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[2].Q, 2)));
                     break;
@@ -242,14 +243,17 @@ namespace ClientDesktop.Commands
             string writePath4 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminKP0.txt";
             string writePath5 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminKappaP0.txt";
 
-            int kLeft = 2;
-            int kRight = 5;
-            int kappaLeft = 4;
-            int kappaRight = 12;
-            int p0Left = 0;
-            int p0Rigth = 20;
+            string writePath6 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FPminKP0.txt";
+            string writePath7 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FPminKappaP0.txt";
 
-            double n = 100;
+            int kLeft = 6;
+            int kRight = 12;
+            int kappaLeft = 2;
+            int kappaRight = 22;
+            int p0Left = 0;
+            int p0Rigth = 30;
+
+            double n = 15;
             double kStep = (kRight - kLeft) / n;
             double kappaStep = (kappaRight - kappaLeft) / n;
             double p0Step = (p0Rigth - p0Left) / n;
@@ -273,6 +277,7 @@ namespace ClientDesktop.Commands
                 }
             }
             #endregion
+            bool f = true;
             #region Fmin K P0
             //using (StreamWriter sw = new StreamWriter(writePath4, false, Encoding.Default))
             //{
@@ -286,7 +291,7 @@ namespace ClientDesktop.Commands
             //                object Q = (5 * m).ToString();
             //                object P = (5 * m).ToString();
             //                object P0 = pZeros[i].ToString();
-            //                object T1 = (5 * (m-1)).ToString();
+            //                object T1 = (5 * (m - 1)).ToString();
             //                object T2 = (5 * m).ToString();
             //                object H0 = (1).ToString();
             //                object Mu = (5).ToString();
@@ -301,34 +306,192 @@ namespace ClientDesktop.Commands
             //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
             //                };
             //                #endregion
-            //                MainViewModel.wellViewModel.Add.Execute(obj.ToArray<object>());
+            //                if (_mvm.WellViewModel.Wells.Count<3)
+            //                {
+            //                    _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+            //                }
+            //                else
+            //                {
+            //                    for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
+            //                    {
+            //                        _mvm.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
+            //                        _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+            //                    }
+            //                }
             //            }
 
-            //            #region P calculation
-            //            if (MainViewModel.ConsumptionsAndTimes == null || MainViewModel.ConsumptionsAndTimes?.Consumptions.Count == 0)
-            //                for (int k = 0; k < wellViewModel.Wells.Count; k++)
-            //                    MainViewModel.wellViewModel.Wells[k].Mode = Mode.Direct;
-            //            MainViewModel.PressuresAndTimes = await SendWellsForPressures();
-            //            //plotViewModel.PlotTimePressures(PressuresAndTimes);
+            //            #region P calculation                                                                                                       
+            //            if (_mvm.ConsumptionsAndTimes == null || _mvm.ConsumptionsAndTimes?.Consumptions.Count == 0)
+            //                for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
+            //                    _mvm.WellViewModel.Wells[k].Mode = Mode.Direct;
+            //            if (f)
+            //            {
+            //                _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+            //                f = false;
+            //            }
+            //            //plotViewModel.PlotTimePressures(PressuresAndTimes);                                                                       
             //            #endregion
-            //            #region Q calculation
-            //            MainViewModel.ConsumptionsAndTimes = await SendWellsForConsumptions();
-            //            //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);
-            //            double min = CalculateInitialFminQ();
+            //            #region Q calculation                                                                                                       
+            //            _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+            //            //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
+            //            double min = (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).CalculateInitialFminQ();
             //            #endregion
 
             //            sw.Write(min);
             //            sw.Write(" ");
-
-            //            Clear();
-            //            MainViewModel.wellViewModel.DeleteAllWellCommand.Execute(null);
+            //            _mvm.ConsumptionsAndTimes = null;
+            //            //_mvm.Clear.Execute(null);
+            //            //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
             //        }
             //        sw.Write('\n');
             //    }
             //}
             #endregion
+            //_mvm.WellViewModel.Wells.Clear();
+
             #region Fmin Kappa P0
-            using (StreamWriter sw = new StreamWriter(writePath5, false, Encoding.Default))
+            //using (StreamWriter sw = new StreamWriter(writePath5, false, Encoding.Default))
+            //{
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        for (int j = 0; j <= n; j++)
+            //        {
+            //            for (int m = 1; m <= 3; m++)
+            //            {
+            //                #region Fill Obj
+            //                object Q = (5 * m).ToString();
+            //                object P = (5 * m).ToString();
+            //                object P0 = pZeros[i].ToString();
+            //                object T1 = (5 * (m - 1)).ToString();
+            //                object T2 = (5 * m).ToString();
+            //                object H0 = (1).ToString();
+            //                object Mu = (5).ToString();
+            //                object Rw = (0.1).ToString();
+            //                object K = (6).ToString();
+            //                object Kappa = kappas[j].ToString();
+            //                object Rs = (0.3).ToString();
+            //                object Ksi = (0).ToString();
+            //                object N = (100).ToString();
+            //                List<object> obj = new List<object>()
+            //                {
+            //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
+            //                };
+            //                #endregion
+            //                if (_mvm.WellViewModel.Wells.Count < 3)
+            //                {
+            //                    _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+            //                }
+            //                else
+            //                {
+            //                    for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
+            //                    {
+            //                        _mvm.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
+            //                        _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+            //                    }
+            //                }
+            //            }
+
+            //            #region P calculation
+            //            if (_mvm.ConsumptionsAndTimes == null || _mvm.ConsumptionsAndTimes?.Consumptions.Count == 0)
+            //                for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
+            //                    _mvm.WellViewModel.Wells[k].Mode = Mode.Direct;
+            //            if (f)
+            //            {
+            //                _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+            //                f = false;
+            //            }
+            //            //plotViewModel.PlotTimePressures(PressuresAndTimes);
+            //            #endregion
+            //            #region Q calculation
+            //            _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+            //            //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
+            //            double min = (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).CalculateInitialFminQ();
+            //            #endregion
+
+            //            sw.Write(min);
+            //            sw.Write(" ");
+
+            //            _mvm.ConsumptionsAndTimes = null;
+            //            //_mvm.Clear.Execute(null);
+            //            //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
+            //        }
+            //        sw.Write('\n');
+            //    }
+            //}
+            #endregion
+
+            #region FminP K P0
+            //using (StreamWriter sw = new StreamWriter(writePath6, false, Encoding.Default))
+            //{
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        for (int j = 0; j <= n; j++)
+            //        {
+            //            for (int m = 1; m <= 3; m++)
+            //            {
+            //                #region Fill Obj
+            //                object Q = (5 * m).ToString();
+            //                object P = (5 * m).ToString();
+            //                object P0 = pZeros[i].ToString();
+            //                object T1 = (5 * (m - 1)).ToString();
+            //                object T2 = (5 * m).ToString();
+            //                object H0 = (1).ToString();
+            //                object Mu = (5).ToString();
+            //                object Rw = (0.1).ToString();
+            //                object K = ks[j].ToString();
+            //                object Kappa = (4).ToString();
+            //                object Rs = (0.3).ToString();
+            //                object Ksi = (0).ToString();
+            //                object N = (100).ToString();
+            //                List<object> obj = new List<object>()
+            //                {
+            //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
+            //                };
+            //                #endregion
+            //                if (_mvm.WellViewModel.Wells.Count < 3)
+            //                {
+            //                    _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+            //                }
+            //                else
+            //                {
+            //                    for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
+            //                    {
+            //                        _mvm.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
+            //                        _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+            //                    }
+            //                }
+            //            }
+
+            //            #region Q calculation
+            //            if (_mvm.PressuresAndTimes?.Pressures1f.Count == 0 || _mvm.PressuresAndTimes == null)
+            //                for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
+            //                    _mvm.WellViewModel.Wells[k].Mode = Mode.Reverse;                        
+            //            if (f)
+            //            {
+            //                _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+            //                f = false;
+            //            }
+            //            #endregion
+            //            #region Q calculation                                                                                                       
+            //            _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+            //            //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
+            //            double min = (_mvm.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
+            //            #endregion
+
+            //            sw.Write(min);
+            //            sw.Write(" ");
+
+            //            _mvm.ConsumptionsAndTimes = null;
+            //            //_mvm.Clear.Execute(null);
+            //            //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
+            //        }
+            //        sw.Write('\n');
+            //    }
+            //}
+            #endregion
+
+            #region FminP Kappa P0
+            using (StreamWriter sw = new StreamWriter(writePath7, false, Encoding.Default))
             {
                 for (int i = 0; i <= n; i++)
                 {
@@ -355,32 +518,48 @@ namespace ClientDesktop.Commands
                                 Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
                             };
                             #endregion
-                            _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+                            if (_mvm.WellViewModel.Wells.Count < 3)
+                            {
+                                _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+                            }
+                            else
+                            {
+                                for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
+                                {
+                                    _mvm.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
+                                    _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+                                }
+                            }
                         }
 
-                        #region P calculation
-                        if (_mvm.ConsumptionsAndTimes == null || _mvm.ConsumptionsAndTimes?.Consumptions.Count == 0)
-                            for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
-                                _mvm.WellViewModel.Wells[k].Mode = Mode.Direct;
-                        _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
-                        //plotViewModel.PlotTimePressures(PressuresAndTimes);
-                        #endregion
                         #region Q calculation
-                        _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
-                        //plotViewModel.PlotTimeConsumptions(ConsumptionsAndTimes);
-                        double min = (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).CalculateInitialFminQ();
+                        if (_mvm.PressuresAndTimes?.Pressures1f.Count == 0 || _mvm.PressuresAndTimes == null)
+                            for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
+                                _mvm.WellViewModel.Wells[k].Mode = Mode.Reverse;
+                        if (f)
+                        {
+                            _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+                            f = false;
+                        }
+
+                        #endregion
+                        #region Q calculation                                                                                                       
+                        _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+                        //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
+                        double min = (_mvm.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
                         #endregion
 
                         sw.Write(min);
                         sw.Write(" ");
 
-                        _mvm.Clear.Execute(null);
-                        _mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
+                        _mvm.ConsumptionsAndTimes = null;
+                        //_mvm.Clear.Execute(null);
+                        //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
                     }
                     sw.Write('\n');
                 }
             }
-#endregion
+            #endregion
         }
     }
 

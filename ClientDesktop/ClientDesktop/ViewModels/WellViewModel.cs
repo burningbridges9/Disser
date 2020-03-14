@@ -55,6 +55,19 @@ namespace ClientDesktop.ViewModels
             }
         }
 
+        private ICommand _addAutoWellCommand;
+        public ICommand AddAuto
+        {
+            get
+            {
+                if (_addAutoWellCommand == null)
+                {
+                    _addAutoWellCommand = new AddAutoWellCommand(this);
+                }
+                return _addAutoWellCommand;
+            }
+        }
+
         public ObservableCollection<Well> Wells { get; set; }
         public Well SelectedWell
         {

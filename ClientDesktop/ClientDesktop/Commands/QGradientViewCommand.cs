@@ -107,8 +107,7 @@ namespace ClientDesktop.Commands
             {
                 _gvm.GradientsAndConsumptions.Add(gradientAndConsumptions);
                 _gvm.Gradients.Add(gradientAndConsumptions.QGradient);
-                _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
-                _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
+                _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
                 MainWindow.MainViewModel.PlotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
             }
         }
@@ -154,8 +153,8 @@ namespace ClientDesktop.Commands
             {
                 _gvm.GradientsAndConsumptions.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
                 _gvm.Gradients.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
-                _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
-                _gvm.SelectedGradient = _gvm.GradientsAndConsumptions.Last().QGradient;
+                _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
+                MainWindow.MainViewModel.PlotViewModel.PlotTimeConsumptions(_gvm.GradientsAndConsumptions.Last().ConsumptionsAndTimes);
                 if (_gvm.GradientsAndConsumptions.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
             }
