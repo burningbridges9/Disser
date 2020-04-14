@@ -3,7 +3,7 @@ using ClientDesktop.Models;
 using ClientDesktop.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using ClientDesktop.Calculs;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -36,7 +36,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             var parameters = (object[])parameter;
             PGradient g;
@@ -103,7 +103,7 @@ namespace ClientDesktop.Commands
                     parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
             }
 
-            PGradientAndPressures pGradientAndPressures = await SendWellsForGradient(g);
+            PGradientAndPressures pGradientAndPressures = SendWellsForGradient(g);
             if (pGradientAndPressures.PressuresAndTimes != null)
             {
                 _gvm.PGradientAndPressures.Add(pGradientAndPressures);
@@ -114,7 +114,7 @@ namespace ClientDesktop.Commands
             }
         }
 
-        async Task<PGradientAndPressures> SendWellsForGradient(PGradient gradient)
+        private PGradientAndPressures SendWellsForGradient(PGradient gradient)
         {
             WellsList wellsList = new WellsList(MainWindow.MainViewModel.WellViewModel.Wells.ToList());
             PGradientAndWellsList gradientAndWellsList = new PGradientAndWellsList
@@ -122,18 +122,7 @@ namespace ClientDesktop.Commands
                 Gradient = gradient,
                 WellsList = wellsList,
             };
-            var serializedProduct = JsonConvert.SerializeObject(gradientAndWellsList);
-            HttpClient httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(60);
-            string apiUrl = "https://localhost:44308/api/values/nextpgradient";
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-            request.Content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");//CONTENT-TYPE header
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var res = await httpClient.PostAsync(apiUrl, content);
-            string responseBody = await res.Content.ReadAsStringAsync();
-            PGradientAndPressures pGradientAndPressures = JsonConvert.DeserializeObject<PGradientAndPressures>(responseBody);
+            PGradientAndPressures pGradientAndPressures = RealMagic.PGradientMethod(gradientAndWellsList);
             return pGradientAndPressures;
         }
     }
@@ -149,7 +138,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             if (_gvm.PGradientAndPressures.Count > 1)
             {
@@ -174,7 +163,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             string path = Directory.GetCurrentDirectory();
             string writePath = Path.Combine(path, "PressureGradient.json");
@@ -203,7 +192,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             if (_gvm.PGradientAndPressures.Count > 1)
             {

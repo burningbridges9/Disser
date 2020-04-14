@@ -1,4 +1,5 @@
-﻿using ClientDesktop.Models;
+﻿using ClientDesktop.Calculs;
+using ClientDesktop.Models;
 using ClientDesktop.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -35,31 +36,20 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             if (_mvm.ConsumptionsAndTimes == null || _mvm.ConsumptionsAndTimes?.Consumptions.Count == 0)
                 for (int i = 0; i < _mvm.WellViewModel.Wells.Count; i++)
                     _mvm.WellViewModel.Wells[i].Mode = Mode.Direct;
-            _mvm.PressuresAndTimes = await SendWellsForPressures();
+            _mvm.PressuresAndTimes = SendWellsForPressures();
             _mvm.PlotViewModel.PlotTimePressures(_mvm.PressuresAndTimes);
             CalculateInitialFminP();
         }
 
-        public async Task<PressuresAndTimes> SendWellsForPressures()
+        public PressuresAndTimes SendWellsForPressures()
         {
             WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            var serializedProduct = JsonConvert.SerializeObject(wellsList);
-            HttpClient httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
-            string apiUrl = "https://localhost:44308/api/values/pressures";
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-            request.Content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");//CONTENT-TYPE header
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var res = await httpClient.PostAsync(apiUrl, content);
-            string responseBody = await res.Content.ReadAsStringAsync();
-            PressuresAndTimes pressuresAndTimes = JsonConvert.DeserializeObject<PressuresAndTimes>(responseBody);
+            PressuresAndTimes pressuresAndTimes = RealMagic.GetPressures(wellsList);
             // make check
             _mvm.WellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
             _mvm.WellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
@@ -117,31 +107,20 @@ namespace ClientDesktop.Commands
         {
             return true;
         }
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             if (_mvm.PressuresAndTimes?.Pressures1f.Count == 0 || _mvm.PressuresAndTimes == null)
                 for (int i = 0; i < _mvm.WellViewModel.Wells.Count; i++)
                     _mvm.WellViewModel.Wells[i].Mode = Mode.Reverse;
-            _mvm.ConsumptionsAndTimes = await SendWellsForConsumptions();
+            _mvm.ConsumptionsAndTimes = SendWellsForConsumptions();
             _mvm.PlotViewModel.PlotTimeConsumptions(_mvm.ConsumptionsAndTimes);
             CalculateInitialFminQ();
         }
 
-        public async Task<ConsumptionsAndTimes> SendWellsForConsumptions()
+        public ConsumptionsAndTimes SendWellsForConsumptions()
         {
             WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            var serializedProduct = JsonConvert.SerializeObject(wellsList);
-            HttpClient httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
-            string apiUrl = "https://localhost:44308/api/values/consumptions";
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-            request.Content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");//CONTENT-TYPE header
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var res = await httpClient.PostAsync(apiUrl, content);
-            string responseBody = await res.Content.ReadAsStringAsync();
-            ConsumptionsAndTimes consumptionsAndTimes = JsonConvert.DeserializeObject<ConsumptionsAndTimes>(responseBody);
+            ConsumptionsAndTimes consumptionsAndTimes = RealMagic.GetConsumptions(wellsList);
             _mvm.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];//5.5099120064701842E-05
             _mvm.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];//0.00011114639731946801
             _mvm.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];//0.00016799535363899219
@@ -150,7 +129,6 @@ namespace ClientDesktop.Commands
 
         public double CalculateInitialFminQ()
         {
-
             if (_mvm.QGradientViewModel.GradientsAndConsumptions.Count != 0)
                 _mvm.QGradientViewModel.GradientsAndConsumptions.Clear();
             QGradient g = new QGradient
@@ -200,7 +178,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             _mvm.PlotViewModel.MyModel.Series.Clear();
             _mvm.PlotViewModel.MyModel.InvalidatePlot(true);
@@ -230,7 +208,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             List<double> pZeros = new List<double>();
             List<double> kappas = new List<double>();
@@ -491,74 +469,74 @@ namespace ClientDesktop.Commands
             #endregion
 
             #region FminP Kappa P0
-            using (StreamWriter sw = new StreamWriter(writePath7, false, Encoding.Default))
-            {
-                for (int i = 0; i <= n; i++)
-                {
-                    for (int j = 0; j <= n; j++)
-                    {
-                        for (int m = 1; m <= 3; m++)
-                        {
-                            #region Fill Obj
-                            object Q = (5 * m).ToString();
-                            object P = (5 * m).ToString();
-                            object P0 = pZeros[i].ToString();
-                            object T1 = (5 * (m - 1)).ToString();
-                            object T2 = (5 * m).ToString();
-                            object H0 = (1).ToString();
-                            object Mu = (5).ToString();
-                            object Rw = (0.1).ToString();
-                            object K = (10).ToString();
-                            object Kappa = kappas[j].ToString();
-                            object Rs = (0.3).ToString();
-                            object Ksi = (0).ToString();
-                            object N = (100).ToString();
-                            List<object> obj = new List<object>()
-                            {
-                                Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
-                            };
-                            #endregion
-                            if (_mvm.WellViewModel.Wells.Count < 3)
-                            {
-                                _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
-                            }
-                            else
-                            {
-                                for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
-                                {
-                                    _mvm.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
-                                    _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
-                                }
-                            }
-                        }
+            //using (StreamWriter sw = new StreamWriter(writePath7, false, Encoding.Default))
+            //{
+            //    for (int i = 0; i <= n; i++)
+            //    {
+            //        for (int j = 0; j <= n; j++)
+            //        {
+            //            for (int m = 1; m <= 3; m++)
+            //            {
+            //                #region Fill Obj
+            //                object Q = (5 * m).ToString();
+            //                object P = (5 * m).ToString();
+            //                object P0 = pZeros[i].ToString();
+            //                object T1 = (5 * (m - 1)).ToString();
+            //                object T2 = (5 * m).ToString();
+            //                object H0 = (1).ToString();
+            //                object Mu = (5).ToString();
+            //                object Rw = (0.1).ToString();
+            //                object K = (10).ToString();
+            //                object Kappa = kappas[j].ToString();
+            //                object Rs = (0.3).ToString();
+            //                object Ksi = (0).ToString();
+            //                object N = (100).ToString();
+            //                List<object> obj = new List<object>()
+            //                {
+            //                    Q, P,P0, T1,T2, H0, Mu, Rw, K, Kappa, Rs, Ksi, N
+            //                };
+            //                #endregion
+            //                if (_mvm.WellViewModel.Wells.Count < 3)
+            //                {
+            //                    _mvm.WellViewModel.Add.Execute(obj.ToArray<object>());
+            //                }
+            //                else
+            //                {
+            //                    for (int l = 0; l < _mvm.WellViewModel.Wells.Count; l++)
+            //                    {
+            //                        _mvm.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
+            //                        _mvm.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+            //                    }
+            //                }
+            //            }
 
-                        #region Q calculation
-                        if (_mvm.PressuresAndTimes?.Pressures1f.Count == 0 || _mvm.PressuresAndTimes == null)
-                            for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
-                                _mvm.WellViewModel.Wells[k].Mode = Mode.Reverse;
-                        if (f)
-                        {
-                            _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
-                            f = false;
-                        }
+            //            #region Q calculation
+            //            if (_mvm.PressuresAndTimes?.Pressures1f.Count == 0 || _mvm.PressuresAndTimes == null)
+            //                for (int k = 0; k < _mvm.WellViewModel.Wells.Count; k++)
+            //                    _mvm.WellViewModel.Wells[k].Mode = Mode.Reverse;
+            //            if (f)
+            //            {
+            //                _mvm.ConsumptionsAndTimes = await (_mvm.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+            //                f = false;
+            //            }
 
-                        #endregion
-                        #region Q calculation                                                                                                       
-                        _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
-                        //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
-                        double min = (_mvm.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
-                        #endregion
+            //            #endregion
+            //            #region Q calculation                                                                                                       
+            //            _mvm.PressuresAndTimes = await (_mvm.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+            //            //plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
+            //            double min = (_mvm.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
+            //            #endregion
 
-                        sw.Write(min);
-                        sw.Write(" ");
+            //            sw.Write(min);
+            //            sw.Write(" ");
 
-                        _mvm.ConsumptionsAndTimes = null;
-                        //_mvm.Clear.Execute(null);
-                        //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
-                    }
-                    sw.Write('\n');
-                }
-            }
+            //            _mvm.ConsumptionsAndTimes = null;
+            //            //_mvm.Clear.Execute(null);
+            //            //_mvm.WellViewModel.DeleteAllWellCommand.Execute(null);
+            //        }
+            //        sw.Write('\n');
+            //    }
+            //}
             #endregion
         }
     }

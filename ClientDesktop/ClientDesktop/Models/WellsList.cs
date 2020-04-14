@@ -13,6 +13,9 @@ namespace ClientDesktop.Models
         public List<Well> Wells { get; set; }
         [JsonProperty("Indexes")]
         public List<int> Indexes { get; set; }
+        public WellsList()
+        {
+        }
 
         public WellsList(List<Well> Wells)
         {

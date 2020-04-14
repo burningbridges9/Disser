@@ -1,4 +1,5 @@
-﻿using ClientDesktop.Models;
+﻿using ClientDesktop.Calculs;
+using ClientDesktop.Models;
 using ClientDesktop.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -35,7 +36,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             var parameters = (object[])parameter;
             QGradient g;
@@ -102,7 +103,7 @@ namespace ClientDesktop.Commands
                     parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
             }
 
-            QGradientAndConsumptions gradientAndConsumptions = await SendWellsForGradient(g);
+            QGradientAndConsumptions gradientAndConsumptions = SendWellsForGradient(g);
             if (gradientAndConsumptions.ConsumptionsAndTimes != null)
             {
                 _gvm.GradientsAndConsumptions.Add(gradientAndConsumptions);
@@ -112,7 +113,7 @@ namespace ClientDesktop.Commands
             }
         }
 
-        async Task<QGradientAndConsumptions> SendWellsForGradient(QGradient gradient)
+        private QGradientAndConsumptions SendWellsForGradient(QGradient gradient)
         {
             WellsList wellsList = new WellsList(MainWindow.MainViewModel.WellViewModel.Wells.ToList());
             QGradientAndWellsList gradientAndWellsList = new QGradientAndWellsList
@@ -120,18 +121,7 @@ namespace ClientDesktop.Commands
                 Gradient = gradient,
                 WellsList = wellsList,
             };
-            var serializedProduct = JsonConvert.SerializeObject(gradientAndWellsList);
-            HttpClient httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(60);
-            string apiUrl = "https://localhost:44308/api/values/nextgradient";
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
-            var content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-            request.Content = new StringContent(serializedProduct, Encoding.UTF8, "application/json");//CONTENT-TYPE header
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var res = await httpClient.PostAsync(apiUrl, content);
-            string responseBody = await res.Content.ReadAsStringAsync();
-            QGradientAndConsumptions gradientAndConsumptions = JsonConvert.DeserializeObject<QGradientAndConsumptions>(responseBody);
+            QGradientAndConsumptions gradientAndConsumptions = RealMagic.QGradientMethod(gradientAndWellsList);
             return gradientAndConsumptions;
         }
     }
@@ -147,7 +137,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             if (_gvm.GradientsAndConsumptions.Count > 1)
             {
@@ -171,7 +161,7 @@ namespace ClientDesktop.Commands
             return true;
         }
 
-        public override async void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             string path = Directory.GetCurrentDirectory();
             string writePath = Path.Combine(path, "ConsumptionGradient.json");
