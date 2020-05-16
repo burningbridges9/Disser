@@ -66,12 +66,39 @@ namespace ClientDesktop.ViewModels
             }
         }
 
-        private ICommand _Surface;
-        public ICommand Surface
+        private ICommand _SurfaceP0KFminQ;
+        public ICommand SurfaceP0KFminQ
         {
             get
             {
-                return _Surface ?? new SurfaceCommand(this);
+                return _SurfaceP0KFminQ ?? new SurfaceP0KFminQCommand(this);
+            }
+        }
+
+        private ICommand _SurfaceP0KappaFminQ;
+        public ICommand SurfaceP0KappaFminQ
+        {
+            get
+            {
+                return _SurfaceP0KappaFminQ ?? new SurfaceP0KappaFminQCommand(this);
+            }
+        }
+
+        private ICommand _SurfaceP0KFminP;
+        public ICommand SurfaceP0KFminP
+        {
+            get
+            {
+                return _SurfaceP0KFminP ?? new SurfaceP0KFminPCommand(this);
+            }
+        }
+
+        private ICommand _SurfaceP0KappaFminP;
+        public ICommand SurfaceP0KappaFminP
+        {
+            get
+            {
+                return _SurfaceP0KappaFminP ?? new SurfaceP0KappaFminPCommand(this);
             }
         }
 

@@ -63,11 +63,14 @@ namespace ClientDesktop.ViewModels
             MyModel.Series.Clear();
             MyModel.InvalidatePlot(true);
             var model = new PlotModel { LegendSymbolLength = 24 };
+            model.LegendTitle = "Расходы Q = Q(t)";
+            model.LegendPosition = LegendPosition.RightBottom;
             model.Series.Add(new LineSeries
             {
                 Color = OxyColors.SkyBlue,
                 MarkerType = MarkerType.None,
-                MarkerStrokeThickness = 1.5
+                MarkerStrokeThickness = 1.5,
+                Title = "Рассчитанные расходы"
             });
             foreach (var pt in consumptionsAndTimes.Consumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
             {
@@ -79,7 +82,8 @@ namespace ClientDesktop.ViewModels
                 {
                     Color = OxyColors.Red,
                     MarkerType = MarkerType.None,
-                    MarkerStrokeThickness = 1.5
+                    MarkerStrokeThickness = 1.5,
+                    Title = "Замеренные расходы"
                 });
                 foreach (var pt in consumptionsAndTimes.StaticConsumptions.Zip(consumptionsAndTimes.Times, Tuple.Create))
                 {
@@ -94,6 +98,8 @@ namespace ClientDesktop.ViewModels
             MyModel.Series.Clear();
             MyModel.InvalidatePlot(true);
             var model = new PlotModel { LegendSymbolLength = 24 };
+            model.LegendTitle = "Давления P = P(t)";
+            model.LegendPosition = LegendPosition.RightBottom;
             switch (MainWindow.MainViewModel.WellViewModel.Wells.Count)
             {
                 case 1:
@@ -151,7 +157,8 @@ namespace ClientDesktop.ViewModels
                     {
                         Color = OxyColors.SkyBlue,
                         MarkerType = MarkerType.None,
-                        MarkerStrokeThickness = 1.5
+                        MarkerStrokeThickness = 1.5,
+                        Title = "Расчитанное давление P1"
                     });
                     model.Series.Add(new LineSeries
                     {
@@ -160,12 +167,14 @@ namespace ClientDesktop.ViewModels
                         MarkerSize = 0.5,
                         MarkerStroke = OxyColors.Blue,
                         MarkerFill = OxyColors.Blue,
-                        MarkerStrokeThickness = 0.5
+                        MarkerStrokeThickness = 0.5,
+                        Title = "Расчитанное давление P1 без учета расходов Q2 и Q3"
                     });
                     model.Series.Add(new LineSeries
                     {
                         Color = OxyColors.Black,
-                        MarkerStrokeThickness = 1.5
+                        MarkerStrokeThickness = 1.5,
+                        Title = "Расчитанное давление P2"
                     });
                     model.Series.Add(new LineSeries
                     {
@@ -174,12 +183,14 @@ namespace ClientDesktop.ViewModels
                         MarkerSize = 0.5,
                         MarkerStroke = OxyColors.Green,
                         MarkerFill = OxyColors.Green,
-                        MarkerStrokeThickness = 0.5
+                        MarkerStrokeThickness = 0.5,
+                        Title = "Расчитанное давление P2 без учета расхода Q3"
                     });
                     model.Series.Add(new LineSeries
                     {
                         Color = OxyColors.Red,
-                        MarkerStrokeThickness = 1.5
+                        MarkerStrokeThickness = 1.5,
+                        Title = "Расчитанное давление P3"
                     });
                     foreach (var pt in pressuresAndTimes.Pressures1f.Zip(pressuresAndTimes.Times1f, Tuple.Create))
                     {
@@ -207,7 +218,8 @@ namespace ClientDesktop.ViewModels
                         {
                             Color = OxyColors.BlueViolet,
                             MarkerType = MarkerType.Cross,
-                            MarkerStrokeThickness = 2.5
+                            MarkerStrokeThickness = 2.5,
+                            Title = "Замеренное давление P"
                         });
                         var tempTimes = new List<Double>();
                         tempTimes.AddRange(pressuresAndTimes.Times1f);

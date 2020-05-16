@@ -8,15 +8,16 @@
         xmlns:pr ="clr-namespace:ClientDesktop.Layouts"
         xmlns:vms ="clr-namespace:ClientDesktop.ViewModels"
         xmlns:oxy="http://oxyplot.org/wpf"
-        Title="Dissertation" Height="800" Width="1200">
+        Title="Dissertation" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.DataContext>
         <vms:PlotViewModel/>
     </Window.DataContext>
     <Grid x:Name="MainGrid">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="700"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="600"/>
+                <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="518*"></ColumnDefinition>
@@ -27,7 +28,7 @@
                 <TabItem x:Name="PressureAndConsumption" Width="280" Height="50" Header="Pressure and Consumption" FontSize="20">
                     <Grid>
                         <pr:PressureCalcLayout x:Name="Addition" Grid.Column="1"/>
-                    </Grid>                    
+                    </Grid>
                 </TabItem>
                 <TabItem x:Name="GradientTI" Width="150" Height="50" Header="Q Gradient" FontSize="20">
                     <Grid>
@@ -47,20 +48,42 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="CalculatePressuresButton" Grid.Column ="0" Command="{Binding CalculatePressures}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="CalculatePressuresButton" Grid.Row ="0" Grid.Column ="0" Command="{Binding CalculatePressures}">
                     <TextBlock Text="Pressures"/>
                 </Button>
-                <Button x:Name="ClearButton" Grid.Column ="1"  Command="{Binding Clear}">
+                <Button x:Name="ClearButton" Grid.Row ="0" Grid.Column ="1"  Command="{Binding Clear}">
                     <TextBlock Text="Clear"/>
                 </Button>
-                <Button x:Name="CalculateConsumptionsButton"  Grid.Column ="2" Command="{Binding CalculateConsumptions}">
+                <Button x:Name="CalculateConsumptionsButton" Grid.Row ="0"  Grid.Column ="2" Command="{Binding CalculateConsumptions}">
                     <TextBlock Text="Consumptions"/>
                 </Button>
-                <Button x:Name="SurfaceButton"  Grid.Column ="3" Command="{Binding Surface}">
+                <Button x:Name="SurfaceFminQP0KappaButton" Grid.Row ="1"  Grid.Column ="0" Command="{Binding SurfaceP0KappaFminQ}">
                     <StackPanel>
                         <TextBlock Text="Surfaces" HorizontalAlignment="Center"/>
-                        <TextBlock Text="(P0, kappa)" HorizontalAlignment="Center"/>
-                        <TextBlock Text="(P0, k)" HorizontalAlignment="Center"/>
+                        <TextBlock Text="(FminQ, P0, kappa)" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="SurfaceFminQP0KButton" Grid.Row ="1"  Grid.Column ="1" Command="{Binding SurfaceP0KFminQ}">
+                    <StackPanel>
+                        <TextBlock Text="Surfaces" HorizontalAlignment="Center"/>
+                        <TextBlock Text="(FminQ, P0, k)" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="SurfaceFminPP0KappaButton" Grid.Row ="1"  Grid.Column ="2" Command="{Binding SurfaceP0KappaFminP}">
+                    <StackPanel>
+                        <TextBlock Text="Surfaces" HorizontalAlignment="Center"/>
+                        <TextBlock Text="(FminP, P0, kappa)" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="SurfaceFminPP0KButton" Grid.Row ="1"  Grid.Column ="3" Command="{Binding SurfaceP0KFminP}">
+                    <StackPanel>
+                        <TextBlock Text="Surfaces" HorizontalAlignment="Center"/>
+                        <TextBlock Text="(FminP, P0, k)" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </Grid>
