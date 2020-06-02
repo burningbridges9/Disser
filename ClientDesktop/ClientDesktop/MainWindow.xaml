@@ -80,7 +80,7 @@
                         <TextBlock Text="(FminP, P0, kappa)" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="SurfaceFminPP0KButton" Grid.Row ="1"  Grid.Column ="3" Command="{Binding SurfaceP0KFminP}">
+                <Button x:Name="SurfaceFminPP0KButton" Grid.Row ="1"  Grid.Column ="3" Command="{Binding SurfaceP0KFminP}" Visibility="Hidden">
                     <StackPanel>
                         <TextBlock Text="Surfaces" HorizontalAlignment="Center"/>
                         <TextBlock Text="(FminP, P0, k)" HorizontalAlignment="Center"/>

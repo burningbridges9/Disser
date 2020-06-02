@@ -973,9 +973,12 @@ namespace ClientDesktop.Calculs
                         Fmin = Math.Sqrt(Fmin / (Math.Pow(gradientWells[0].Q, 2) + Math.Pow(gradientWells[1].Q, 2)));
                         break;
                     case 3:
-                        Fmin = Math.Pow((gradientWells[0].Q - Qk1[wlQk1Wells.Indexes[0] - 2]), 2)
-                                + Math.Pow((gradientWells[1].Q - Qk1[wlQk1Wells.Indexes[1] - 1]), 2)
-                                + Math.Pow((gradientWells[2].Q - Qk1.Last()), 2);
+                        var q1 = Qk1[wlQk1Wells.Indexes[0] - 2];
+                        var q2 = Qk1[wlQk1Wells.Indexes[1] - 1];
+                        var q3 = Qk1.Last();
+                        Fmin = Math.Pow((gradientWells[0].Q - q1), 2)
+                                + Math.Pow((gradientWells[1].Q - q2), 2)
+                                + Math.Pow((gradientWells[2].Q - q3), 2);
                         Fmin = Fmin / (Math.Pow(gradientWells[0].Q, 2) + Math.Pow(gradientWells[1].Q, 2) + Math.Pow(gradientWells[2].Q, 2));
                         break;
 
@@ -1095,40 +1098,22 @@ namespace ClientDesktop.Calculs
             #endregion
 
             #region Qk QkDelta QkappaDelta QksiDelta QP0Delta evaluation
-            List<double> Qk;
-            List<double> QkDelta;
-            List<double> QkappaDelta;
-            List<double> QksiDelta;
-            List<double> QP0Delta;
 
-            PressuresAndTimes Pk;
-            PressuresAndTimes PkDelta;
-            PressuresAndTimes PkappaDelta;
-            PressuresAndTimes PksiDelta;
-            PressuresAndTimes PP0Delta;
-
-            //List<double> QkNormed;
-            //List<double> QP0DeltaNorm;
             WellsList wlGradWells = new WellsList { Wells = gradientWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            GetTimesAndPressures(wlGradWells, out Pk); // Q_k
+            GetTimesAndPressures(wlGradWells, out PressuresAndTimes Pk); // Q_k
 
             WellsList wlKWells = new WellsList { Wells = kWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            GetTimesAndPressures(wlKWells, out PkDelta); // k+delta
+            GetTimesAndPressures(wlKWells, out PressuresAndTimes PkDelta); // k+delta
 
             WellsList wlKappaWells = new WellsList { Wells = kappaWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            GetTimesAndPressures(wlKappaWells, out PkappaDelta); // kappa+delta
+            GetTimesAndPressures(wlKappaWells, out PressuresAndTimes PkappaDelta); // kappa+delta
 
             WellsList wlKsiWells = new WellsList { Wells = ksiWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            GetTimesAndPressures(wlKsiWells, out PksiDelta); // ksi+delta
+            GetTimesAndPressures(wlKsiWells, out PressuresAndTimes PksiDelta); // ksi+delta
 
             WellsList wlP0Wells = new WellsList { Wells = p0wells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            GetTimesAndPressures(wlP0Wells, out PP0Delta); // p0+delta
+            GetTimesAndPressures(wlP0Wells, out PressuresAndTimes PP0Delta); // p0+delta
                                                            // подсчет градиента
-
-            //WellsList wlGradNormWells = new WellsList { Wells = gradientWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            //GetConsumtionsNorm(wlGradWells, out QkNormed); // Q_k
-            //WellsList wlP0NormWells = new WellsList { Wells = gradientWells, Indexes = gradientAndWellsList.WellsList.Indexes };
-            //GetConsumtionsNorm(wlP0Wells, out QP0DeltaNorm); // Q_k
             #endregion
 
             #region gradient projections evaluation
@@ -1136,7 +1121,6 @@ namespace ClientDesktop.Calculs
             double gradientKappa = 0;
             double gradientKsi = 0;
             double gradientP0 = 0;
-            double gradientP0norm = 0;
             switch (gradientWells.Count)
             {
                 #region case 1
@@ -1201,18 +1185,30 @@ namespace ClientDesktop.Calculs
                 #endregion
                 #region case 3
                 case 3:
-                    gradientK = ((Math.Pow((gradientWells[0].P - PkDelta.Pressures1f.Last()), 2) +
-                            Math.Pow((gradientWells[1].P - PkDelta.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - PkDelta.Pressures3.Last()), 2))
-                            - (Math.Pow((gradientWells[0].P - Pk.Pressures1f.Last()), 2)
-                            + Math.Pow((gradientWells[1].P - Pk.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - Pk.Pressures3.Last()), 2))) / gradientAndWellsList.Gradient.DeltaK;
-                    gradientKappa = ((Math.Pow((gradientWells[0].P - PkappaDelta.Pressures1f.Last()), 2) +
-                            Math.Pow((gradientWells[1].P - PkappaDelta.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - PkappaDelta.Pressures3.Last()), 2))
-                            - (Math.Pow((gradientWells[0].P - Pk.Pressures1f.Last()), 2)
-                            + Math.Pow((gradientWells[1].P - Pk.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - Pk.Pressures3.Last()), 2))) / gradientAndWellsList.Gradient.DeltaKappa;
+                    var f = (Math.Pow(gradientWells[0].P - Pk.Pressures1f.Last(), 2)
+                            + Math.Pow(gradientWells[1].P - Pk.Pressures2f.Last(), 2)
+                            + Math.Pow(gradientWells[2].P - Pk.Pressures3.Last(), 2))
+                            / (Math.Pow(gradientWells[0].P, 2)
+                            + Math.Pow(gradientWells[1].P, 2)
+                            + Math.Pow(gradientWells[2].P, 2));
+
+                    var fk = (Math.Pow(gradientWells[0].P - PkDelta.Pressures1f.Last(), 2)
+                            + Math.Pow(gradientWells[1].P - PkDelta.Pressures2f.Last(), 2)
+                            + Math.Pow(gradientWells[2].P - PkDelta.Pressures3.Last(), 2))
+                            / (Math.Pow(gradientWells[0].P, 2)
+                            + Math.Pow(gradientWells[1].P, 2)
+                            + Math.Pow(gradientWells[2].P, 2));
+
+                    gradientK = (fk - f) / (gradientAndWellsList.Gradient.DeltaK * Math.Pow(10.0, 15) * Math.Pow(10, 3));
+
+                    var fkappa = (Math.Pow(gradientWells[0].P - PkappaDelta.Pressures1f.Last(), 2)
+                                  + Math.Pow(gradientWells[1].P - PkappaDelta.Pressures2f.Last(), 2)
+                                  + Math.Pow(gradientWells[2].P - PkappaDelta.Pressures3.Last(), 2))
+                                  / (Math.Pow(gradientWells[0].P, 2)
+                                  + Math.Pow(gradientWells[1].P, 2)
+                                  + Math.Pow(gradientWells[2].P, 2));
+                    gradientKappa = (fkappa - f) / (gradientAndWellsList.Gradient.DeltaKappa * 3600.0 * Math.Pow(10, 3));
+
                     if (gradientAndWellsList.Gradient.DeltaKsi == 0)
                     {
                         gradientKsi = 0;
@@ -1232,20 +1228,14 @@ namespace ClientDesktop.Calculs
                     }
                     else
                     {
-                        gradientP0 = ((Math.Pow((gradientWells[0].P - PP0Delta.Pressures1f.Last()), 2) +
-                            Math.Pow((gradientWells[1].P - PP0Delta.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - PP0Delta.Pressures3.Last()), 2))
-                            - (Math.Pow((gradientWells[0].P - Pk.Pressures1f.Last()), 2)
-                            + Math.Pow((gradientWells[1].P - Pk.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - Pk.Pressures3.Last()), 2))) / gradientAndWellsList.Gradient.DeltaP0;
-
-                        //gradientP0norm = ((Math.Pow((gradientWells[0].Q/1000000 - QP0DeltaNorm[wlKWells.Indexes[0] - 2]), 2) +
-                        //    Math.Pow((gradientWells[1].Q/1000000 - QP0DeltaNorm[wlKWells.Indexes[1] - 1]), 2)
-                        //    + Math.Pow((gradientWells[2].Q / 1000000 - QP0DeltaNorm.Last()), 2))
-                        //    - (Math.Pow((gradientWells[0].Q / 1000000 - QkNormed[wlKWells.Indexes[0] - 2]), 2)
-                        //    + Math.Pow((gradientWells[1].Q / 1000000 - QkNormed[wlKWells.Indexes[1] - 1]), 2)
-                        //    + Math.Pow((gradientWells[2].Q / 1000000 - QkNormed.Last()), 2))) / (gradientAndWellsList.Gradient.DeltaP0*Math.Pow(10,-6));
-                    }
+                        var fp = (Math.Pow(gradientWells[0].P - PP0Delta.Pressures1f.Last(), 2)
+                               + Math.Pow(gradientWells[1].P - PP0Delta.Pressures2f.Last(), 2)
+                               + Math.Pow(gradientWells[2].P - PP0Delta.Pressures3.Last(), 2))
+                               / (Math.Pow(gradientWells[0].P, 2)
+                                     + Math.Pow(gradientWells[1].P, 2)
+                                     + Math.Pow(gradientWells[2].P, 2));
+                        gradientP0 = (fp - f) / (gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10.0, -6) * Math.Pow(10, 3));
+}
                     break;
                     #endregion
             }
@@ -1271,21 +1261,21 @@ namespace ClientDesktop.Calculs
             int kNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedK, gradientK, gradientAndWellsList.Gradient.ChangedK, gradientAndWellsList.Gradient.DeltaK);
             int kappaNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedKappa, gradientKappa, gradientAndWellsList.Gradient.ChangedKappa, gradientAndWellsList.Gradient.DeltaKappa);
             int ksiNum = DegreeEvaluation(gradientAndWellsList.Gradient.UsedKsi, gradientKsi, gradientAndWellsList.Gradient.ChangedKsi, gradientAndWellsList.Gradient.DeltaKsi);
-            int p0Num = !(i1 == 0 && i2 == 0 && i3 == 0) ? 0 : DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0, gradientAndWellsList.Gradient.ChangedP0, gradientAndWellsList.Gradient.DeltaP0);
-            int p0NumNorm = DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0norm, gradientAndWellsList.Gradient.ChangedP0 * Math.Pow(10, -6), gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10, -6));
-            nextGradient.Lambda *= Math.Pow(10, MaxDegreeEvaluation(kNum, kappaNum, ksiNum, p0Num));
+            int p0Num =/* !(i1 == 0 && i2 == 0 && i3 == 0) ? 0 : */DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0, gradientAndWellsList.Gradient.ChangedP0, gradientAndWellsList.Gradient.DeltaP0);
+            //int p0NumNorm = DegreeEvaluation(gradientAndWellsList.Gradient.UsedP0, gradientP0norm, gradientAndWellsList.Gradient.ChangedP0 * Math.Pow(10, -6), gradientAndWellsList.Gradient.DeltaP0 * Math.Pow(10, -6));
+            //nextGradient.Lambda *= Math.Pow(10, MaxDegreeEvaluation(kNum, kappaNum, ksiNum, p0Num));
             #endregion
 
-            double kNext = gradientAndWellsList.Gradient.ChangedK - i1 * nextGradient.Lambda * gradientK;
-            double kappaNext = gradientAndWellsList.Gradient.ChangedKappa - i2 * nextGradient.Lambda * gradientKappa;
+            double kNext = gradientAndWellsList.Gradient.ChangedK * Math.Pow(10.0, 15) - i1 * nextGradient.Lambda * gradientK;
+            double kappaNext = gradientAndWellsList.Gradient.ChangedKappa * 3600.0 - i2 * nextGradient.Lambda * gradientKappa;
             double ksiNext = gradientAndWellsList.Gradient.ChangedKsi - i3 * nextGradient.Lambda * gradientKsi;
-            double p0Next = gradientAndWellsList.Gradient.ChangedP0 - i4 * nextGradient.Lambda * gradientP0;
+            double p0Next = gradientAndWellsList.Gradient.ChangedP0 * Math.Pow(10.0, -6) - i4 * nextGradient.Lambda * gradientP0;
             if ((kNext > 0) && (kappaNext > 0) && (ksiNext >= 0) && (p0Next >= 0))
             {
-                nextGradient.ChangedK = kNext;
-                nextGradient.ChangedKappa = kappaNext;
+                nextGradient.ChangedK = kNext * Math.Pow(10.0, -15);
+                nextGradient.ChangedKappa = kappaNext * (1.0 / 3600.0);
                 nextGradient.ChangedKsi = ksiNext;
-                nextGradient.ChangedP0 = p0Next;
+                nextGradient.ChangedP0 = p0Next * Math.Pow(10.0, 6);
                 //stack.push_front(*grK1);
                 List<Well> Pk1wells = new List<Well>();
                 Pk1wells.AddRange(gradientWells);
@@ -1296,11 +1286,9 @@ namespace ClientDesktop.Calculs
                     Pk1wells[i].Ksi = nextGradient.ChangedKsi;
                     Pk1wells[i].P0 = nextGradient.ChangedP0;
                 }
-                List<double> Qk1;
-                PressuresAndTimes Pk1;
                 WellsList wlPk1Wells = new WellsList { Wells = Pk1wells, Indexes = gradientAndWellsList.WellsList.Indexes };
                 //GetConsumtions(wlQk1Wells, out Qk1);
-                GetTimesAndPressures(wlPk1Wells, out Pk1);
+                GetTimesAndPressures(wlPk1Wells, out PressuresAndTimes Pk1);
                 double Fmin = 0;
                 switch (gradientWells.Count)
                 {
