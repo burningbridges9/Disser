@@ -1,5 +1,6 @@
 ﻿using ClientDesktop.Models;
 using ClientDesktop.ViewModels;
+using MathWorks.SurfaceAnimating;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,12 @@ namespace ClientDesktop.Commands
     public class SurfaceP0KFminQCommand : MainViewCommand
     {
         public SurfaceP0KFminQCommand(MainViewModel mvm) : base(mvm)
-        { }
+        {
+            SurfaceAnimator surfaceAnimator = new SurfaceAnimator();
+            //MathWorks.MATLAB.NET.Arrays.MWArray[] in = new MWArray[3];
+            //in[0] = new MWCharArray("String argument 1");
+            surfaceAnimator.SurfAnimationFq("my_file.xls");
+        }
 
         public override bool CanExecute(object parameter)
         {

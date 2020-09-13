@@ -604,21 +604,31 @@ namespace ClientDesktop.Calculs
             //        sw2.Write('\n');
             //    }
             //}
-            List<double> prev = new List<double>();
-            do
+            //List<double> prev = new List<double>();
+            //do
+            //{
+            //    prev = X.ToList();
+            //    for (int i = 0; i < X.Count; i++)
+            //    {
+            //        double var = 0;
+            //        for (int j = 0; j < i; j++)
+            //            var += (A[i][j] * X[j]);
+            //        for (int j = i + 1; j < X.Count; j++)
+            //            var += (A[i][j] * prev[j]);
+            //        X[i] = (B[i] - var) / A[i][i];
+            //    }
+            //}
+            //while (!Converge(X, prev));
+            
+            for (int i = 0; i < X.Count; i++)
             {
-                prev = X.ToList();
-                for (int i = 0; i < X.Count; i++)
+                var sum = 0.0;
+                for (int j = 0; j < i; j++)
                 {
-                    double var = 0;
-                    for (int j = 0; j < i; j++)
-                        var += (A[i][j] * X[j]);
-                    for (int j = i + 1; j < X.Count; j++)
-                        var += (A[i][j] * prev[j]);
-                    X[i] = (B[i] - var) / A[i][i];
+                    sum += A[i][j] * X[j];
                 }
+                X[i] = (B[i] - sum) / A[i][i];
             }
-            while (!Converge(X, prev));
         }
 
         private static bool Converge(List<double> xk, List<double> xkp)
