@@ -29,7 +29,7 @@ namespace ClientDesktop
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
-            MainViewModel = new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel);
+            MainViewModel = new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel, SurfaceClc.surfaceViewModel);
             this.DataContext = MainViewModel;
         }
     }

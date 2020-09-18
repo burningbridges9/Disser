@@ -198,6 +198,6 @@ namespace ClientDesktop.Commands
             _mvm.ConsumptionsAndTimes?.Times?.Clear();
         }
     }
-   
 
+    
 }

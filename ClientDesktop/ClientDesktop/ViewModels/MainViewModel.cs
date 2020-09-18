@@ -29,12 +29,14 @@ namespace ClientDesktop.ViewModels
         }
         public QGradientViewModel QGradientViewModel { get; set; }
         public PGradientViewModel PGradientViewModel { get; set; }
-        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, PGradientViewModel pGradientViewModel)
+        public SurfaceViewModel SurfaceViewModel { get; set; }
+        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, PGradientViewModel pGradientViewModel, SurfaceViewModel surfaceViewModel)
         {
             this.WellViewModel = wellViewModel;
             this.QGradientViewModel = qGradientViewModel;
             this.PGradientViewModel = pGradientViewModel;
             this.PlotViewModel = new PlotViewModel();
+            this.SurfaceViewModel = surfaceViewModel;
         }
 
         #region Commands

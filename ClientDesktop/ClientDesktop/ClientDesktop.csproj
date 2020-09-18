@@ -68,11 +68,8 @@
     <Reference Include="OxyPlot.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Wpf.1.0.0\lib\net45\OxyPlot.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="SurfaceAnimating">
-      <HintPath>Surface\SurfaceAnimating.dll</HintPath>
-    </Reference>
-    <Reference Include="SurfaceAnimatingNative">
-      <HintPath>Surface\SurfaceAnimatingNative.dll</HintPath>
+    <Reference Include="Surface">
+      <HintPath>Surface\Surface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -111,6 +108,7 @@
     <Compile Include="Commands\QGradientViewCommand.cs" />
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\SurfaceCommands.cs" />
+    <Compile Include="Commands\SurfaceViewCommand.cs" />
     <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
     <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\ValueConverters\WellConverters\KConverter.cs" />
@@ -126,6 +124,8 @@
     <Compile Include="Models\PGradient.cs" />
     <Compile Include="Models\QGradient.cs" />
     <Compile Include="Models\PGradientAndWellsList.cs" />
+    <Compile Include="Models\SurfaceModel.cs" />
+    <Compile Include="ViewModels\SurfaceViewModel.cs" />
     <Compile Include="Views\PGradientCalc.xaml.cs">
       <DependentUpon>PGradientCalc.xaml</DependentUpon>
     </Compile>
@@ -145,6 +145,9 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlotViewModel.cs" />
     <Compile Include="ViewModels\WellViewModel.cs" />
+    <Compile Include="Views\SurfaceCalc.xaml.cs">
+      <DependentUpon>SurfaceCalc.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\PGradientCalc.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -172,6 +175,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SurfaceCalc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Well.cs" />
