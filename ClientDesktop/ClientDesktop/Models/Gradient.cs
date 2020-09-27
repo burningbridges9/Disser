@@ -10,9 +10,7 @@ namespace ClientDesktop.Models
 {
     public class Gradient : INotifyPropertyChanged
     {
-        [JsonIgnore]
         private double _ChangedK;
-        [JsonProperty("ChangedK")]
         public double ChangedK
         {
             get { return _ChangedK; }
@@ -23,9 +21,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _ChangedKappa;
-        [JsonProperty("ChangedKappa")]
         public double ChangedKappa
         {
             get { return _ChangedKappa; }
@@ -36,9 +32,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _ChangedKsi;
-        [JsonProperty("ChangedKsi")]
         public double ChangedKsi
         {
             get { return _ChangedKsi; }
@@ -49,9 +43,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _ChangedP0;
-        [JsonProperty("ChangedP0")]
         public double ChangedP0
         {
             get { return _ChangedP0; }
@@ -62,9 +54,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _DeltaK;
-        [JsonProperty("DeltaK")]
         public double DeltaK
         {
             get { return _DeltaK; }
@@ -75,9 +65,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _DeltaKappa;
-        [JsonProperty("DeltaKappa")]
         public double DeltaKappa
         {
             get { return _DeltaKappa; }
@@ -88,9 +76,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _DeltaKsi;
-        [JsonProperty("DeltaKsi")]
         public double DeltaKsi
         {
             get { return _DeltaKsi; }
@@ -101,9 +87,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _DeltaP0;
-        [JsonProperty("DeltaP0")]
         public double DeltaP0
         {
             get { return _DeltaP0; }
@@ -114,9 +98,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _GradientK;
-        [JsonProperty("GradientK")]
         public double GradientK
         {
             get { return _GradientK; }
@@ -127,9 +109,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _GradientKappa;
-        [JsonProperty("GradientKappa")]
         public double GradientKappa
         {
             get { return _GradientKappa; }
@@ -140,9 +120,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _GradientKsi;
-        [JsonProperty("GradientKsi")]
         public double GradientKsi
         {
             get { return _GradientKsi; }
@@ -153,9 +131,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _GradientP0;
-        [JsonProperty("GradientP0")]
         public double GradientP0
         {
             get { return _GradientP0; }
@@ -166,9 +142,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private bool? _UsedK;
-        [JsonProperty("UsedK")]
         public bool? UsedK
         {
             get { return _UsedK; }
@@ -179,9 +153,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private bool? _UsedKappa;
-        [JsonProperty("UsedKappa")]
         public bool? UsedKappa
         {
             get { return _UsedKappa; }
@@ -192,9 +164,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private bool? _UsedKsi;
-        [JsonProperty("UsedKsi")]
         public bool? UsedKsi
         {
             get { return _UsedKsi; }
@@ -205,9 +175,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private bool? _UsedP0;
-        [JsonProperty("UsedP0")]
         public bool? UsedP0
         {
             get { return _UsedP0; }
@@ -218,9 +186,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Lambda;
-        [JsonProperty("Lambda")]
         public double Lambda
         {
             get { return _Lambda; }

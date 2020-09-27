@@ -583,43 +583,6 @@ namespace ClientDesktop.Calculs
 
         public static void GaussSeidel(List<List<double>> A, List<double> B, List<double> X)
         {
-
-            //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            //string writePath1 = Path.Combine(Environment.CurrentDirectory, "A.txt");
-            //string writePath2 = Path.Combine(Environment.CurrentDirectory, "b.txt");
-
-            //using (StreamWriter sw1 = new StreamWriter(writePath1, false, Encoding.Default))
-            //using (StreamWriter sw2 = new StreamWriter(writePath2, false, Encoding.Default))
-            //{
-            //    for (int k = 0; k < B.Count; k++)
-            //    {
-            //        sw1.Write(B[k] + " ");
-            //    }
-            //    for (int i = 0; i < A.Count; i++)
-            //    {
-            //        for (int j = 0; j < A.Count; j++)
-            //        {
-            //            sw2.Write(A[i][j] + " ");
-            //        }
-            //        sw2.Write('\n');
-            //    }
-            //}
-            //List<double> prev = new List<double>();
-            //do
-            //{
-            //    prev = X.ToList();
-            //    for (int i = 0; i < X.Count; i++)
-            //    {
-            //        double var = 0;
-            //        for (int j = 0; j < i; j++)
-            //            var += (A[i][j] * X[j]);
-            //        for (int j = i + 1; j < X.Count; j++)
-            //            var += (A[i][j] * prev[j]);
-            //        X[i] = (B[i] - var) / A[i][i];
-            //    }
-            //}
-            //while (!Converge(X, prev));
-            
             for (int i = 0; i < X.Count; i++)
             {
                 var sum = 0.0;

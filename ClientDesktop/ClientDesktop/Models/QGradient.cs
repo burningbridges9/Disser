@@ -10,9 +10,7 @@ namespace ClientDesktop.Models
 {
     public class QGradient : Gradient
     {
-        [JsonIgnore]
         private double _FminQ;
-        [JsonProperty("FminQ")]
         public double FminQ
         {
             get { return _FminQ; }

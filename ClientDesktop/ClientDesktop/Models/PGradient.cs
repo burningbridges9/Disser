@@ -9,9 +9,7 @@ namespace ClientDesktop.Models
 {
     public class PGradient : Gradient
     {
-        [JsonIgnore]
         private double _FminP;
-        [JsonProperty("FminP")]
         public double FminP
         {
             get { return _FminP; }

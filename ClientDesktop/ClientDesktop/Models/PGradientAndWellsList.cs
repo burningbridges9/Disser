@@ -9,9 +9,7 @@ namespace ClientDesktop.Models
 {
     public class PGradientAndWellsList
     {
-        [JsonProperty("Gradient")]
         public PGradient Gradient { get; set; }
-        [JsonProperty("WellsList")]
         public WellsList WellsList { get; set; }
     }
 }
