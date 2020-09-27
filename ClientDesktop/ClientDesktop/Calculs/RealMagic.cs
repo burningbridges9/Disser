@@ -14,8 +14,7 @@ namespace HydrodynamicStudies.Calculs
     {
         public static PressuresAndTimes GetPressures(WellsList wellsList)
         {
-            PressuresAndTimes pressuresAndTimes;
-            Functions.GetTimesAndPressures(wellsList, out pressuresAndTimes);
+            PressuresAndTimes pressuresAndTimes = Functions.GetTimesAndPressures(wellsList);
             List<double> staticPressures = new List<double>();
             Functions.PrepareStaticPressures(wellsList, staticPressures);
             if (wellsList.Wells[0].Mode == Mode.Reverse)
@@ -25,9 +24,8 @@ namespace HydrodynamicStudies.Calculs
 
         public static ConsumptionsAndTimes GetConsumptions(WellsList wellsList)
         {
-            List<double> consumptions = new List<double>();
             ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes();
-            Functions.GetConsumtions(wellsList, out consumptions);
+            var consumptions = Functions.GetConsumtions(wellsList);
             List<double> staticConsumptions = new List<double>();
             Functions.PrepareStaticConsumptions(wellsList, staticConsumptions);
             consumptionsAndTimes.Times = Functions.GetTimes(wellsList.Wells, false);
