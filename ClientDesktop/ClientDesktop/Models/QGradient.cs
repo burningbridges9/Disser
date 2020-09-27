@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Models
+namespace HydrodynamicStudies.Models
 {
     public class QGradient : Gradient
     {

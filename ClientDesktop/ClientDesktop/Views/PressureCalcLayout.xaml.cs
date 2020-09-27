@@ -1,6 +1,6 @@
-﻿using ClientDesktop.Models;
-using ClientDesktop.Utils;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Models;
+using HydrodynamicStudies.Utils;
+using HydrodynamicStudies.ViewModels;
 using OxyPlot;
 using OxyPlot.Series;
 using System;
@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClientDesktop.Layouts
+namespace HydrodynamicStudies.Views
 {
     /// <summary>
     /// Interaction logic for PressureCalcLayout.xaml

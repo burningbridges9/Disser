@@ -1,6 +1,6 @@
-﻿using ClientDesktop.Calculs;
-using ClientDesktop.Models;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Calculs;
+using HydrodynamicStudies.Models;
+using HydrodynamicStudies.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     abstract public class QGradientViewCommand : ICommand
     {
@@ -71,7 +71,7 @@ namespace ClientDesktop.Commands
 
                 _gvm.GradientsAndConsumptions.Last().QGradient.UsedK = (bool?)parameters[9];
                 _gvm.GradientsAndConsumptions.Last().QGradient.UsedKappa = (bool?)parameters[10];
-                _gvm.GradientsAndConsumptions.Last().QGradient.UsedKsi =   (bool?)parameters[11];
+                _gvm.GradientsAndConsumptions.Last().QGradient.UsedKsi = (bool?)parameters[11];
                 _gvm.GradientsAndConsumptions.Last().QGradient.UsedP0 = (bool?)parameters[12];
 
                 g = _gvm.GradientsAndConsumptions.Last().QGradient;
@@ -116,7 +116,7 @@ namespace ClientDesktop.Commands
         private QGradientAndConsumptions SendWellsForGradient(QGradient gradient)
         {
             WellsList wellsList = new WellsList(MainWindow.MainViewModel.WellViewModel.Wells.ToList());
-            QGradientAndWellsList gradientAndWellsList = new QGradientAndWellsList
+            GradientAndWellsList<QGradient> gradientAndWellsList = new GradientAndWellsList<QGradient>
             {
                 Gradient = gradient,
                 WellsList = wellsList,

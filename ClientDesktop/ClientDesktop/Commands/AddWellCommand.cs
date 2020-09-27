@@ -1,12 +1,12 @@
-﻿using ClientDesktop.Models;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Models;
+using HydrodynamicStudies.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     public class AddWellCommand : WellViewCommand
     {

@@ -1,12 +1,12 @@
-﻿using ClientDesktop.Commands;
-using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Models;
+using HydrodynamicStudies.Commands;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace ClientDesktop.ViewModels
+namespace HydrodynamicStudies.ViewModels
 {
     public class PGradientViewModel : INotifyPropertyChanged
     {

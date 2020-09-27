@@ -1,4 +1,4 @@
-﻿using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Models;
 using OxyPlot;
 using OxyPlot.Series;
 using System;
@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.ViewModels
+namespace HydrodynamicStudies.ViewModels
 {
     public class PlotViewModel : INotifyPropertyChanged
     {

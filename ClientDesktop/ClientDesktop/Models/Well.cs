@@ -1,19 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ClientDesktop.Models
+namespace HydrodynamicStudies.Models
 {
     public class Well : INotifyPropertyChanged
     {
-        [JsonIgnore]
         private double _Q;
-        [JsonProperty("Q")]
         public double Q
         {
             get { return _Q; }
@@ -24,9 +17,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _P;
-        [JsonProperty("P")]
         public double P
         {
             get { return _P; }
@@ -37,9 +28,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _P0;
-        [JsonProperty("P0")]
         public double P0
         {
             get { return _P0; }
@@ -50,9 +39,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Time1;
-        [JsonProperty("Time1")]
         public double Time1
         {
             get { return _Time1; }
@@ -64,9 +51,7 @@ namespace ClientDesktop.Models
         }
 
 
-        [JsonIgnore]
         private double _Time2;
-        [JsonProperty("Time2")]
         public double Time2
         {
             get { return _Time2; }
@@ -78,9 +63,7 @@ namespace ClientDesktop.Models
         }
 
 
-        [JsonIgnore]
         private double _H0;
-        [JsonProperty("H0")]
         public double H0
         {
             get { return _H0; }
@@ -92,9 +75,7 @@ namespace ClientDesktop.Models
         }
 
 
-        [JsonIgnore]
         private double _Mu;
-        [JsonProperty("Mu")]
         public double Mu
         {
             get { return _Mu; }
@@ -105,9 +86,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Rw;
-        [JsonProperty("Rw")]
         public double Rw
         {
             get { return _Rw; }
@@ -118,9 +97,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _K;
-        [JsonProperty("K")]
         public double K
         {
             get { return _K; }
@@ -131,9 +108,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Kappa;
-        [JsonProperty("Kappa")]
         public double Kappa
         {
             get { return _Kappa; }
@@ -144,9 +119,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Rs;
-        [JsonProperty("Rs")]
         public double Rs
         {
             get { return _Rs; }
@@ -157,9 +130,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _Ksi;
-        [JsonProperty("Ksi")]
         public double Ksi
         {
             get { return _Ksi; }
@@ -170,9 +141,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private int _N;
-        [JsonProperty("N")]
         public int N
         {
             get { return _N; }
@@ -183,9 +152,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _CalculatedP;
-        [JsonProperty("CalculatedP")]
         public double CalculatedP
         {
             get { return _CalculatedP; }
@@ -197,9 +164,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _CalculatedQ;
-        [JsonProperty("CalculatedQ")]
         public double CalculatedQ 
         {
             get { return _CalculatedQ; }
@@ -211,9 +176,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _CalcMP;
-        [JsonProperty("CalcMP")]
         public double CalcMP
         {
             get { return _CalcMP; }
@@ -224,9 +187,7 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonIgnore]
         private double _CalcMQ;
-        [JsonProperty("CalcMQ")]
         public double CalcMQ
         {
             get { return _CalcMQ; }
@@ -237,7 +198,6 @@ namespace ClientDesktop.Models
             }
         }
 
-        [JsonProperty("Mode")]
         public Mode Mode { get; set; }
 
         private void ReCalculate()

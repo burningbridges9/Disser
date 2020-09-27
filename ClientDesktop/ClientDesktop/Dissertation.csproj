@@ -109,22 +109,17 @@
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\SurfaceCommands.cs" />
     <Compile Include="Commands\SurfaceViewCommand.cs" />
-    <Compile Include="Commands\ValueConverters\AddWellConverter.cs" />
-    <Compile Include="Commands\ValueConverters\NextGradientConverter.cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\KConverter.cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\KappaConverter.cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\TimeConverter.cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\MuConverter.cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\PConverter .cs" />
-    <Compile Include="Commands\ValueConverters\WellConverters\QConverter.cs" />
+    <Compile Include="ValueConverters\AddWellConverter.cs" />
+    <Compile Include="ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\MainViewCommand.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
     <Compile Include="Models\Annealing.cs" />
+    <Compile Include="Models\GradientAndWellsList.cs" />
     <Compile Include="Models\PGradientAndPressures.cs" />
     <Compile Include="Models\PGradient.cs" />
     <Compile Include="Models\QGradient.cs" />
-    <Compile Include="Models\PGradientAndWellsList.cs" />
     <Compile Include="Models\SurfaceModel.cs" />
+    <Compile Include="ValueConverters\WellConverters.cs" />
     <Compile Include="ViewModels\SurfaceViewModel.cs" />
     <Compile Include="Views\PGradientCalc.xaml.cs">
       <DependentUpon>PGradientCalc.xaml</DependentUpon>
@@ -136,7 +131,6 @@
     <Compile Include="Models\ConsumptionsAndTimes.cs" />
     <Compile Include="Models\Gradient.cs" />
     <Compile Include="Models\QGradientAndConsumptions.cs" />
-    <Compile Include="Models\QGradientAndWellsList.cs" />
     <Compile Include="Models\Mode.cs" />
     <Compile Include="Models\PressuresAndTimes.cs" />
     <Compile Include="Models\WellsList.cs" />

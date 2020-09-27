@@ -1,5 +1,5 @@
-﻿using ClientDesktop.Commands;
-using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Commands;
+using HydrodynamicStudies.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.ViewModels
+namespace HydrodynamicStudies.ViewModels
 {
     public class WellViewModel :INotifyPropertyChanged
     {

@@ -1,4 +1,4 @@
-﻿using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Surface;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     abstract public class SurfaceViewCommand : ICommand
     {
@@ -42,10 +42,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = _svm.SurfaceModel.K_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
-            string writePath2 = _svm.SurfaceModel.Kappa_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
-            string writePath3 = _svm.SurfaceModel.P0_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
-            string writePath5 = _svm.SurfaceModel.Fmin_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminQKappaP0.txt";
+            string writePath1 = _svm.SurfaceModel.K_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
+            string writePath2 = _svm.SurfaceModel.Kappa_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
+            string writePath3 = _svm.SurfaceModel.P0_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
+            string writePath5 = _svm.SurfaceModel.Fmin_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FminQKappaP0.txt";
 
             double kLeft = double.Parse(parameters[0].ToString());// 8.9;
             double kRight = double.Parse(parameters[1].ToString());// 9.4;
@@ -137,10 +137,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = _svm.SurfaceModel.K_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
-            string writePath2 = _svm.SurfaceModel.Kappa_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
-            string writePath3 = _svm.SurfaceModel.P0_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
-            string writePath4 = _svm.SurfaceModel.Fmin_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminQKappaP0.txt";
+            string writePath1 = _svm.SurfaceModel.K_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
+            string writePath2 = _svm.SurfaceModel.Kappa_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
+            string writePath3 = _svm.SurfaceModel.P0_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
+            string writePath4 = _svm.SurfaceModel.Fmin_path_P;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FminQKappaP0.txt";
 
             double kLeft = double.Parse(parameters[0].ToString());// 8.9;
             double kRight = double.Parse(parameters[1].ToString());// 9.4;

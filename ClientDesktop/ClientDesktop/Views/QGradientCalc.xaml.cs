@@ -1,5 +1,5 @@
-﻿using ClientDesktop.Models;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Models;
+using HydrodynamicStudies.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClientDesktop.Layouts
+namespace HydrodynamicStudies.Views
 {
     /// <summary>
     /// Interaction logic for GradientCalc.xaml

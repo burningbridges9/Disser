@@ -1,6 +1,6 @@
-﻿using ClientDesktop.Commands;
-using ClientDesktop.Layouts;
-using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Commands;
+using HydrodynamicStudies.Views;
+using HydrodynamicStudies.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.ViewModels
+namespace HydrodynamicStudies.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {

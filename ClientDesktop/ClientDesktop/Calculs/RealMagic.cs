@@ -1,11 +1,11 @@
-﻿using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Calculs
+namespace HydrodynamicStudies.Calculs
 {
     /// <summary>
     /// nam tihs laer emos was I
@@ -37,7 +37,7 @@ namespace ClientDesktop.Calculs
             return consumptionsAndTimes;
         }
 
-        public static QGradientAndConsumptions QGradientMethod(QGradientAndWellsList gradientAndWellsList)
+        public static QGradientAndConsumptions QGradientMethod(GradientAndWellsList<QGradient> gradientAndWellsList)
         {
             List<Well> gradientWells = new List<Well>();
             foreach (var v in gradientAndWellsList.WellsList.Wells)
@@ -78,7 +78,7 @@ namespace ClientDesktop.Calculs
             return gradientAndConsumptions;
         }
 
-        public static PGradientAndPressures PGradientMethod(PGradientAndWellsList gradientAndWellsList)
+        public static PGradientAndPressures PGradientMethod(GradientAndWellsList<PGradient> gradientAndWellsList)
         {
             List<Well> gradientWells = new List<Well>();
             foreach (var v in gradientAndWellsList.WellsList.Wells)

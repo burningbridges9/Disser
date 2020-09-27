@@ -1,4 +1,4 @@
-﻿using ClientDesktop.Models;
+﻿using HydrodynamicStudies.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Calculs
+namespace HydrodynamicStudies.Calculs
 {
     public class Functions
     {
-        public static double Pressure(Models.Well W, double q, double t)
+        public static double Pressure(Well W, double q, double t)
         {
             double P, arg;
             arg = Math.Pow(W.Rs, 2) / (4.0 * W.Kappa * t);
@@ -26,6 +26,8 @@ namespace ClientDesktop.Calculs
             List<double> times = GetTimes(wells.Wells, true);
             List<double> pressures = new List<double>();
             pressuresAndTimes = new PressuresAndTimes();
+            #region Unused
+
             if (wells.Wells.Count == 1)
             {
                 List<double> tOne = new List<double>(wells.Wells[0].N);
@@ -136,6 +138,7 @@ namespace ClientDesktop.Calculs
                 pressuresAndTimes.Times2 = T2new;
             }
 
+            #endregion
             if (wells.Wells.Count == 3)
             {
                 List<double> tOne = new List<double>();
@@ -286,6 +289,8 @@ namespace ClientDesktop.Calculs
             double step1, step2, step3;
             switch (wells.Count)
             {
+                #region Unused
+
                 case 1:
                     step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
                     for (int i = 0; i < wells[0].N; i++)
@@ -308,7 +313,8 @@ namespace ClientDesktop.Calculs
                     {
                         times.RemoveAt(wells[0].N);
                     }
-                    break;
+                    break; 
+                #endregion
                 case 3:
                     step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
                     step2 = (wells[1].Time2 - wells[1].Time1) / (wells[1].N - 1);
@@ -632,7 +638,7 @@ namespace ClientDesktop.Calculs
 
 
         #region Get Next Gradient Iteration
-        public static void GetNextGradientIteration(QGradientAndWellsList gradientAndWellsList, List<Well> gradientWells,
+        public static void GetNextGradientIteration(GradientAndWellsList<QGradient> gradientAndWellsList, List<Well> gradientWells,
             out QGradientAndConsumptions gradientAndConsumptions)
         {
             gradientAndConsumptions = new QGradientAndConsumptions();
@@ -964,7 +970,7 @@ namespace ClientDesktop.Calculs
             }
         }
 
-        public static void GetNextPGradientIteration(PGradientAndWellsList gradientAndWellsList, List<Well> gradientWells,
+        public static void GetNextPGradientIteration(GradientAndWellsList<PGradient> gradientAndWellsList, List<Well> gradientWells,
             out PGradientAndPressures gradientAndPressures)
         {
             gradientAndPressures = new PGradientAndPressures();

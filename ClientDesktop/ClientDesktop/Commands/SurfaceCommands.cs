@@ -1,5 +1,5 @@
-﻿using ClientDesktop.Models;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Models;
+using HydrodynamicStudies.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     #region Not used
 
@@ -33,10 +33,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
-            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
-            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
-            string writePath4 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminQKP0.txt";
+            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
+            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
+            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
+            string writePath4 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FminQKP0.txt";
 
             double kLeft = 9.4;
             double kRight = 10.80;
@@ -151,10 +151,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
-            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
-            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
-            string writePath6 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FPminKP0.txt";
+            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
+            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
+            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
+            string writePath6 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FPminKP0.txt";
 
             double kLeft = 8.4;
             double kRight = 10.4;
@@ -281,10 +281,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\K.txt";
-            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappa.txt";
-            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0.txt";
-            string writePath5 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FminQKappaP0.txt";
+            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
+            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
+            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
+            string writePath5 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FminQKappaP0.txt";
 
             double kLeft = 8.9;
             double kRight = 9.4;
@@ -372,10 +372,10 @@ namespace ClientDesktop.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kp.txt";
-            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\Kappap.txt";
-            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\P0p.txt";
-            string writePath7 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Surface\FPminKappaP0.txt";
+            string writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kp.txt";
+            string writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappap.txt";
+            string writePath3 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0p.txt";
+            string writePath7 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FPminKappaP0.txt";
 
             int kLeft = 9;
             int kRight = 11;

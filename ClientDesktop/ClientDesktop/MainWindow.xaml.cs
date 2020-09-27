@@ -2,8 +2,8 @@
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ClientDesktop.ViewModels;
-using ClientDesktop.Models;
+using HydrodynamicStudies.ViewModels;
+using HydrodynamicStudies.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -14,10 +14,10 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Windows.Media;
-using ClientDesktop.Layouts;
+using HydrodynamicStudies.Views;
 using System.IO;
 
-namespace ClientDesktop
+namespace HydrodynamicStudies
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

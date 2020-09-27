@@ -1,6 +1,6 @@
-﻿using ClientDesktop.Calculs;
-using ClientDesktop.Models;
-using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.Calculs;
+using HydrodynamicStudies.Models;
+using HydrodynamicStudies.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     abstract public class MainViewCommand : ICommand
     {

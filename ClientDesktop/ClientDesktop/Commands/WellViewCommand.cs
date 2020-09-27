@@ -1,4 +1,4 @@
-﻿using ClientDesktop.ViewModels;
+﻿using HydrodynamicStudies.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ClientDesktop.Commands
+namespace HydrodynamicStudies.Commands
 {
     abstract public class WellViewCommand : ICommand
     {
