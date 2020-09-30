@@ -121,7 +121,7 @@ namespace HydrodynamicStudies.Commands
                 Gradient = gradient,
                 WellsList = wellsList,
             };
-            QGradientAndConsumptions gradientAndConsumptions = RealMagic.QGradientMethod(gradientAndWellsList);
+            QGradientAndConsumptions gradientAndConsumptions = Functions.QGradientMethod(gradientAndWellsList);
             return gradientAndConsumptions;
         }
     }

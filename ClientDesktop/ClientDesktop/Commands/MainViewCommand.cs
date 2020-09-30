@@ -49,7 +49,7 @@ namespace HydrodynamicStudies.Commands
         public PressuresAndTimes SendWellsForPressures()
         {
             WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            PressuresAndTimes pressuresAndTimes = RealMagic.GetPressures(wellsList);
+            PressuresAndTimes pressuresAndTimes = Functions.GetPressures(wellsList);
             // make check
             _mvm.WellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
             _mvm.WellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
@@ -71,29 +71,10 @@ namespace HydrodynamicStudies.Commands
             _mvm.PGradientViewModel.PGradientAndPressures.Add(new PGradientAndPressures());
             _mvm.PGradientViewModel.PGradientAndPressures[0].PGradient = g;
             _mvm.PGradientViewModel.PGradientAndPressures[0].PressuresAndTimes = _mvm.PressuresAndTimes;
-            double Fmin = 0;
-            switch (_mvm.WellViewModel.Wells.Count)
-            {
-                //case 1:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
-                //    break;
-                //case 2:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
-                //    break;
-                case 3:
-                    Fmin = Math.Pow((_mvm.WellViewModel.Wells[0].P - _mvm.PressuresAndTimes.Pressures1f.Last()), 2)
-                            + Math.Pow((_mvm.WellViewModel.Wells[1].P - _mvm.PressuresAndTimes.Pressures2f.Last()), 2)
-                            + Math.Pow((_mvm.WellViewModel.Wells[2].P - _mvm.PressuresAndTimes.Pressures3.Last()), 2);
-                    Fmin = Fmin / (Math.Pow(_mvm.WellViewModel.Wells[0].P, 2) + Math.Pow(_mvm.WellViewModel.Wells[1].P, 2) + Math.Pow(_mvm.WellViewModel.Wells[2].P, 2));
-                    break;
-            }
+            double Fmin = Functions.GetObjectFunctionValue(_mvm.WellViewModel.Wells.ToArray(), _mvm.PressuresAndTimes);
             _mvm.PGradientViewModel.PGradientAndPressures[0].PGradient.FminP = Fmin;
-            //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
             _mvm.PGradientViewModel.SelectedGradient = _mvm.PGradientViewModel.PGradientAndPressures.Last().PGradient;
             _mvm.PGradientViewModel.Gradients.Add(_mvm.PGradientViewModel.PGradientAndPressures[0].PGradient);
-            //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
             return Fmin;
         }
     }
@@ -120,7 +101,7 @@ namespace HydrodynamicStudies.Commands
         public ConsumptionsAndTimes SendWellsForConsumptions()
         {
             WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            ConsumptionsAndTimes consumptionsAndTimes = RealMagic.GetConsumptions(wellsList);
+            ConsumptionsAndTimes consumptionsAndTimes = Functions.GetConsumptions(wellsList);
             _mvm.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];//5.5099120064701842E-05
             _mvm.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];//0.00011114639731946801
             _mvm.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];//0.00016799535363899219
@@ -141,30 +122,31 @@ namespace HydrodynamicStudies.Commands
             _mvm.QGradientViewModel.GradientsAndConsumptions.Add(new QGradientAndConsumptions());
             _mvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient = g;
             _mvm.QGradientViewModel.GradientsAndConsumptions[0].ConsumptionsAndTimes = _mvm.ConsumptionsAndTimes;
-            double Fmin = 0;
-            switch (_mvm.WellViewModel.Wells.Count)
-            {
-                //case 1:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
-                //    break;
-                //case 2:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
-                //    break;
-                case 3:
-                    Fmin = Math.Pow(_mvm.WellViewModel.Wells[0].Q - _mvm.WellViewModel.Wells[0].CalculatedQ, 2)
-                            + Math.Pow(_mvm.WellViewModel.Wells[1].Q - _mvm.WellViewModel.Wells[1].CalculatedQ, 2)
-                            + Math.Pow(_mvm.WellViewModel.Wells[2].Q - _mvm.WellViewModel.Wells[2].CalculatedQ, 2);
-                    Fmin = Fmin / (Math.Pow(_mvm.WellViewModel.Wells[0].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[1].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[2].Q, 2));
-                    break;
-            }
+            double Fmin = Functions.GetObjectFunctionValue(_mvm.WellViewModel.Wells.ToArray());
+            #region Moved to Functions
+            // unused. moved to Functions
+            //switch (_mvm.WellViewModel.Wells.Count)
+            //{
+            //    //case 1:
+            //    //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
+            //    //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
+            //    //    break;
+            //    //case 2:
+            //    //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
+            //    //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
+            //    //    break;
+            //    case 3:
+            //        Fmin = Math.Pow(_mvm.WellViewModel.Wells[0].Q - _mvm.WellViewModel.Wells[0].CalculatedQ, 2)
+            //                + Math.Pow(_mvm.WellViewModel.Wells[1].Q - _mvm.WellViewModel.Wells[1].CalculatedQ, 2)
+            //                + Math.Pow(_mvm.WellViewModel.Wells[2].Q - _mvm.WellViewModel.Wells[2].CalculatedQ, 2);
+            //        Fmin = Fmin / (Math.Pow(_mvm.WellViewModel.Wells[0].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[1].Q, 2) + Math.Pow(_mvm.WellViewModel.Wells[2].Q, 2));
+            //        break;
+            //} 
+            #endregion
             _mvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient.FminQ = Fmin;
-            //GradientClc.GradientToShow = GradientsAndConsumptions.Last().Gradient;
             _mvm.QGradientViewModel.SelectedGradient = _mvm.QGradientViewModel.GradientsAndConsumptions.Last().QGradient;
             _mvm.QGradientViewModel.Gradients.Add(_mvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient);
             return Fmin;
-            //GradientClc.FQmin.Text = gradientViewModel.SelectedGradient.FminQ.ToString();
         }
     }
 

@@ -42,17 +42,17 @@ namespace HydrodynamicStudies.Commands
             List<double> ks = new List<double>();
             List<double> kappasC = new List<double>();
             List<double> ksC = new List<double>();
-            string writePath1 = _svm.SurfaceModel.K_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\K.txt";
-            string writePath2 = _svm.SurfaceModel.Kappa_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\Kappa.txt";
-            string writePath3 = _svm.SurfaceModel.P0_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\P0.txt";
-            string writePath5 = _svm.SurfaceModel.Fmin_path_Q;// @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\HydrodynamicStudies\HydrodynamicStudies\Surface\FminQKappaP0.txt";
+            string writePath1 = _svm.SurfaceModel.K_path_Q;
+            string writePath2 = _svm.SurfaceModel.Kappa_path_Q;
+            string writePath3 = _svm.SurfaceModel.P0_path_Q;
+            string writePath5 = _svm.SurfaceModel.Fmin_path_Q;
 
-            double kLeft = double.Parse(parameters[0].ToString());// 8.9;
-            double kRight = double.Parse(parameters[1].ToString());// 9.4;
-            double kappaLeft = double.Parse(parameters[2].ToString());// 1.75;
-            double kappaRight = double.Parse(parameters[3].ToString());// 2.75;
-            double p0Left = double.Parse(parameters[4].ToString());// 19.88;
-            double p0Rigth = double.Parse(parameters[5].ToString());// 19.9;
+            double kLeft = double.Parse(parameters[0].ToString());
+            double kRight = double.Parse(parameters[1].ToString());
+            double kappaLeft = double.Parse(parameters[2].ToString());
+            double kappaRight = double.Parse(parameters[3].ToString());
+            double p0Left = double.Parse(parameters[4].ToString());
+            double p0Rigth = double.Parse(parameters[5].ToString());
 
             double n = int.Parse(parameters[6].ToString());// 15;
             double kStep = (kRight - kLeft) / n;
@@ -78,7 +78,6 @@ namespace HydrodynamicStudies.Commands
                 }
             }
             #endregion
-            bool f = true;
             #region Fmin Kappa P0
             using (StreamWriter sw = new StreamWriter(writePath5, false, Encoding.Default))
             {
@@ -115,6 +114,8 @@ namespace HydrodynamicStudies.Commands
             MainWindow.MainViewModel.WellViewModel.Wells.Clear();
             MainWindow.MainViewModel.QGradientViewModel.Gradients.Clear();
             MainWindow.MainViewModel.QGradientViewModel.GradientsAndConsumptions.Clear();
+            MainWindow.MainViewModel.PGradientViewModel.Gradients.Clear();
+            MainWindow.MainViewModel.PGradientViewModel.PGradientAndPressures.Clear();
             var surf = new Surface.SurfaceAnimator();
             surf.SurfAnimationFq(_svm.SurfaceModel.Report_file_name_Q);
         }

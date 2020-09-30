@@ -122,7 +122,7 @@ namespace HydrodynamicStudies.Commands
                 Gradient = gradient,
                 WellsList = wellsList,
             };
-            PGradientAndPressures pGradientAndPressures = RealMagic.PGradientMethod(gradientAndWellsList);
+            PGradientAndPressures pGradientAndPressures = Functions.PGradientMethod(gradientAndWellsList);
             return pGradientAndPressures;
         }
     }

@@ -105,7 +105,6 @@
     <Compile Include="Calculs\Converter.cs" />
     <Compile Include="Calculs\Functions.cs" />
     <Compile Include="Calculs\IntegralCalculator.cs" />
-    <Compile Include="Calculs\RealMagic.cs" />
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
     <Compile Include="Commands\PGradientViewCommand.cs" />
@@ -117,7 +116,6 @@
     <Compile Include="ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\MainViewCommand.cs" />
     <Compile Include="Commands\WellViewCommand.cs" />
-    <Compile Include="Models\Annealing.cs" />
     <Compile Include="Models\GradientAndWellsList.cs" />
     <Compile Include="Models\PGradientAndPressures.cs" />
     <Compile Include="Models\PGradient.cs" />

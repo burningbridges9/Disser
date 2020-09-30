@@ -1311,5 +1311,159 @@ namespace HydrodynamicStudies.Calculs
         }
 
         #endregion
+
+
+
+        public static PressuresAndTimes GetPressures(WellsList wellsList)
+        {
+            PressuresAndTimes pressuresAndTimes = Functions.GetTimesAndPressures(wellsList);
+            List<double> staticPressures = new List<double>();
+            Functions.PrepareStaticPressures(wellsList, staticPressures);
+            if (wellsList.Wells[0].Mode == Mode.Reverse)
+                pressuresAndTimes.StaticPressures = staticPressures;
+            return pressuresAndTimes;
+        }
+
+        public static ConsumptionsAndTimes GetConsumptions(WellsList wellsList)
+        {
+            ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes();
+            var consumptions = Functions.GetConsumtions(wellsList);
+            List<double> staticConsumptions = new List<double>();
+            Functions.PrepareStaticConsumptions(wellsList, staticConsumptions);
+            consumptionsAndTimes.Times = Functions.GetTimes(wellsList.Wells, false);
+            consumptionsAndTimes.Consumptions = consumptions;
+            if (wellsList.Wells[0].Mode == Mode.Direct)
+                consumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            return consumptionsAndTimes;
+        }
+
+        public static QGradientAndConsumptions QGradientMethod(GradientAndWellsList<QGradient> gradientAndWellsList)
+        {
+            List<Well> gradientWells = new List<Well>();
+            foreach (var v in gradientAndWellsList.WellsList.Wells)
+                gradientWells.Add(new Well
+                {
+                    Q = v.Q,
+                    P = v.P,
+                    P0 = v.P0,
+                    Time1 = v.Time1,
+                    Time2 = v.Time2,
+                    H0 = v.H0,
+                    K = v.K,
+                    Kappa = v.Kappa,
+                    Ksi = v.Ksi,
+                    Mu = v.Mu,
+                    Rs = v.Rs,
+                    Rw = v.Rw,
+                    N = v.N,
+                    Mode = v.Mode,
+                    CalculatedP = v.CalculatedP,
+                    CalculatedQ = v.CalculatedQ,
+                });
+            for (int i = 0; i < gradientWells.Count; i++)
+            {
+                gradientWells[i].K = gradientAndWellsList.Gradient.ChangedK;
+                gradientWells[i].Kappa = gradientAndWellsList.Gradient.ChangedKappa;
+                gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
+                gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
+            }
+            QGradientAndConsumptions gradientAndConsumptions = new QGradientAndConsumptions() { QGradient = gradientAndWellsList.Gradient };
+            Functions.GetNextGradientIteration(gradientAndWellsList, gradientWells, out gradientAndConsumptions);
+            if (gradientAndConsumptions.ConsumptionsAndTimes != null)
+            {
+                List<double> staticConsumptions = new List<double>();
+                Functions.PrepareStaticConsumptions(gradientAndWellsList.WellsList, staticConsumptions);
+                gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            }
+            return gradientAndConsumptions;
+        }
+
+        public static PGradientAndPressures PGradientMethod(GradientAndWellsList<PGradient> gradientAndWellsList)
+        {
+            List<Well> gradientWells = new List<Well>();
+            foreach (var v in gradientAndWellsList.WellsList.Wells)
+                gradientWells.Add(new Well
+                {
+                    Q = v.Q,
+                    P = v.P,
+                    P0 = v.P0,
+                    Time1 = v.Time1,
+                    Time2 = v.Time2,
+                    H0 = v.H0,
+                    K = v.K,
+                    Kappa = v.Kappa,
+                    Ksi = v.Ksi,
+                    Mu = v.Mu,
+                    Rs = v.Rs,
+                    Rw = v.Rw,
+                    N = v.N,
+                    Mode = v.Mode,
+                    CalculatedP = v.CalculatedP,
+                    CalculatedQ = v.CalculatedQ,
+                });
+            for (int i = 0; i < gradientWells.Count; i++)
+            {
+                gradientWells[i].K = gradientAndWellsList.Gradient.ChangedK;
+                gradientWells[i].Kappa = gradientAndWellsList.Gradient.ChangedKappa;
+                gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
+                gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
+            }
+            PGradientAndPressures pGradientAndPressures = new PGradientAndPressures() { PGradient = gradientAndWellsList.Gradient };
+            Functions.GetNextPGradientIteration(gradientAndWellsList, gradientWells, out pGradientAndPressures);
+            if (pGradientAndPressures.PressuresAndTimes != null)
+            {
+                List<double> staticConsumptions = new List<double>();
+                Functions.PrepareStaticPressures(gradientAndWellsList.WellsList, staticConsumptions);
+                pGradientAndPressures.PressuresAndTimes.StaticPressures = staticConsumptions;
+            }
+            return pGradientAndPressures;
+        }
+    
+        public static double GetObjectFunctionValue(Well[] wells)
+        {
+            double fMin = 0;
+            switch (wells.Count())
+            {
+                //case 1:
+                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
+                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
+                //    break;
+                //case 2:
+                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
+                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
+                //    break;
+                case 3:
+                    fMin = Math.Pow(wells[0].Q - wells[0].CalculatedQ, 2)
+                            + Math.Pow(wells[1].Q - wells[1].CalculatedQ, 2)
+                            + Math.Pow(wells[2].Q - wells[2].CalculatedQ, 2);
+                    fMin = fMin / (Math.Pow(wells[0].Q, 2) + Math.Pow(wells[1].Q, 2) + Math.Pow(wells[2].Q, 2));
+                    break;
+            }
+            return fMin;
+        }
+
+
+        public static double GetObjectFunctionValue(Well[] wells, PressuresAndTimes pressuresAndTimes)
+        {
+            double fMin = 0;
+            switch (wells.Count())
+            {
+                //case 1:
+                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
+                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
+                //    break;
+                //case 2:
+                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
+                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
+                //    break;
+                case 3:
+                    fMin = Math.Pow(wells[0].Q - pressuresAndTimes.Pressures1f.Last(), 2)
+                            + Math.Pow(wells[1].Q - pressuresAndTimes.Pressures2f.Last(), 2)
+                            + Math.Pow(wells[2].Q - pressuresAndTimes.Pressures3.Last(), 2);
+                    fMin = fMin / (Math.Pow(wells[0].P, 2) + Math.Pow(wells[1].P, 2) + Math.Pow(wells[2].P, 2));
+                    break;
+            }
+            return fMin;
+        }
     }
 }
