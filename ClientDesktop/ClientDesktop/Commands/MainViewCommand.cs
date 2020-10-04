@@ -48,12 +48,7 @@ namespace HydrodynamicStudies.Commands
 
         public PressuresAndTimes SendWellsForPressures()
         {
-            WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            PressuresAndTimes pressuresAndTimes = Functions.GetPressures(wellsList);
-            // make check
-            _mvm.WellViewModel.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
-            _mvm.WellViewModel.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
-            _mvm.WellViewModel.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
+            PressuresAndTimes pressuresAndTimes = Functions.GetPressures(new WellsList(_mvm.WellViewModel.Wells.ToList()));
             return pressuresAndTimes;
         }
 
@@ -100,11 +95,7 @@ namespace HydrodynamicStudies.Commands
 
         public ConsumptionsAndTimes SendWellsForConsumptions()
         {
-            WellsList wellsList = new WellsList(_mvm.WellViewModel.Wells.ToList());
-            ConsumptionsAndTimes consumptionsAndTimes = Functions.GetConsumptions(wellsList);
-            _mvm.WellViewModel.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];//5.5099120064701842E-05
-            _mvm.WellViewModel.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];//0.00011114639731946801
-            _mvm.WellViewModel.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];//0.00016799535363899219
+            ConsumptionsAndTimes consumptionsAndTimes = Functions.GetConsumptions(new WellsList(_mvm.WellViewModel.Wells.ToList()));
             return consumptionsAndTimes;
         }
 

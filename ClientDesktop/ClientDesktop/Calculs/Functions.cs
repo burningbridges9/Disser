@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HydrodynamicStudies.Calculs
 {
-    public class Functions
+    public partial class Functions
     {
         public static double Pressure(Well W, double q, double t)
         {
@@ -1321,6 +1321,9 @@ namespace HydrodynamicStudies.Calculs
             Functions.PrepareStaticPressures(wellsList, staticPressures);
             if (wellsList.Wells[0].Mode == Mode.Reverse)
                 pressuresAndTimes.StaticPressures = staticPressures;
+            wellsList.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
+            wellsList.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
+            wellsList.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
 
@@ -1334,6 +1337,9 @@ namespace HydrodynamicStudies.Calculs
             consumptionsAndTimes.Consumptions = consumptions;
             if (wellsList.Wells[0].Mode == Mode.Direct)
                 consumptionsAndTimes.StaticConsumptions = staticConsumptions;
+            wellsList.Wells[0].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[0] - 2];
+            wellsList.Wells[1].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[1] - 1];
+            wellsList.Wells[2].CalculatedQ = consumptionsAndTimes.Consumptions[wellsList.Indexes[2] - 2];
             return consumptionsAndTimes;
         }
 
@@ -1442,7 +1448,6 @@ namespace HydrodynamicStudies.Calculs
             return fMin;
         }
 
-
         public static double GetObjectFunctionValue(Well[] wells, PressuresAndTimes pressuresAndTimes)
         {
             double fMin = 0;
@@ -1465,5 +1470,6 @@ namespace HydrodynamicStudies.Calculs
             }
             return fMin;
         }
+
     }
 }

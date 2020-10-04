@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace HydrodynamicStudies.Models
 {
-    public class Well : INotifyPropertyChanged
+    public class Well : INotifyPropertyChanged, IWell
     {
         private double _Q;
         public double Q

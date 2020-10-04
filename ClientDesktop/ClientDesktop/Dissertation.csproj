@@ -104,6 +104,8 @@
     </ApplicationDefinition>
     <Compile Include="Calculs\Converter.cs" />
     <Compile Include="Calculs\Functions.cs" />
+    <Compile Include="Calculs\Functions.MetropolisHastings.cs" />
+    <Compile Include="Calculs\Helpers\HCalc.cs" />
     <Compile Include="Calculs\IntegralCalculator.cs" />
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
@@ -112,6 +114,10 @@
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
     <Compile Include="Commands\SurfaceCommands.cs" />
     <Compile Include="Commands\SurfaceViewCommand.cs" />
+    <Compile Include="Models\AcceptedValueMH.cs" />
+    <Compile Include="Models\IWell.cs" />
+    <Compile Include="Models\IWellFeaturesInclude.cs" />
+    <Compile Include="Models\MetropolisHastings.cs" />
     <Compile Include="ValueConverters\AddWellConverter.cs" />
     <Compile Include="ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\MainViewCommand.cs" />

@@ -25,5 +25,10 @@ namespace HydrodynamicStudies.Models
             }
         }
 
+        public void Clear()
+        {
+            Wells.Clear();
+            Indexes.Clear();
+        }
     }
 }
