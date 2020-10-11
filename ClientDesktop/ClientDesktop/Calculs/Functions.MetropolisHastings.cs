@@ -31,9 +31,84 @@ namespace HydrodynamicStudies.Calculs
             double current_ksi = wellsListCurrent.Wells.FirstOrDefault().Ksi;
             double current_p0 = wellsListCurrent.Wells.FirstOrDefault().P0;
 
+            int acceptedCount = 0;
+
             switch (modelMH.M)
             {
                 case 1:
+
+                    for (int i = 0; i < modelMH.WalksCount; i++)
+                    {
+                        HCalc hCalc = new HCalc();
+                        double w = rng.NextDouble();
+
+                        #region evaluate candidates
+                        double temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w);
+                        double temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w);
+                        double temp_ksi = TempValue(modelMH.IncludedKsi, current_ksi, modelMH.StepKsi, modelMH.MinKsi, modelMH.MaxKsi, hCalc, w);
+                        double temp_p0 = TempValue(modelMH.IncludedP0, current_p0, modelMH.StepP0, modelMH.MinP0, modelMH.MaxP0, hCalc, w);
+
+                        List<Well> updatedWithTempWells = new List<Well>();
+                        updatedWithTempWells.AddRange(wellsListCurrent.Wells);
+                        WellsList tempWellsList = new WellsList(updatedWithTempWells);
+                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
+                        {
+                            tempWellsList.Wells[l].K = temp_k;
+                            tempWellsList.Wells[l].Kappa = temp_kappa;
+                            tempWellsList.Wells[l].P0 = temp_p0;
+                            tempWellsList.Wells[l].Ksi = temp_ksi;
+                            tempWellsList.Wells[l].Mode = mode;
+                            tempWellsList.Wells[l].CalcMQ = 0;
+                            tempWellsList.Wells[l].CalculatedQ = 0;
+                        }
+                        ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
+                        double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
+                        #endregion
+
+                        acceptedCount = accepted ? ++acceptedCount : acceptedCount;
+
+                        double next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
+                        double next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
+                        double next_ksi = modelMH.IncludedKsi ? NextValue(p, p_i, current_ksi, temp_ksi) : temp_ksi;
+                        double next_p0 = modelMH.IncludedP0 ? NextValue(p, p_i, current_p0, temp_p0) : temp_p0;
+
+                        //wellsListCurrent.Clear();
+                        List<Well> updatedWithNextValsWells = new List<Well>();
+                        updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
+                        wellsListCurrent = new WellsList(updatedWithNextValsWells);
+                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
+                        {
+                            wellsListCurrent.Wells[l].K = next_k;
+                            wellsListCurrent.Wells[l].Kappa = next_kappa;
+                            wellsListCurrent.Wells[l].P0 = next_p0;
+                            wellsListCurrent.Wells[l].Ksi = next_ksi;
+                            wellsListCurrent.Wells[l].Mode = mode;
+                            wellsListCurrent.Wells[l].CalcMQ = 0;
+                            wellsListCurrent.Wells[l].CalculatedQ = 0;
+                        }
+                        ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+
+                        if (acceptedCount % modelMH.Ns == 0)
+                        {
+                            AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                            {
+                                ProbabilityDensity = likelihoodValue,
+                                Fmin = currentFmin,
+                                K = next_k,
+                                Kappa = next_kappa,
+                                Ksi = next_ksi,
+                                P0 = next_p0,
+                                IncludedK = modelMH.IncludedK,
+                                IncludedKappa = modelMH.IncludedKappa,
+                                IncludedKsi = modelMH.IncludedKsi,
+                                IncludedP0 = modelMH.IncludedP0,
+                            };
+                            acceptedValueMHs.Add(acceptedValue);
+                        }
+                    }
                     break;
                 case 2:
 
@@ -65,9 +140,10 @@ namespace HydrodynamicStudies.Calculs
                         ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = AcceptTempModelProbability(likelihoodValue);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
                         #endregion
 
+                        acceptedCount = accepted ? ++acceptedCount : acceptedCount;
 
                         double next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
                         double next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
@@ -91,7 +167,7 @@ namespace HydrodynamicStudies.Calculs
                         ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
 
-                        if (i % modelMH.Ns == 0)
+                        if (acceptedCount % modelMH.Ns == 0)
                         {
                             AcceptedValueMH acceptedValue = new AcceptedValueMH()
                             {
@@ -116,6 +192,21 @@ namespace HydrodynamicStudies.Calculs
             }
 
             return acceptedValueMHs;
+        }
+
+        private static double TempValue(bool included, double current, double step, double minVal, double maxVal, HCalc hCalc, double w)
+        {
+            double temp;
+            if (included)
+            {
+                double H_k = hCalc.NextH(step, w);
+                temp = TemporaryValueCalcWithBoundaries(minVal, maxVal, H_k, current);
+            }
+            else
+            {
+                temp = current;
+            }
+            return temp;
         }
 
         private static double TempValue(bool included, double current, double step, double minVal, double maxVal, HCalc hCalc, double w, double d)
@@ -147,9 +238,10 @@ namespace HydrodynamicStudies.Calculs
             return retValue;
         }
 
-        private static double AcceptTempModelProbability(double likelihoodValue)
+        private static double AcceptTempModelProbability(double likelihoodValue, out bool accepted)
         {
             var retValue = Math.Min(1.0, likelihoodValue);
+            accepted = retValue == 1.0;
             return retValue;
         }
 

@@ -9,6 +9,12 @@ namespace HydrodynamicStudies.Calculs.Helpers
     public class HCalc
     {
         private int variableRecieved = 0;
+        public double NextH(double h, double w)
+        {
+            var retValue = h * (w - 0.5);
+
+            return retValue;
+        }
 
         public double NextH(double h, double w, double d)
         {
