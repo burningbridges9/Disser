@@ -35,7 +35,7 @@ namespace Tests
                 MinP0 = Math.Pow(10.0, 6) * 3,
 
                 MaxK = Math.Pow(10.0, -15) * 15,
-                MaxKappa = (1.0 / 3600.0) * 10,
+                MaxKappa = (1.0 / 3600.0) * 12,
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
@@ -78,7 +78,7 @@ namespace Tests
                         foreach (var a in accepteds)
                         {
                             sw1.Write(a.K * Math.Pow(10.0, 15) + " ");
-                            sw2.Write(a.ProbabilityDensity + " ");
+                            sw2.Write(a.Fmin + " ");
                             sw3.Write(a.Kappa * 3600.0 + " ");
                         }
                     }

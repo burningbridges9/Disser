@@ -4,6 +4,7 @@ namespace HydrodynamicStudies.Models
 {
     public class AcceptedValueMH : IWellFeaturesInclude, IWell, INotifyPropertyChanged
     {
+        public int AcceptedCount { get; set; }
         public double ProbabilityDensity { get; set; }
         public double Fmin { get; set; }
         public double K { get; set; }

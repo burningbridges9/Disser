@@ -24,7 +24,6 @@ namespace HydrodynamicStudies.Calculs
             ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
 
             System.Random rng = SystemRandomSource.Default;
-            double p = rng.NextDouble();
             double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
             double current_k = wellsListCurrent.Wells.FirstOrDefault().K;
             double current_kappa = wellsListCurrent.Wells.FirstOrDefault().Kappa;
@@ -41,7 +40,7 @@ namespace HydrodynamicStudies.Calculs
                     {
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
-
+                        double p = rng.NextDouble();
                         #region evaluate candidates
                         double temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w);
                         double temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w);
@@ -95,6 +94,7 @@ namespace HydrodynamicStudies.Calculs
                         {
                             AcceptedValueMH acceptedValue = new AcceptedValueMH()
                             {
+                                AcceptedCount = acceptedCount,
                                 ProbabilityDensity = likelihoodValue,
                                 Fmin = currentFmin,
                                 K = next_k,
@@ -117,6 +117,13 @@ namespace HydrodynamicStudies.Calculs
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
                         double d = rng.NextDouble();
+                        double p = rng.NextDouble();
+
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        current_k = wellsListCurrent.Wells.FirstOrDefault().K;
+                        current_kappa = wellsListCurrent.Wells.FirstOrDefault().Kappa;
+                        current_ksi = wellsListCurrent.Wells.FirstOrDefault().Ksi;
+                        current_p0 = wellsListCurrent.Wells.FirstOrDefault().P0;
 
                         #region evaluate candidates
                         double temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w, d);
@@ -144,13 +151,11 @@ namespace HydrodynamicStudies.Calculs
                         #endregion
 
                         acceptedCount = accepted ? ++acceptedCount : acceptedCount;
-
                         double next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
                         double next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
                         double next_ksi = modelMH.IncludedKsi ? NextValue(p, p_i, current_ksi, temp_ksi) : temp_ksi;
                         double next_p0 = modelMH.IncludedP0 ? NextValue(p, p_i, current_p0, temp_p0) : temp_p0;
 
-                        //wellsListCurrent.Clear();
                         List<Well> updatedWithNextValsWells = new List<Well>();
                         updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
                         wellsListCurrent = new WellsList(updatedWithNextValsWells);
@@ -171,6 +176,7 @@ namespace HydrodynamicStudies.Calculs
                         {
                             AcceptedValueMH acceptedValue = new AcceptedValueMH()
                             {
+                                AcceptedCount = acceptedCount,
                                 Fmin = currentFmin,
                                 K = next_k,
                                 Kappa = next_kappa,
@@ -256,10 +262,12 @@ namespace HydrodynamicStudies.Calculs
             {
                 returnValue = currentValue + H;
             }
-            else if (maxValue < currentValue && currentValue < H)
+            else if (maxValue < currentValue + H)// && currentValue < H)
             {
                 returnValue = 2 * maxValue - currentValue - H;
             }
+            else
+            { }
             return returnValue;
         }
     }
