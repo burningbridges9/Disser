@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Random;
 using HydrodynamicStudies.Calculs.Helpers;
+using System.Threading;
 
 namespace HydrodynamicStudies.Calculs
 {
@@ -21,12 +22,8 @@ namespace HydrodynamicStudies.Calculs
             //if(mode == Mode.Direct) then do some actions
             wellsListCurrent.Wells.ForEach(x => x.Mode = mode);
             PressuresAndTimes pressuresAndTimes = GetPressures(wellsListCurrent);
-            //ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
-
-            System.Random rng = SystemRandomSource.Default;
-
+            System.Random rng = new SystemRandomSource(threadSafe: true);
             int acceptedCount = 0;
-
             switch (modelMH.M)
             {
                 case 1:
@@ -36,7 +33,7 @@ namespace HydrodynamicStudies.Calculs
                         double p = rng.NextDouble();
                         MainLogicMH(ref wellsListCurrent, modelMH, mode, acceptedValueMHs, ref acceptedCount, w, d: null, p);
                     }
-                        break;
+                    break;
                 case 2:
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
@@ -53,6 +50,97 @@ namespace HydrodynamicStudies.Calculs
             }
 
             return acceptedValueMHs;
+        }
+
+        public static List<AcceptedValueMH> ParallelMetropolisHastingsAlgorithm(WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode = Mode.Direct)
+        {
+            List<AcceptedValueMH> acceptedValueMHs = new List<AcceptedValueMH>();
+
+            // Preparations
+            // calculate some initial values
+            //if(mode == Mode.Direct) then do some actions
+            wellsListCurrent.Wells.ForEach(x => x.Mode = mode);
+            PressuresAndTimes pressuresAndTimes = GetPressures(wellsListCurrent);
+            System.Random rng = new SystemRandomSource(threadSafe: true);
+            int acceptedCount = 0;
+            switch (modelMH.M)
+            {
+                case 1:
+                    //for (int i = 0; i < modelMH.WalksCount; i++)
+                    //{
+                    //    double w = rng.NextDouble();
+                    //    double p = rng.NextDouble();
+                    //    MainLogicMH(ref wellsListCurrent, modelMH, mode, acceptedValueMHs, ref acceptedCount, w, d: null, p);
+                    //}
+                    break;
+                case 2:
+                    var options = new ParallelOptions { MaxDegreeOfParallelism = 4 };
+                    Parallel.For<List<AcceptedValueMH>>(0, modelMH.WalksCount / options.MaxDegreeOfParallelism, options, () => new List<AcceptedValueMH>(),
+                        (j, loop, subList) =>
+                        {
+                            var model = ParallelMainLogicMH(ref wellsListCurrent, modelMH, mode, acceptedValueMHs, ref acceptedCount, rng, modelMH.M);
+                            if (!(model is null))
+                                subList.Add(model);
+                            return subList;
+                        },
+                        (x) => 
+                        { acceptedValueMHs.AddRange(x); }
+                    );
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+
+            return acceptedValueMHs;
+        }
+
+        private static AcceptedValueMH ParallelMainLogicMH(ref WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode, List<AcceptedValueMH> acceptedValueMHs, ref int acceptedCount, System.Random rng, int dim)
+        {
+            double w = rng.NextDouble();
+            double? d;
+            if (dim > 1)
+                d = rng.NextDouble();
+            else
+                d = null;
+            double p = rng.NextDouble(); ;
+            (double currentFmin, double current_k, double current_kappa, double current_ksi, double current_p0) = GetCurrentValues(wellsListCurrent);
+            #region evaluate candidates
+            HCalc hCalc = new HCalc();
+            (double temp_k, double temp_kappa, double temp_ksi, double temp_p0) = d.HasValue ?
+                GetTempValues(modelMH, hCalc, w, d.Value, current_k, current_kappa, current_ksi, current_p0) :
+                GetTempValues(modelMH, hCalc, w, current_k, current_kappa, current_ksi, current_p0);
+
+            WellsList tempWellsList = GetWellsList(wellsListCurrent);
+            UpdateWellsList(mode, temp_k, temp_kappa, temp_ksi, temp_p0, tempWellsList);
+
+            double tempFmin = GetTempFmin(tempWellsList);
+            double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
+            double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
+            #endregion
+            acceptedCount = accepted ? ++acceptedCount : acceptedCount;
+
+            (double next_k, double next_kappa, double next_ksi, double next_p0) =
+                GetNextParameterValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i);
+
+            wellsListCurrent = GetWellsList(wellsListCurrent);
+            UpdateWellsList(mode, next_k, next_kappa, next_ksi, next_p0, wellsListCurrent);
+
+            AcceptedValueMH acceptedValue = new AcceptedValueMH()
+            {
+                AcceptedCount = acceptedCount,
+                Fmin = currentFmin,
+                K = next_k,
+                Kappa = next_kappa,
+                Ksi = next_ksi,
+                P0 = next_p0,
+                IncludedK = modelMH.IncludedK,
+                IncludedKappa = modelMH.IncludedKappa,
+                IncludedKsi = modelMH.IncludedKsi,
+                IncludedP0 = modelMH.IncludedP0,
+            };
+            return acceptedCount % modelMH.Ns == 0 ? acceptedValue : null;
         }
 
         private static void MainLogicMH(ref WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode, List<AcceptedValueMH> acceptedValueMHs, ref int acceptedCount, double w, double? d, double p)
