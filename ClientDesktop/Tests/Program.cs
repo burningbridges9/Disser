@@ -21,7 +21,7 @@ namespace Tests
             MetropolisHastings modelMH = new MetropolisHastings()
             {
                 C = 1,
-                WalksCount = 10000,
+                WalksCount = 1000,
                 Ns = 10,
                 S_0 = 0.025,
                 IncludedK = true,
@@ -39,15 +39,14 @@ namespace Tests
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
-                StepK = Math.Pow(10.0, -15) * 3,
-                StepKappa = (1.0 / 3600.0) * 3,
+                StepK = Math.Pow(10.0, -15) * 2,
+                StepKappa = (1.0 / 3600.0) * 2,
                 StepKsi = 0,
                 StepP0 = 0,
             };
             Mode mode = Mode.Direct;
             WellsList wellsList = new WellsList(GetWells());
             var list = Functions.MetropolisHastingsAlgorithm(wellsList, modelMH, mode);
-            //var list = Functions.ParallelMetropolisHastingsAlgorithm(wellsList, modelMH, mode);
             WriteToFile(list, 2);
 
         }
