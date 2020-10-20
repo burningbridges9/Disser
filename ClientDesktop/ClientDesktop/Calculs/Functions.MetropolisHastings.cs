@@ -24,12 +24,6 @@ namespace HydrodynamicStudies.Calculs
             ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
 
             System.Random rng = SystemRandomSource.Default;
-            double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-            double current_k = wellsListCurrent.Wells.FirstOrDefault().K;
-            double current_kappa = wellsListCurrent.Wells.FirstOrDefault().Kappa;
-            double current_ksi = wellsListCurrent.Wells.FirstOrDefault().Ksi;
-            double current_p0 = wellsListCurrent.Wells.FirstOrDefault().P0;
-
             int acceptedCount = 0;
 
             switch (modelMH.M)
@@ -41,11 +35,14 @@ namespace HydrodynamicStudies.Calculs
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
                         double p = rng.NextDouble();
+
+                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        double current_k, current_kappa, current_ksi, current_p0;
+                        GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
+
                         #region evaluate candidates
-                        double temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w);
-                        double temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w);
-                        double temp_ksi = TempValue(modelMH.IncludedKsi, current_ksi, modelMH.StepKsi, modelMH.MinKsi, modelMH.MaxKsi, hCalc, w);
-                        double temp_p0 = TempValue(modelMH.IncludedP0, current_p0, modelMH.StepP0, modelMH.MinP0, modelMH.MaxP0, hCalc, w);
+                        double temp_k, temp_kappa, temp_ksi, temp_p0;
+                        GetTempValues(modelMH, hCalc, w, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
 
                         List<Well> updatedWithTempWells = new List<Well>();
                         updatedWithTempWells.AddRange(wellsListCurrent.Wells);
@@ -68,10 +65,8 @@ namespace HydrodynamicStudies.Calculs
 
                         acceptedCount = accepted ? ++acceptedCount : acceptedCount;
 
-                        double next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
-                        double next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
-                        double next_ksi = modelMH.IncludedKsi ? NextValue(p, p_i, current_ksi, temp_ksi) : temp_ksi;
-                        double next_p0 = modelMH.IncludedP0 ? NextValue(p, p_i, current_p0, temp_p0) : temp_p0;
+                        double next_k, next_kappa, next_ksi, next_p0;
+                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
 
                         //wellsListCurrent.Clear();
                         List<Well> updatedWithNextValsWells = new List<Well>();
@@ -119,17 +114,13 @@ namespace HydrodynamicStudies.Calculs
                         double d = rng.NextDouble();
                         double p = rng.NextDouble();
 
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        current_k = wellsListCurrent.Wells.FirstOrDefault().K;
-                        current_kappa = wellsListCurrent.Wells.FirstOrDefault().Kappa;
-                        current_ksi = wellsListCurrent.Wells.FirstOrDefault().Ksi;
-                        current_p0 = wellsListCurrent.Wells.FirstOrDefault().P0;
+                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        double current_k, current_kappa, current_ksi, current_p0;
+                        GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
 
                         #region evaluate candidates
-                        double temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w, d);
-                        double temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w, d);
-                        double temp_ksi = TempValue(modelMH.IncludedKsi, current_ksi, modelMH.StepKsi, modelMH.MinKsi, modelMH.MaxKsi, hCalc, w, d);
-                        double temp_p0 = TempValue(modelMH.IncludedP0, current_p0, modelMH.StepP0, modelMH.MinP0, modelMH.MaxP0, hCalc, w, d);
+                        double temp_k, temp_kappa, temp_ksi, temp_p0;
+                        GetTempValues(modelMH, hCalc, w, d, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
 
                         List<Well> updatedWithTempWells = new List<Well>();
                         updatedWithTempWells.AddRange(wellsListCurrent.Wells);
@@ -151,10 +142,8 @@ namespace HydrodynamicStudies.Calculs
                         #endregion
 
                         acceptedCount = accepted ? ++acceptedCount : acceptedCount;
-                        double next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
-                        double next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
-                        double next_ksi = modelMH.IncludedKsi ? NextValue(p, p_i, current_ksi, temp_ksi) : temp_ksi;
-                        double next_p0 = modelMH.IncludedP0 ? NextValue(p, p_i, current_p0, temp_p0) : temp_p0;
+                        double next_k, next_kappa, next_ksi, next_p0;
+                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
 
                         List<Well> updatedWithNextValsWells = new List<Well>();
                         updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
@@ -198,6 +187,38 @@ namespace HydrodynamicStudies.Calculs
             }
 
             return acceptedValueMHs;
+        }
+
+        private static void GetTempValues(MetropolisHastings modelMH, HCalc hCalc, double w, double current_k, double current_kappa, double current_ksi, double current_p0, out double temp_k, out double temp_kappa, out double temp_ksi, out double temp_p0)
+        {
+            temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w);
+            temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w);
+            temp_ksi = TempValue(modelMH.IncludedKsi, current_ksi, modelMH.StepKsi, modelMH.MinKsi, modelMH.MaxKsi, hCalc, w);
+            temp_p0 = TempValue(modelMH.IncludedP0, current_p0, modelMH.StepP0, modelMH.MinP0, modelMH.MaxP0, hCalc, w);
+        }
+
+        private static void GetNextValues(MetropolisHastings modelMH, double p, double current_k, double current_kappa, double current_ksi, double current_p0, double temp_k, double temp_kappa, double temp_ksi, double temp_p0, double p_i, out double next_k, out double next_kappa, out double next_ksi, out double next_p0)
+        {
+            next_k = modelMH.IncludedK ? NextValue(p, p_i, current_k, temp_k) : temp_k;
+            next_kappa = modelMH.IncludedKappa ? NextValue(p, p_i, current_kappa, temp_kappa) : temp_kappa;
+            next_ksi = modelMH.IncludedKsi ? NextValue(p, p_i, current_ksi, temp_ksi) : temp_ksi;
+            next_p0 = modelMH.IncludedP0 ? NextValue(p, p_i, current_p0, temp_p0) : temp_p0;
+        }
+
+        private static void GetTempValues(MetropolisHastings modelMH, HCalc hCalc, double w, double d, double current_k, double current_kappa, double current_ksi, double current_p0, out double temp_k, out double temp_kappa, out double temp_ksi, out double temp_p0)
+        {
+            temp_k = TempValue(modelMH.IncludedK, current_k, modelMH.StepK, modelMH.MinK, modelMH.MaxK, hCalc, w, d);
+            temp_kappa = TempValue(modelMH.IncludedKappa, current_kappa, modelMH.StepKappa, modelMH.MinKappa, modelMH.MaxKappa, hCalc, w, d);
+            temp_ksi = TempValue(modelMH.IncludedKsi, current_ksi, modelMH.StepKsi, modelMH.MinKsi, modelMH.MaxKsi, hCalc, w, d);
+            temp_p0 = TempValue(modelMH.IncludedP0, current_p0, modelMH.StepP0, modelMH.MinP0, modelMH.MaxP0, hCalc, w, d);
+        }
+
+        private static void GetCurrentValues(WellsList wellsListCurrent, out double current_k, out double current_kappa, out double current_ksi, out double current_p0)
+        {
+            current_k = wellsListCurrent.Wells.FirstOrDefault().K;
+            current_kappa = wellsListCurrent.Wells.FirstOrDefault().Kappa;
+            current_ksi = wellsListCurrent.Wells.FirstOrDefault().Ksi;
+            current_p0 = wellsListCurrent.Wells.FirstOrDefault().P0;
         }
 
         private static double TempValue(bool included, double current, double step, double minVal, double maxVal, HCalc hCalc, double w)

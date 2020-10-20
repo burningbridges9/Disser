@@ -21,9 +21,9 @@ namespace Tests
             MetropolisHastings modelMH = new MetropolisHastings()
             {
                 C = 1,
-                WalksCount = 1000,
+                WalksCount = 10000,
                 Ns = 10,
-                S_0 = 0.025,
+                S_0 = 0.025, // 0.015; 0.04
                 IncludedK = true,
                 IncludedKappa = true,
                 IncludedKsi = false,
@@ -34,13 +34,13 @@ namespace Tests
                 MinKsi = 0,
                 MinP0 = Math.Pow(10.0, 6) * 3,
 
-                MaxK = Math.Pow(10.0, -15) * 15,
+                MaxK = Math.Pow(10.0, -15) * 12,
                 MaxKappa = (1.0 / 3600.0) * 12,
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
-                StepK = Math.Pow(10.0, -15) * 2,
-                StepKappa = (1.0 / 3600.0) * 2,
+                StepK = Math.Pow(10.0, -15) * 4,
+                StepKappa = (1.0 / 3600.0) * 4,
                 StepKsi = 0,
                 StepP0 = 0,
             };
