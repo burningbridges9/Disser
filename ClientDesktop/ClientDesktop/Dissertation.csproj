@@ -105,6 +105,7 @@
     <Compile Include="Calculs\Converter.cs" />
     <Compile Include="Calculs\Functions.cs" />
     <Compile Include="Calculs\Functions.MetropolisHastings.cs" />
+    <Compile Include="Calculs\Functions.MetropolisHastings.Parallel.cs" />
     <Compile Include="Calculs\Helpers\HCalc.cs" />
     <Compile Include="Calculs\IntegralCalculator.cs" />
     <Compile Include="Commands\AddWellCommand.cs" />

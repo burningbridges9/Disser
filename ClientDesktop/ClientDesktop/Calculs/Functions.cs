@@ -621,16 +621,6 @@ namespace HydrodynamicStudies.Calculs
             PrepareEqPressures(wells, out eqPressures);
             PrepareCoefs(times, wells.Wells, out coefs);
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            string writePath1 = Path.Combine(Environment.CurrentDirectory, "times.txt");
-
-            using (StreamWriter sw1 = new StreamWriter(writePath1, false, Encoding.Default))
-            {
-                for (int k = 0; k < times.Count; k++)
-                {
-                    sw1.Write(times[k] + " ");
-                }
-            }
 
             GaussSeidel(coefs, eqPressures, consumptions);
             return consumptions;

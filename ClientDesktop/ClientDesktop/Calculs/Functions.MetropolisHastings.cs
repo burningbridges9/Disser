@@ -82,6 +82,7 @@ namespace HydrodynamicStudies.Calculs
                             wellsListCurrent.Wells[l].CalcMQ = 0;
                             wellsListCurrent.Wells[l].CalculatedQ = 0;
                         }
+
                         ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
 
@@ -106,9 +107,9 @@ namespace HydrodynamicStudies.Calculs
                     }
                     break;
                 case 2:
-
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
+                        Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
                         double d = rng.NextDouble();
@@ -141,7 +142,6 @@ namespace HydrodynamicStudies.Calculs
                         double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
                         #endregion
 
-                        acceptedCount = accepted ? ++acceptedCount : acceptedCount;
                         double next_k, next_kappa, next_ksi, next_p0;
                         GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
 
@@ -161,22 +161,26 @@ namespace HydrodynamicStudies.Calculs
                         ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
 
-                        if (acceptedCount % modelMH.Ns == 0)
+                        if (accepted)
                         {
-                            AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                            ++acceptedCount;
+                            if (acceptedCount % modelMH.Ns == 0)
                             {
-                                AcceptedCount = acceptedCount,
-                                Fmin = currentFmin,
-                                K = next_k,
-                                Kappa = next_kappa,
-                                Ksi = next_ksi,
-                                P0 = next_p0,
-                                IncludedK = modelMH.IncludedK,
-                                IncludedKappa = modelMH.IncludedKappa,
-                                IncludedKsi = modelMH.IncludedKsi,
-                                IncludedP0 = modelMH.IncludedP0,
-                            };
-                            acceptedValueMHs.Add(acceptedValue);
+                                AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                                {
+                                    AcceptedCount = acceptedCount,
+                                    Fmin = currentFmin,
+                                    K = next_k,
+                                    Kappa = next_kappa,
+                                    Ksi = next_ksi,
+                                    P0 = next_p0,
+                                    IncludedK = modelMH.IncludedK,
+                                    IncludedKappa = modelMH.IncludedKappa,
+                                    IncludedKsi = modelMH.IncludedKsi,
+                                    IncludedP0 = modelMH.IncludedP0,
+                                };
+                                acceptedValueMHs.Add(acceptedValue);
+                            }
                         }
                     }
                     break;

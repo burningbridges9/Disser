@@ -13,7 +13,9 @@ namespace Tests
     {
         static void Main(string[] args)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             TestMH();
+
         }
 
         private static void TestMH()
@@ -21,7 +23,7 @@ namespace Tests
             MetropolisHastings modelMH = new MetropolisHastings()
             {
                 C = 1,
-                WalksCount = 10000,
+                WalksCount = 30000,
                 Ns = 10,
                 S_0 = 0.025, // 0.015; 0.04
                 IncludedK = true,
@@ -29,13 +31,13 @@ namespace Tests
                 IncludedKsi = false,
                 IncludedP0 = false,
 
-                MinK = Math.Pow(10.0, -15) * 3,
+                MinK = Math.Pow(10.0, -15) * 9,
                 MinKappa = (1.0 / 3600.0) * 2,
                 MinKsi = 0,
                 MinP0 = Math.Pow(10.0, 6) * 3,
 
-                MaxK = Math.Pow(10.0, -15) * 12,
-                MaxKappa = (1.0 / 3600.0) * 12,
+                MaxK = Math.Pow(10.0, -15) * 20,
+                MaxKappa = (1.0 / 3600.0) * 20,
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
@@ -47,6 +49,8 @@ namespace Tests
             Mode mode = Mode.Direct;
             WellsList wellsList = new WellsList(GetWells());
             var list = Functions.MetropolisHastingsAlgorithm(wellsList, modelMH, mode);
+            //var list = Functions.ParallelMetropolisHastingsAlgorithm(wellsList, modelMH, 2, mode);
+            Console.WriteLine($"Accepted count = {list.LastOrDefault().AcceptedCount}");
             WriteToFile(list, 2);
 
         }
