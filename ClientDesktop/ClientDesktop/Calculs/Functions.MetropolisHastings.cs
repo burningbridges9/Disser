@@ -23,7 +23,7 @@ namespace HydrodynamicStudies.Calculs
             PressuresAndTimes pressuresAndTimes = GetPressures(wellsListCurrent);
             ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
 
-            System.Random rng = SystemRandomSource.Default;
+            //System.Random rng = SystemRandomSource.Default;
             int acceptedCount = 0;
 
             switch (modelMH.M)
@@ -33,8 +33,8 @@ namespace HydrodynamicStudies.Calculs
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
                         HCalc hCalc = new HCalc();
-                        double w = rng.NextDouble();
-                        double p = rng.NextDouble();
+                        double w = StaticRandom.Rand(); //rng.NextDouble();
+                        double p = StaticRandom.Rand(); //rng.NextDouble();
 
                         double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double current_k, current_kappa, current_ksi, current_p0;
@@ -111,18 +111,18 @@ namespace HydrodynamicStudies.Calculs
                     {
                         Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
-                        double w = rng.NextDouble();
-                        double d = rng.NextDouble();
-                        double p = rng.NextDouble();
+                        double w = StaticRandom.Rand();// rng.NextDouble();
+                        double d = StaticRandom.Rand();// rng.NextDouble();
+                        double p = StaticRandom.Rand();// rng.NextDouble();
 
                         double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+
                         double current_k, current_kappa, current_ksi, current_p0;
                         GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
 
                         #region evaluate candidates
                         double temp_k, temp_kappa, temp_ksi, temp_p0;
                         GetTempValues(modelMH, hCalc, w, d, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
-
                         List<Well> updatedWithTempWells = new List<Well>();
                         updatedWithTempWells.AddRange(wellsListCurrent.Wells);
                         WellsList tempWellsList = new WellsList(updatedWithTempWells);
@@ -138,12 +138,16 @@ namespace HydrodynamicStudies.Calculs
                         }
                         ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        Console.WriteLine($"temp_k = {temp_k}");
+                        Console.WriteLine($"temp_kappa = {temp_kappa}");
+                        Console.WriteLine($"tempFmin = {tempFmin}");
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
                         double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
                         #endregion
 
                         double next_k, next_kappa, next_ksi, next_p0;
                         GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
+
 
                         List<Well> updatedWithNextValsWells = new List<Well>();
                         updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
@@ -160,7 +164,6 @@ namespace HydrodynamicStudies.Calculs
                         }
                         ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-
                         if (accepted)
                         {
                             ++acceptedCount;

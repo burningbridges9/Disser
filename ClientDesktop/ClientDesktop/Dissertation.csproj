@@ -107,6 +107,7 @@
     <Compile Include="Calculs\Functions.MetropolisHastings.cs" />
     <Compile Include="Calculs\Functions.MetropolisHastings.Parallel.cs" />
     <Compile Include="Calculs\Helpers\HCalc.cs" />
+    <Compile Include="Calculs\Helpers\StaticRandom.cs" />
     <Compile Include="Calculs\IntegralCalculator.cs" />
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Models\IWell.cs" />
     <Compile Include="Models\IWellFeaturesInclude.cs" />
     <Compile Include="Models\MetropolisHastings.cs" />
+    <Compile Include="Models\MetropolisParallelObject.cs" />
     <Compile Include="ValueConverters\AddWellConverter.cs" />
     <Compile Include="ValueConverters\NextGradientConverter.cs" />
     <Compile Include="Commands\MainViewCommand.cs" />
@@ -215,6 +217,8 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\CalculationsStorage\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
