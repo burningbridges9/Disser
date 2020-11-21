@@ -1,18 +1,13 @@
 ﻿using HydrodynamicStudies.Commands;
 using HydrodynamicStudies.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace HydrodynamicStudies.ViewModels
 {
-    public class WellViewModel :INotifyPropertyChanged
+    public class WellViewModel : INotifyPropertyChanged
     {
         private Well _selectedWell;
 
@@ -83,13 +78,9 @@ namespace HydrodynamicStudies.ViewModels
         {
             Wells = new ObservableCollection<Well>();
         }
-        //public void Add(Models.Well well)
-        //{
-        //    Wells.Add(well);
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }

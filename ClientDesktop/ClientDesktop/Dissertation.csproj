@@ -109,8 +109,11 @@
     <Compile Include="Calculs\Helpers\HCalc.cs" />
     <Compile Include="Calculs\Helpers\StaticRandom.cs" />
     <Compile Include="Calculs\IntegralCalculator.cs" />
+    <Compile Include="Commands\StartMHCommand.cs" />
+    <Compile Include="Commands\AddMHCommand.cs" />
     <Compile Include="Commands\AddWellCommand.cs" />
     <Compile Include="Commands\DeleteAllWellCommand.cs" />
+    <Compile Include="Commands\MetropolisHastingsViewCommand.cs" />
     <Compile Include="Commands\PGradientViewCommand.cs" />
     <Compile Include="Commands\QGradientViewCommand.cs" />
     <Compile Include="Commands\RemoveLastWellCommand.cs" />
@@ -131,11 +134,15 @@
     <Compile Include="Models\QGradient.cs" />
     <Compile Include="Models\SurfaceModel.cs" />
     <Compile Include="ValueConverters\WellConverters.cs" />
+    <Compile Include="ViewModels\MetropolisHastingsViewModel.cs" />
     <Compile Include="ViewModels\SurfaceViewModel.cs" />
     <Compile Include="Views\PGradientCalc.xaml.cs">
       <DependentUpon>PGradientCalc.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\PGradientViewModel.cs" />
+    <Compile Include="Views\MetropolisHastingsView.xaml.cs">
+      <DependentUpon>MetropolisHastingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\QGradientCalc.xaml.cs">
       <DependentUpon>QGradientCalc.xaml</DependentUpon>
     </Compile>
@@ -154,6 +161,10 @@
       <DependentUpon>SurfaceCalc.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\PGradientCalc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MetropolisHastingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

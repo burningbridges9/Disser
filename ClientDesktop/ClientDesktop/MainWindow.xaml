@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
             <oxy:PlotView x:Name="Plot" Model ="{Binding Path = PlotViewModel.MyModel, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="0"/>
             <TabControl Grid.Column="1" Grid.RowSpan="2">
-                <TabItem x:Name="PressureAndConsumption" Width="280" Height="50" Header="Pressure and Consumption" FontSize="20">
+                <TabItem x:Name="PressureAndConsumption" Width="250" Height="50" Header="Pressure and Consumption" FontSize="20" IsSelected="True">
                     <Grid>
                         <pr:PressureCalcLayout x:Name="Addition" Grid.Column="1"/>
                     </Grid>
@@ -40,9 +40,14 @@
                         <pr:PGradientCalc x:Name="PGradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="SurfaceTI" Width="120" Height="50" Header="Surface" FontSize="20">
+                <TabItem x:Name="SurfaceTI" Width="80" Height="50" Header="Surface" FontSize="20">
                     <Grid>
                         <pr:SurfaceCalc x:Name="SurfaceClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="MHTI" Width="190" Height="50" Header="Metropolis-Hastings" FontSize="20">
+                    <Grid>
+                        <pr:MetropolisHastingsView x:Name="MHView" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </TabItem>
             </TabControl>
