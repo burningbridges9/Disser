@@ -153,8 +153,7 @@ namespace HydrodynamicStudies.Commands
 
         public override void Execute(object parameter)
         {
-            _mvm.PlotViewModel.MyModel.Series.Clear();
-            _mvm.PlotViewModel.MyModel.InvalidatePlot(true);
+            _mvm.PlotViewModel.CleanUp();
             _mvm.QGradientViewModel.GradientsAndConsumptions.Clear();
             _mvm.PressuresAndTimes?.Pressures1f?.Clear();
             _mvm.PressuresAndTimes?.Pressures1s?.Clear();

@@ -1,4 +1,5 @@
-﻿using HydrodynamicStudies.Models;
+﻿using HydrodynamicStudies.Calculs;
+using HydrodynamicStudies.Models;
 using OxyPlot;
 using OxyPlot.Series;
 using System;
@@ -14,7 +15,7 @@ namespace HydrodynamicStudies.ViewModels
     public class PlotViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName]string prop = "")
+        private void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
@@ -22,7 +23,7 @@ namespace HydrodynamicStudies.ViewModels
 
         public PlotViewModel()
         {
-            this.MyModel = new PlotModel();
+            this.PlotModel = new PlotModel();
             var s1 = new LineSeries
             {
                 Color = OxyColors.SkyBlue,
@@ -50,18 +51,18 @@ namespace HydrodynamicStudies.ViewModels
                 MarkerFill = OxyColors.AliceBlue,
                 MarkerStrokeThickness = 1.5
             };
-            
-            MyModel.Series.Add(s1);
 
-            MyModel.Series.Add(s2);
-            MyModel.Series.Add(s3);
-            MyModel.InvalidatePlot(true);
+            PlotModel.Series.Add(s1);
+
+            PlotModel.Series.Add(s2);
+            PlotModel.Series.Add(s3);
+            PlotModel.InvalidatePlot(true);
         }
 
         public void PlotTimeConsumptions(ConsumptionsAndTimes consumptionsAndTimes)
         {
-            MyModel.Series.Clear();
-            MyModel.InvalidatePlot(true);
+            PlotModel.Series.Clear();
+            PlotModel.InvalidatePlot(true);
             var model = new PlotModel { LegendSymbolLength = 24 };
             model.LegendTitle = "Расходы Q = Q(t)";
             model.LegendPosition = LegendPosition.RightBottom;
@@ -90,13 +91,13 @@ namespace HydrodynamicStudies.ViewModels
                     (model.Series[1] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
                 }
             }
-            MyModel = model;
+            PlotModel = model;
         }
 
         public void PlotTimePressures(PressuresAndTimes pressuresAndTimes)
         {
-            MyModel.Series.Clear();
-            MyModel.InvalidatePlot(true);
+            PlotModel.Series.Clear();
+            PlotModel.InvalidatePlot(true);
             var model = new PlotModel { LegendSymbolLength = 24 };
             model.LegendTitle = "Давления P = P(t)";
             model.LegendPosition = LegendPosition.RightBottom;
@@ -113,7 +114,7 @@ namespace HydrodynamicStudies.ViewModels
                     {
                         (model.Series[0] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
                     }
-                    MyModel = model;
+                    PlotModel = model;
                     break;
 
                 case 2:
@@ -149,7 +150,7 @@ namespace HydrodynamicStudies.ViewModels
                     {
                         (model.Series[2] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
                     }
-                    MyModel = model;
+                    PlotModel = model;
                     break;
 
                 case 3:
@@ -229,20 +230,48 @@ namespace HydrodynamicStudies.ViewModels
                             (model.Series[5] as LineSeries).Points.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * Math.Pow(10, -6)));
                         }
                     }
-                    MyModel = model;
+                    PlotModel = model;
                     break;
             }
         }
-        private PlotModel myModel { get; set; }
-        public PlotModel MyModel
+
+        public void CleanUp()
         {
-            get { return myModel; }
+            PlotModel.Series.Clear();
+            PlotModel.InvalidatePlot(true);
+        }
+
+        private PlotModel plotModel { get; set; }
+        public PlotModel PlotModel
+        {
+            get { return plotModel; }
             set
             {
-                myModel = value;
-                OnPropertyChanged("MyModel");
+                plotModel = value;
+                OnPropertyChanged("PlotModel");
             }
         }
 
+
+        public void SetupScatterModel()
+        {
+            var model = new PlotModel { Title = "ScatterSeries" };
+            var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
+            model.Series.Add(scatterSeries);
+            PlotModel = model;
+            Functions.OnAcceptAction += OnAccept;
+        }
+
+        public void OnAccept(AcceptedValueMH obj)
+        {
+            var x = obj.K;
+            var y = obj.Kappa;
+            var size = 3;
+            var series = PlotModel.Series.FirstOrDefault() as ScatterSeries;
+            series.Points.Add(new ScatterPoint(x, y, size, 2));
+            PlotModel.Series.Clear();
+            PlotModel.Series.Add(series);
+            PlotModel.InvalidatePlot(true);
+        }
     }
 }

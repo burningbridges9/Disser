@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Random;
 using HydrodynamicStudies.Calculs.Helpers;
+using System.Threading;
 
 namespace HydrodynamicStudies.Calculs
 {
     public partial class Functions
     {
+        public static Action<AcceptedValueMH> OnAcceptAction;
+
         public static List<AcceptedValueMH> MetropolisHastingsAlgorithm(WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode = Mode.Direct)
         {
             List<AcceptedValueMH> acceptedValueMHs = new List<AcceptedValueMH>();
@@ -21,11 +24,11 @@ namespace HydrodynamicStudies.Calculs
             //if(mode == Mode.Direct) then do some actions
             wellsListCurrent.Wells.ForEach(x => x.Mode = mode);
             PressuresAndTimes pressuresAndTimes = GetPressures(wellsListCurrent);
-            ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
-
-            //System.Random rng = SystemRandomSource.Default;
+            GetConsumptions(wellsListCurrent);
+            double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+            System.Random rng = SystemRandomSource.Default;
             int acceptedCount = 0;
-
+            bool accepted = false;
             switch (modelMH.M)
             {
                 case 1:
@@ -36,7 +39,7 @@ namespace HydrodynamicStudies.Calculs
                         double w = StaticRandom.Rand(); //rng.NextDouble();
                         double p = StaticRandom.Rand(); //rng.NextDouble();
 
-                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double current_k, current_kappa, current_ksi, current_p0;
                         GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
 
@@ -60,7 +63,7 @@ namespace HydrodynamicStudies.Calculs
                         ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out accepted);
                         #endregion
 
                         acceptedCount = accepted ? ++acceptedCount : acceptedCount;
@@ -111,18 +114,18 @@ namespace HydrodynamicStudies.Calculs
                     {
                         Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
-                        double w = StaticRandom.Rand();// rng.NextDouble();
-                        double d = StaticRandom.Rand();// rng.NextDouble();
-                        double p = StaticRandom.Rand();// rng.NextDouble();
+                        double w = rng.NextDouble();
+                        double d = rng.NextDouble();
+                        double p = rng.NextDouble();
 
-                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        GetConsumptions(wellsListCurrent);
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        GetCurrentValues(wellsListCurrent, out double current_k, out double current_kappa, out double current_ksi, out double current_p0);
 
-                        double current_k, current_kappa, current_ksi, current_p0;
-                        GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
 
                         #region evaluate candidates
-                        double temp_k, temp_kappa, temp_ksi, temp_p0;
-                        GetTempValues(modelMH, hCalc, w, d, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
+                        GetTempValues(modelMH, hCalc, w, d, current_k, current_kappa, current_ksi, current_p0,
+                            out double temp_k, out double temp_kappa, out double temp_ksi, out double temp_p0);
                         List<Well> updatedWithTempWells = new List<Well>();
                         updatedWithTempWells.AddRange(wellsListCurrent.Wells);
                         WellsList tempWellsList = new WellsList(updatedWithTempWells);
@@ -138,15 +141,12 @@ namespace HydrodynamicStudies.Calculs
                         }
                         ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        Console.WriteLine($"temp_k = {temp_k}");
-                        Console.WriteLine($"temp_kappa = {temp_kappa}");
-                        Console.WriteLine($"tempFmin = {tempFmin}");
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out accepted);
                         #endregion
 
-                        double next_k, next_kappa, next_ksi, next_p0;
-                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
+                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i,
+                            out double next_k, out double next_kappa, out double next_ksi, out double next_p0);
 
 
                         List<Well> updatedWithNextValsWells = new List<Well>();
@@ -159,16 +159,21 @@ namespace HydrodynamicStudies.Calculs
                             wellsListCurrent.Wells[l].P0 = next_p0;
                             wellsListCurrent.Wells[l].Ksi = next_ksi;
                             wellsListCurrent.Wells[l].Mode = mode;
-                            wellsListCurrent.Wells[l].CalcMQ = 0;
-                            wellsListCurrent.Wells[l].CalculatedQ = 0;
                         }
-                        ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+
                         if (accepted)
                         {
                             ++acceptedCount;
+                            //lock (lockObj)
+                            //{
+                            //    Console.WriteLine($"i = {i}");
+                            Console.WriteLine($"acceptedCount = {acceptedCount}");
+                            //    Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
+                            //}
                             if (acceptedCount % modelMH.Ns == 0)
                             {
+                                GetConsumptions(wellsListCurrent);
+                                currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                                 AcceptedValueMH acceptedValue = new AcceptedValueMH()
                                 {
                                     AcceptedCount = acceptedCount,
@@ -183,6 +188,8 @@ namespace HydrodynamicStudies.Calculs
                                     IncludedP0 = modelMH.IncludedP0,
                                 };
                                 acceptedValueMHs.Add(acceptedValue);
+                                //return acceptedValue;
+                                //OnAcceptAction?.Invoke(acceptedValue);
                             }
                         }
                     }
@@ -284,15 +291,15 @@ namespace HydrodynamicStudies.Calculs
             double returnValue = 0;
             if (currentValue + H < minValue)
             {
-                returnValue = 2 * minValue - currentValue - H;
+                returnValue = maxValue - (minValue - (currentValue + H));
             }
             else if (minValue < currentValue + H && maxValue > currentValue + H)
             {
                 returnValue = currentValue + H;
             }
-            else if (maxValue < currentValue + H)// && currentValue < H)
+            else if (maxValue < currentValue + H)
             {
-                returnValue = 2 * maxValue - currentValue - H;
+                returnValue = minValue + ((currentValue + H) - maxValue);
             }
             else
             { }

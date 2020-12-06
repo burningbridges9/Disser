@@ -1,8 +1,10 @@
 ﻿using HydrodynamicStudies.Calculs;
 using HydrodynamicStudies.Models;
 using HydrodynamicStudies.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,58 @@ namespace HydrodynamicStudies.Commands
 
         public override void Execute(object parameter)
         {
+            MainWindow.MainViewModel.PlotViewModel.CleanUp();
+            MainWindow.MainViewModel.PlotViewModel.SetupScatterModel();
             var wl = new WellsList(MainWindow.MainViewModel.WellViewModel.Wells.ToList());
             var mode = wl.Wells.First().Mode;
+
             var result = Functions.MetropolisHastingsAlgorithm(wl, metropolisHastingsViewModel.MetropolisHastings, mode);
+            WriteToFile(result.ToList(), 2);
+        }
+
+
+        static void WriteToFile(List<AcceptedValueMH> accepteds, int values)
+        {
+            var writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\K_Q1.txt";
+            var writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Kappa_Q1.txt";
+            var writePathProb = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Probability_Q1.txt";
+            var writePathObj = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Acc1.txt";
+            switch (values)
+            {
+                case 1:
+                    using (StreamWriter sw1 = new StreamWriter(writePath1, false, Encoding.Default))
+                    using (StreamWriter sw2 = new StreamWriter(writePathProb, false, Encoding.Default))
+                    {
+                        foreach (var a in accepteds)
+                        {
+                            sw1.Write(a.K * Math.Pow(10.0, 15) + " ");
+                            sw2.Write(a.ProbabilityDensity + " ");
+                        }
+                    }
+                    break;
+                case 2:
+                    using (StreamWriter sw1 = new StreamWriter(writePath1, false, Encoding.Default))
+                    using (StreamWriter sw2 = new StreamWriter(writePathProb, false, Encoding.Default))
+                    using (StreamWriter sw3 = new StreamWriter(writePath2, false, Encoding.Default))
+                    {
+                        foreach (var a in accepteds)
+                        {
+                            sw1.Write(a.K * Math.Pow(10.0, 15) + " ");
+                            sw2.Write(a.Fmin + " ");
+                            sw3.Write(a.Kappa * 3600.0 + " ");
+                        }
+                    }
+
+                    var json = JsonConvert.SerializeObject(accepteds, Formatting.Indented);
+                    using (StreamWriter sw = new StreamWriter(writePathObj, false, Encoding.Default))
+                    {
+                        sw.Write(json);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }

@@ -41,21 +41,21 @@
                 <ColumnDefinition Width="100*"/>
                 <ColumnDefinition Width="129*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="TextBoxMinK" Text="4" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-            <TextBox x:Name="TextBoxMaxK" Text="12" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+            <TextBox x:Name="TextBoxMinK" Text="8" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+            <TextBox x:Name="TextBoxMaxK" Text="11" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
             <TextBox x:Name="TextBoxMinKappa" Text="1" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-            <TextBox x:Name="TextBoxMaxKappa" Text="8" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+            <TextBox x:Name="TextBoxMaxKappa" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
             <TextBox x:Name="TextBoxMinKsi" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
             <TextBox x:Name="TextBoxMaxKsi" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
-            <TextBox x:Name="TextBoxMinP0" Text="2" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
-            <TextBox x:Name="TextBoxMaxP0" Text="2" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
+            <TextBox x:Name="TextBoxMinP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
+            <TextBox x:Name="TextBoxMaxP0" Text="3" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
 
 
 
             <CheckBox x:Name="IncludeK" IsChecked="True" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
-            <TextBox x:Name="StepK" Text="4"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+            <TextBox x:Name="StepK" Text="0.6"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
             <CheckBox x:Name="IncludeKappa" IsChecked="True" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
-            <TextBox x:Name="StepKappa" Text="1"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+            <TextBox x:Name="StepKappa" Text="0.8"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
             <CheckBox x:Name="IncludeKsi" IsChecked="False" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
             <TextBox x:Name="StepKsi" Text="0"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
             <CheckBox x:Name="IncludeP0" IsChecked="False" Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />

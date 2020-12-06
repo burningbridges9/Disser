@@ -13,13 +13,22 @@ namespace HydrodynamicStudies.Calculs
     public partial class Functions
     {
         private static Object lockObj = new Object();
+
+        private static int _seedCount = 0;
+        private static ThreadLocal<Random> _tlRng = new ThreadLocal<Random>(() => new Random(GenerateSeed()));
+        private static int GenerateSeed()
+        {
+            // note the usage of Interlocked, remember that in a shared context we can't just "_seedCount++"
+            return (int)((DateTime.Now.Ticks << 4) + (Interlocked.Increment(ref _seedCount)));
+        }
+
         public static List<AcceptedValueMH> ParallelMetropolisHastingsAlgorithm(WellsList wellsListCurrent, MetropolisHastings modelMH, int threadsNumber, Mode mode = Mode.Direct)
         {
             var tasks = new List<Task<List<AcceptedValueMH>>>();
             var l = new List<AcceptedValueMH>();
             for (int i = 0; i < threadsNumber; i++)
             {
-                tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(() => MetropolisHastingsAlgorithm(wellsListCurrent, modelMH, mode), TaskCreationOptions.LongRunning));
+                //tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(() => MetropolisHastingsAlgorithm(wellsListCurrent, modelMH, mode), TaskCreationOptions.LongRunning));
             }
             var results = new List<AcceptedValueMH>();
             Task.WaitAll(tasks.ToArray());
@@ -41,7 +50,7 @@ namespace HydrodynamicStudies.Calculs
             ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
 
 
-            System.Random rng = metropolisParallelObject.rng;
+            System.Random rng = new Random();
             int acceptedCount = 0;
 
             switch (modelMH.M)
@@ -50,8 +59,8 @@ namespace HydrodynamicStudies.Calculs
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
                         HCalc hCalc = new HCalc();
-                        double w = StaticRandom.Rand(); //rng.NextDouble();
-                        double p = StaticRandom.Rand(); //rng.NextDouble();
+                        double w = rng.NextDouble();
+                        double p = rng.NextDouble();
 
                         double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double current_k, current_kappa, current_ksi, current_p0;
@@ -134,16 +143,16 @@ namespace HydrodynamicStudies.Calculs
 
                         lock (lockObj)
                         {
-                            Console.WriteLine($"i = {i}");
-                            Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
-                            w = rng.NextDouble();
-                            d = rng.NextDouble();
-                            p = rng.NextDouble();
-                            Console.WriteLine($"w = {w}");
-                            Console.WriteLine($"d = {d}");
-                            Console.WriteLine($"p = {p}");
+                            //Console.WriteLine($"i = {i}");
+                            //Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
+                            w = _tlRng.Value.NextDouble();
+                            d = _tlRng.Value.NextDouble();
+                            p = _tlRng.Value.NextDouble();
+                            //Console.WriteLine($"w = {w}");
+                            //Console.WriteLine($"d = {d}");
+                            //Console.WriteLine($"p = {p}");
                         }
-
+                        GetConsumptions(wellsListCurrent);
                         double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         //Console.WriteLine($"currentFmin = {currentFmin}");
 
@@ -193,6 +202,20 @@ namespace HydrodynamicStudies.Calculs
                             wellsListCurrent.Wells[l].CalculatedQ = 0;
                         }
                         ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
+
+
+                        lock (lockObj)
+                        {
+                            Console.WriteLine($"i = {i}");
+                            Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
+                            Console.WriteLine($"acceptedCount = {acceptedCount}");
+                            Console.WriteLine($"next_k = {next_k}");
+                            Console.WriteLine($"next_kappa = {next_kappa}");
+                            Console.WriteLine($"currentFmin = {currentFmin}");
+                            Console.WriteLine($"tempFmin = {tempFmin}");
+                        }
+
+
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         if (accepted)
                         {

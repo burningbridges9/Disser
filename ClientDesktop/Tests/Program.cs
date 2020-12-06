@@ -17,8 +17,8 @@ namespace Tests
         static void Main(string[] args)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            TestParallelMH();
-            //TestMH();
+            //TestParallelMH();
+            TestMH();
             //RestoreFromFile();
         }
 
@@ -35,36 +35,36 @@ namespace Tests
                 IncludedKsi = false,
                 IncludedP0 = false,
 
-                MinK = Math.Pow(10.0, -15) * 8,
+                MinK = Math.Pow(10.0, -15) * 7,
                 MinKappa = (1.0 / 3600.0) * 1,
                 MinKsi = 0,
                 MinP0 = Math.Pow(10.0, 6) * 3,
 
-                MaxK = Math.Pow(10.0, -15) * 11,
-                MaxKappa = (1.0 / 3600.0) * 5,
+                MaxK = Math.Pow(10.0, -15) * 12,
+                MaxKappa = (1.0 / 3600.0) * 6,
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
-                StepK = Math.Pow(10.0, -15) * 0.6,
-                StepKappa = (1.0 / 3600.0) * 0.8,
+                StepK = Math.Pow(10.0, -15) * 1,
+                StepKappa = (1.0 / 3600.0)  * 1,
                 StepKsi = 0,
                 StepP0 = 0,
             };
             Mode mode = Mode.Direct;
             WellsList wellsList = new WellsList(GetWells());
             var list = Functions.MetropolisHastingsAlgorithm(wellsList, modelMH, mode);
-            //var list = Functions.ParallelMetropolisHastingsAlgorithm(wellsList, modelMH, 1, mode);
+            //var list = Functions.ParallelMetropolisHastingsAlgorithm(wellsList, modelMH, 2, mode);
             Console.WriteLine($"Accepted count = {list.LastOrDefault().AcceptedCount}");
             WriteToFile(list, 2);
 
         }
-
+        
         private static void TestParallelMH()
         {
             MetropolisHastings modelMH = new MetropolisHastings()
             {
                 C = 1,
-                WalksCount = 5000,
+                WalksCount = 3000,
                 Ns = 10,
                 S_0 = 0.005, // 0.015; 0.04; 0.025 // 0.01; 0.005
                 IncludedK = true,
@@ -89,9 +89,10 @@ namespace Tests
             };
             Mode mode = Mode.Direct;
             WellsList wellsList = new WellsList(GetWells());
-            const int trNum = 8;
+            const int trNum = 2;
             MetropolisParallelObject[] metropolisParallelObjects = new MetropolisParallelObject[trNum];
-            System.Random rng = new Random();
+            System.Random rng = new CryptoRandomSource(threadSafe:true);
+
             Thread[] threads = new Thread[trNum];
             for (int i = 0; i < trNum; i++)
             {
@@ -117,10 +118,10 @@ namespace Tests
 
         static void WriteToFile(List<AcceptedValueMH> accepteds, int values)
         {
-            var writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\K_Q1.txt";
-            var writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Kappa_Q1.txt";
-            var writePathProb = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Probability_Q1.txt";
-            var writePathObj = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Acc1.txt";
+            var writePath1 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\K_Q3.txt";
+            var writePath2 = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Kappa_Q3.txt";
+            var writePathProb = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Probability_Q3.txt";
+            var writePathObj = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Acc3.txt";
             switch (values)
             {
                 case 1:
@@ -161,7 +162,7 @@ namespace Tests
 
         static List<AcceptedValueMH> RestoreFromFile()
         {
-            var writePathObj = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Acc1.txt";
+            var writePathObj = @"C:\Users\Rustam\Documents\Visual Studio 2017\Projects\Disser\ClientDesktop\ClientDesktop\Metropolis\Acc2.txt";
             var json = string.Empty;
             using (StreamReader sw = new StreamReader(writePathObj))
             {
