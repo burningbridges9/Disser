@@ -28,7 +28,7 @@ namespace TestsNET
             MetropolisHastings modelMH = new MetropolisHastings()
             {
                 C = 1,
-                WalksCount = 500000, // 250000, 500000 
+                WalksCount = 50000, // 250000, 500000 
                 Ns = 10,
                 S_0 = 0.001, // 0.015; 0.04; 0.025 // 0.01; 0.005
                 IncludedK = true,
@@ -36,26 +36,26 @@ namespace TestsNET
                 IncludedKsi = false,
                 IncludedP0 = false,
 
-                MinK = Math.Pow(10.0, -15) * 7.5,
-                MinKappa = (1.0 / 3600.0) * 0.5,
+                MinK = Math.Pow(10.0, -15) * 7,
+                MinKappa = (1.0 / 3600.0) * 1,
                 MinKsi = 0,
                 MinP0 = Math.Pow(10.0, 6) * 3,
 
-                MaxK = Math.Pow(10.0, -15) * 9.5,
-                MaxKappa = (1.0 / 3600.0) * 3.5,
+                MaxK = Math.Pow(10.0, -15) * 12,
+                MaxKappa = (1.0 / 3600.0) * 7,
                 MaxKsi = 0,
                 MaxP0 = Math.Pow(10.0, 6) * 3,
 
-                StepK = Math.Pow(10.0, -15) * 0.2,
-                StepKappa = (1.0 / 3600.0) * 0.3,
+                StepK = Math.Pow(10.0, -15) * 0.5,
+                StepKappa = (1.0 / 3600.0) * 0.6,
                 StepKsi = 0,
                 StepP0 = 0,
 
-                SelectLogic = SelectLogic.BasedOnAccepted
+                SelectLogic = SelectLogic.AcceptAll
             };
-            Mode mode = Mode.Direct;
+            Mode mode = Mode.Reverse;
             WellsList wellsList = new WellsList(GetWells());
-            var list = Functions.MetropolisHastingsAlgorithm(wellsList, modelMH, mode);
+            var list = Functions.MetropolisHastingsAlgorithmForPressures(wellsList, modelMH, mode);
             //var list = Functions.ParallelMetropolisHastingsAlgorithm(wellsList, modelMH, 8, mode);
             Console.WriteLine($"Accepted count = {list.LastOrDefault().AcceptedCount}");
             WriteToFile(list, 2);

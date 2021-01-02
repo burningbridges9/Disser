@@ -224,7 +224,8 @@
         <Grid Grid.Row="1">
             <ListBox x:Name="wellsList" ItemTemplate="{StaticResource listTemplate}" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Visible">
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 ItemsSource="{Binding Wells}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />

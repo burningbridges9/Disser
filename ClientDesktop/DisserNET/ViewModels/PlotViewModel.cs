@@ -14,13 +14,7 @@ namespace DisserNET.ViewModels
 {
     public class PlotViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-
+        public WellViewModel wellViewModel { get; set; }
         public PlotViewModel()
         {
             this.PlotModel = new PlotModel();
@@ -101,7 +95,7 @@ namespace DisserNET.ViewModels
             var model = new PlotModel { LegendSymbolLength = 24 };
             model.LegendTitle = "Давления P = P(t)";
             model.LegendPosition = LegendPosition.RightBottom;
-            switch (MainWindow.MainViewModel.WellViewModel.Wells.Count)
+            switch (wellViewModel.Wells.Count)
             {
                 case 1:
                     model.Series.Add(new LineSeries
@@ -159,7 +153,7 @@ namespace DisserNET.ViewModels
                         Color = OxyColors.SkyBlue,
                         MarkerType = MarkerType.None,
                         MarkerStrokeThickness = 1.5,
-                        Title = "Расчитанное давление P1"
+                        Title = "Рассчитанное давление P1"
                     });
                     model.Series.Add(new LineSeries
                     {
@@ -169,13 +163,13 @@ namespace DisserNET.ViewModels
                         MarkerStroke = OxyColors.Blue,
                         MarkerFill = OxyColors.Blue,
                         MarkerStrokeThickness = 0.5,
-                        Title = "Расчитанное давление P1 без учета расходов Q2 и Q3"
+                        Title = "Рассчитанное давление P1 без учета расходов Q2 и Q3"
                     });
                     model.Series.Add(new LineSeries
                     {
                         Color = OxyColors.Black,
                         MarkerStrokeThickness = 1.5,
-                        Title = "Расчитанное давление P2"
+                        Title = "Рассчитанное давление P2"
                     });
                     model.Series.Add(new LineSeries
                     {
@@ -185,13 +179,13 @@ namespace DisserNET.ViewModels
                         MarkerStroke = OxyColors.Green,
                         MarkerFill = OxyColors.Green,
                         MarkerStrokeThickness = 0.5,
-                        Title = "Расчитанное давление P2 без учета расхода Q3"
+                        Title = "Рассчитанное давление P2 без учета расхода Q3"
                     });
                     model.Series.Add(new LineSeries
                     {
                         Color = OxyColors.Red,
                         MarkerStrokeThickness = 1.5,
-                        Title = "Расчитанное давление P3"
+                        Title = "Рассчитанное давление P3"
                     });
                     foreach (var pt in pressuresAndTimes.Pressures1f.Zip(pressuresAndTimes.Times1f, Tuple.Create))
                     {
@@ -259,7 +253,6 @@ namespace DisserNET.ViewModels
             var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
             model.Series.Add(scatterSeries);
             PlotModel = model;
-            Functions.OnAcceptAction += OnAccept;
         }
 
         public void OnAccept(AcceptedValueMH obj)
@@ -272,6 +265,12 @@ namespace DisserNET.ViewModels
             PlotModel.Series.Clear();
             PlotModel.Series.Add(series);
             PlotModel.InvalidatePlot(true);
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

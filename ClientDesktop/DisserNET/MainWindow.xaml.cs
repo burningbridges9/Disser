@@ -8,13 +8,15 @@ namespace DisserNET
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static MainViewModel MainViewModel { get; set; }
-        public MainWindow()
+        public readonly MainViewModel MainViewModel;
+
+        public static MainViewModel MainViewModell;
+        public MainWindow(MainViewModel mainViewModel)
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
-            MainViewModel = new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel, SurfaceClc.surfaceViewModel);
-            this.DataContext = MainViewModel;
+            this.MainViewModel = mainViewModel;//new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel, 
+            //SurfaceClc.surfaceViewModel);
+            this.DataContext = mainViewModel;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DisserNET.ViewModels;
+using DisserNET.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
@@ -11,12 +13,13 @@ namespace DisserNET
     /// </summary>
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
 
         public IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -34,9 +37,14 @@ namespace DisserNET
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // ...
+            services.AddSingleton<WellViewModel>();
+            services.AddSingleton<PlotViewModel>();
+            services.AddSingleton<QGradientViewModel>();
+            services.AddSingleton<PGradientViewModel>();
+            services.AddSingleton<SurfaceViewModel>();
+            services.AddSingleton<MainViewModel>();
 
-            services.AddTransient<MainWindow>();
+            services.AddSingleton<MainWindow>();
         }
 
     }

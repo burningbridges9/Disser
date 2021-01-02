@@ -8,14 +8,9 @@ namespace DisserNET.Views
     /// </summary>
     public partial class PGradientCalc : UserControl
     {
-        public PGradientViewModel gradientViewModel;
         public PGradientCalc()
         {
-            gradientViewModel = new PGradientViewModel();
-            DataContext = gradientViewModel;
             InitializeComponent();
-            gradientList.ItemsSource = gradientViewModel.Gradients;
         }
-
     }
 }

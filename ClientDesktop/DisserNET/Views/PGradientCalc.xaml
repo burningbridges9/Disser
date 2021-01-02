@@ -183,7 +183,8 @@
         <Grid x:Name="ListParameters" Grid.Row="1">    
             <ListBox x:Name="gradientList" ItemTemplate="{StaticResource listTemplate}" 
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Visible">
+             ScrollViewer.VerticalScrollBarVisibility="Visible"
+             ItemsSource="{Binding Gradients}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />

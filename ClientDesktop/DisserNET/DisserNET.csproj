@@ -23,7 +23,6 @@
     <Folder Include="Commands\" />
     <Folder Include="Models\" />
     <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="ValueConverters\" />
     <Folder Include="Utils\" />
   </ItemGroup>

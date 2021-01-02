@@ -1,8 +1,9 @@
 ﻿<Application x:Class="DisserNET.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DisserNET">
+             xmlns:local="clr-namespace:DisserNET" 
+             xmlns:VMs="clr-namespace:DisserNET.ViewModels">
     <Application.Resources>
-         
+        <!--<VMs:ViewModelLocator x:Key="ViewModelLocator"/>-->
     </Application.Resources>
 </Application>

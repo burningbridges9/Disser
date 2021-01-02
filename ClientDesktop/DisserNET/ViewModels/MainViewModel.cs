@@ -36,6 +36,7 @@ namespace DisserNET.ViewModels
             this.QGradientViewModel = qGradientViewModel;
             this.PGradientViewModel = pGradientViewModel;
             this.PlotViewModel = new PlotViewModel();
+            PlotViewModel.wellViewModel = wellViewModel;
             this.SurfaceViewModel = surfaceViewModel;
         }
 
