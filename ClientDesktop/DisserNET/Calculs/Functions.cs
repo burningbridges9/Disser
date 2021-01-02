@@ -1418,24 +1418,31 @@ namespace DisserNET.Calculs
         public static double GetObjectFunctionValue(Well[] wells)
         {
             double fMin = 0;
-            switch (wells.Count())
+            if (wells[0].Mode == Mode.Direct)
             {
-                //case 1:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2)));
-                //    break;
-                //case 2:
-                //    Fmin = Math.Pow((wellViewModel.Wells[0].Q - Qk1[indexes[0] - 2]), 2) + Math.Pow((wellViewModel.Wells[1].Q - Qk1.Last()), 2);
-                //    Fmin = Math.Sqrt(Fmin / (Math.Pow(wellViewModel.Wells[0].Q, 2) + Math.Pow(wellViewModel.Wells[1].Q, 2)));
-                //    break;
-                case 3:
-                    fMin = Math.Pow(wells[0].Q - wells[0].CalculatedQ, 2)
-                            + Math.Pow(wells[1].Q - wells[1].CalculatedQ, 2)
-                            + Math.Pow(wells[2].Q - wells[2].CalculatedQ, 2);
-                    fMin = fMin / (Math.Pow(wells[0].Q, 2) + Math.Pow(wells[1].Q, 2) + Math.Pow(wells[2].Q, 2));
-                    break;
+                switch (wells.Count())
+                {
+                    case 3:
+                        fMin = Math.Pow(wells[0].Q - wells[0].CalculatedQ, 2)
+                                + Math.Pow(wells[1].Q - wells[1].CalculatedQ, 2)
+                                + Math.Pow(wells[2].Q - wells[2].CalculatedQ, 2);
+                        fMin = fMin / (Math.Pow(wells[0].Q, 2) + Math.Pow(wells[1].Q, 2) + Math.Pow(wells[2].Q, 2));
+                        break;
+                }
             }
-            return fMin;
+            else
+            {
+                switch (wells.Count())
+                {
+                    case 3:
+                        fMin = Math.Pow(wells[0].P - wells[0].CalculatedP, 2)
+                                + Math.Pow(wells[1].P - wells[1].CalculatedP, 2)
+                                + Math.Pow(wells[2].P - wells[2].CalculatedP, 2);
+                        fMin = fMin / (Math.Pow(wells[0].P, 2) + Math.Pow(wells[1].P, 2) + Math.Pow(wells[2].P, 2));
+                        break;
+                }
+            }
+            return fMin;            
         }
 
         public static double GetObjectFunctionValue(Well[] wells, PressuresAndTimes pressuresAndTimes)
