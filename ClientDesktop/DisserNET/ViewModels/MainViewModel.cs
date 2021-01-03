@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.Specialized;
 
 namespace DisserNET.ViewModels
 {
@@ -17,7 +18,7 @@ namespace DisserNET.ViewModels
         public PressuresAndTimes PressuresAndTimes { get; set; }
         public ConsumptionsAndTimes ConsumptionsAndTimes { get; set; }
         public WellViewModel WellViewModel { get; set; }
-        public PlotViewModel plotViewModel { get; set; }
+        public PlotViewModel plotViewModel;
         public PlotViewModel PlotViewModel
         {
             get { return plotViewModel; }
@@ -38,6 +39,8 @@ namespace DisserNET.ViewModels
             this.PlotViewModel = new PlotViewModel();
             PlotViewModel.wellViewModel = wellViewModel;
             this.SurfaceViewModel = surfaceViewModel;
+
+            this.WellViewModel.Wells.CollectionChanged += this.QGradientViewModel.WellsChanged;
         }
 
         #region Commands

@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using OxyPlot;
+using System.Collections.Specialized;
 
 namespace DisserNET.ViewModels
 {
@@ -25,6 +27,7 @@ namespace DisserNET.ViewModels
             }
         }
 
+        #region Commands
         private ICommand _nextStepCommand;
         public ICommand NextStep
         {
@@ -63,23 +66,71 @@ namespace DisserNET.ViewModels
                 return _saveQCommand;
             }
         }
+        #endregion
 
-        public List<QGradientAndConsumptions> GradientsAndConsumptions;
+        public ObservableCollection<QGradientAndConsumptions> GradientsAndConsumptions;
+
+        //public ObservableCollection<DataPoint> StaticConsumptions => GradientsAndConsumptions.LastOrDefault()?.ConsumptionsAndTimes?.ToDataPoints(staticConsumptions: true);
+
+        public IList<DataPoint> activeConsumptions;
+        public IList<DataPoint> ActiveConsumptions
+        {
+            get => activeConsumptions;
+            set
+            {
+                activeConsumptions = value;
+                OnPropertyChanged("ActiveConsumptions");
+            }
+        }
+
+        public IList<DataPoint> staticConsumptions;
+        public IList<DataPoint> StaticConsumptions
+        {
+            get => staticConsumptions;
+            set
+            {
+                staticConsumptions = value;
+                OnPropertyChanged("StaticConsumptions");
+            }
+        }
 
         public ObservableCollection<Gradient> Gradients;
+
+        public WellsList wellsList;
 
         public bool IsFirstTimeGradientClicked;
 
         public QGradientViewModel()
         {
             Gradients = new ObservableCollection<Gradient>();
-            GradientsAndConsumptions = new List<QGradientAndConsumptions>();
+            GradientsAndConsumptions = new ObservableCollection<QGradientAndConsumptions>();
+
+            GradientsAndConsumptions.CollectionChanged += GradientAndConsumptionsChanged;
         }
 
+        private void GradientAndConsumptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var grAndCons = sender as IEnumerable<QGradientAndConsumptions>;
+            var lastGrAndCons = grAndCons.LastOrDefault();
+            if ((lastGrAndCons is not null) && (lastGrAndCons?.ConsumptionsAndTimes is not null || lastGrAndCons?.QGradient is not null))
+            {
+                ActiveConsumptions = lastGrAndCons?.ConsumptionsAndTimes.ToDataPoints(false);
+                StaticConsumptions = lastGrAndCons?.ConsumptionsAndTimes.ToDataPoints(true);
+            }
+        }
+
+        public void WellsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            List<Well> w = (sender as IEnumerable<Well>).ToList();
+            wellsList = new WellsList(w);
+        }
+
+        #region Property changed
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+        #endregion
     }
 }
