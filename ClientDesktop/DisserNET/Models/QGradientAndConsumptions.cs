@@ -1,8 +1,8 @@
 ﻿namespace DisserNET.Models
 {
-    public class QGradientAndConsumptions
+    public class QGradientAndConsumptions : IGradientAndValues<QGradient, ConsumptionsAndTimes>
     {
-        public QGradient QGradient { get; set; }
-        public ConsumptionsAndTimes ConsumptionsAndTimes { get; set; }
+        public QGradient Grad { get; set; }
+        public ConsumptionsAndTimes ValuesAndTimes { get; set; }
     }
 }

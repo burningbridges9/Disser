@@ -1,8 +1,8 @@
 ﻿namespace DisserNET.Models
 {
-    public class PGradientAndPressures
+    public class PGradientAndPressures : IGradientAndValues<PGradient, PressuresAndTimes>
     {
-        public PGradient PGradient { get; set; }
-        public PressuresAndTimes PressuresAndTimes { get; set; }
+        public PGradient Grad { get; set; }
+        public PressuresAndTimes ValuesAndTimes { get; set; }
     }
 }

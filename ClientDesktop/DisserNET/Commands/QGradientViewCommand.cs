@@ -42,72 +42,72 @@ namespace DisserNET.Commands
             QGradient g;
             if (!_gvm.IsFirstTimeGradientClicked)
             {
-                _gvm.GradientsAndConsumptions.Last().QGradient.Lambda = Convert.ToDouble(parameters[0]);
-                _gvm.GradientsAndConsumptions.Last().QGradient.ChangedK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15);
-                _gvm.GradientsAndConsumptions.Last().QGradient.ChangedKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0);
-                _gvm.GradientsAndConsumptions.Last().QGradient.ChangedKsi = Convert.ToDouble(parameters[3]);
-                _gvm.GradientsAndConsumptions.Last().QGradient.ChangedP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6);
+                _gvm.GradientsAndConsumptions.Last().Grad.Lambda = Convert.ToDouble(parameters[0]);
+                _gvm.GradientsAndConsumptions.Last().Grad.ChangedK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15);
+                _gvm.GradientsAndConsumptions.Last().Grad.ChangedKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0);
+                _gvm.GradientsAndConsumptions.Last().Grad.ChangedKsi = Convert.ToDouble(parameters[3]);
+                _gvm.GradientsAndConsumptions.Last().Grad.ChangedP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6);
 
-                _gvm.GradientsAndConsumptions.Last().QGradient.DeltaK =
+                _gvm.GradientsAndConsumptions.Last().Grad.DeltaK =
                     Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15) *
                     Math.Pow(10, Convert.ToDouble(parameters[5].ToString().Substring(parameters[5].ToString().IndexOf('-'),
                     parameters[5].ToString().IndexOf(')') - parameters[5].ToString().IndexOf('-'))));
 
-                _gvm.GradientsAndConsumptions.Last().QGradient.DeltaKappa =
+                _gvm.GradientsAndConsumptions.Last().Grad.DeltaKappa =
                     Convert.ToDouble(parameters[2]) * (1.0 / 3600.0) *
                     Math.Pow(10, Convert.ToDouble(parameters[6].ToString().Substring(parameters[6].ToString().IndexOf('-'),
                     parameters[6].ToString().IndexOf(')') - parameters[6].ToString().IndexOf('-'))));
 
-                _gvm.GradientsAndConsumptions.Last().QGradient.DeltaKsi =
+                _gvm.GradientsAndConsumptions.Last().Grad.DeltaKsi =
                     Convert.ToDouble(parameters[3]) *
                     Math.Pow(10, Convert.ToDouble(parameters[7].ToString().Substring(parameters[7].ToString().IndexOf('-'),
                     parameters[7].ToString().IndexOf(')') - parameters[7].ToString().IndexOf('-'))));
 
-                _gvm.GradientsAndConsumptions.Last().QGradient.DeltaP0 =
+                _gvm.GradientsAndConsumptions.Last().Grad.DeltaP0 =
                     Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6) *
                     Math.Pow(10, Convert.ToDouble(parameters[8].ToString().Substring(parameters[8].ToString().IndexOf('-'),
                     parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
 
 
-                _gvm.GradientsAndConsumptions.Last().QGradient.UsedK = (bool?)parameters[9];
-                _gvm.GradientsAndConsumptions.Last().QGradient.UsedKappa = (bool?)parameters[10];
-                _gvm.GradientsAndConsumptions.Last().QGradient.UsedKsi = (bool?)parameters[11];
-                _gvm.GradientsAndConsumptions.Last().QGradient.UsedP0 = (bool?)parameters[12];
+                _gvm.GradientsAndConsumptions.Last().Grad.UsedK = (bool?)parameters[9];
+                _gvm.GradientsAndConsumptions.Last().Grad.UsedKappa = (bool?)parameters[10];
+                _gvm.GradientsAndConsumptions.Last().Grad.UsedKsi = (bool?)parameters[11];
+                _gvm.GradientsAndConsumptions.Last().Grad.UsedP0 = (bool?)parameters[12];
 
-                g = _gvm.GradientsAndConsumptions.Last().QGradient;
+                g = _gvm.GradientsAndConsumptions.Last().Grad;
                 _gvm.IsFirstTimeGradientClicked = true;
             }
             else
             {
-                g = _gvm.GradientsAndConsumptions.Last().QGradient;
+                g = _gvm.GradientsAndConsumptions.Last().Grad;
                 g.Lambda = Convert.ToDouble(parameters[0]);
 
                 g.DeltaK =
-                    _gvm.GradientsAndConsumptions.First().QGradient.ChangedK *
+                    _gvm.GradientsAndConsumptions.First().Grad.ChangedK *
                     Math.Pow(10, Convert.ToDouble(parameters[5].ToString().Substring(parameters[5].ToString().IndexOf('-'),
                     parameters[5].ToString().IndexOf(')') - parameters[5].ToString().IndexOf('-'))));
 
                 g.DeltaKappa =
-                    _gvm.GradientsAndConsumptions.First().QGradient.ChangedKappa *
+                    _gvm.GradientsAndConsumptions.First().Grad.ChangedKappa *
                     Math.Pow(10, Convert.ToDouble(parameters[6].ToString().Substring(parameters[6].ToString().IndexOf('-'),
                     parameters[6].ToString().IndexOf(')') - parameters[6].ToString().IndexOf('-'))));
 
                 g.DeltaKsi =
-                    _gvm.GradientsAndConsumptions.First().QGradient.ChangedKsi *
+                    _gvm.GradientsAndConsumptions.First().Grad.ChangedKsi *
                     Math.Pow(10, Convert.ToDouble(parameters[7].ToString().Substring(parameters[7].ToString().IndexOf('-'),
                     parameters[7].ToString().IndexOf(')') - parameters[7].ToString().IndexOf('-'))));
 
                 g.DeltaP0 =
-                    _gvm.GradientsAndConsumptions.First().QGradient.ChangedP0 *
+                    _gvm.GradientsAndConsumptions.First().Grad.ChangedP0 *
                     Math.Pow(10, Convert.ToDouble(parameters[8].ToString().Substring(parameters[8].ToString().IndexOf('-'),
                     parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
             }
 
             QGradientAndConsumptions gradientAndConsumptions = SendWellsForGradient(g);
-            if (gradientAndConsumptions.ConsumptionsAndTimes != null)
+            if (gradientAndConsumptions.ValuesAndTimes != null)
             {
                 _gvm.GradientsAndConsumptions.Add(gradientAndConsumptions);
-                _gvm.Gradients.Add(gradientAndConsumptions.QGradient);
+                _gvm.Gradients.Add(gradientAndConsumptions.Grad);
                 _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
                // MainWindow.MainViewModell.PlotViewModel.PlotTimeConsumptions(gradientAndConsumptions.ConsumptionsAndTimes);
             }
@@ -144,7 +144,7 @@ namespace DisserNET.Commands
                 _gvm.GradientsAndConsumptions.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
                 _gvm.Gradients.RemoveAt(_gvm.GradientsAndConsumptions.Count - 1);
                 _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
-                MainWindow.MainViewModell.PlotViewModel.PlotTimeConsumptions(_gvm.GradientsAndConsumptions.Last().ConsumptionsAndTimes);
+               // MainWindow.MainViewModell.PlotViewModel.PlotTimeConsumptions(_gvm.GradientsAndConsumptions.Last().ValuesAndTimes);
                 if (_gvm.GradientsAndConsumptions.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
             }

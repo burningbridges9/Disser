@@ -8,9 +8,8 @@ namespace DisserNET
     /// </summary>
     public partial class MainWindow : Window
     {
-        public readonly MainViewModel MainViewModel;
+        private readonly MainViewModel MainViewModel;
 
-        public static MainViewModel MainViewModell;
         public MainWindow(MainViewModel mainViewModel)
         {
             InitializeComponent();

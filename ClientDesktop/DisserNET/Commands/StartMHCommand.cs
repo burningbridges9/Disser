@@ -22,13 +22,11 @@ namespace DisserNET.Commands
 
         public override void Execute(object parameter)
         {
-            MainWindow.MainViewModell.PlotViewModel.CleanUp();
-            MainWindow.MainViewModell.PlotViewModel.SetupScatterModel();
-            var wl = new WellsList(MainWindow.MainViewModell.WellViewModel.Wells.ToList());
-            var mode = wl.Wells.First().Mode;
+            //var wl = new WellsList(MainWindow.MainViewModell.WellViewModel.Wells.ToList());
+            //var mode = wl.Wells.First().Mode;
 
-            var result = Functions.MetropolisHastingsAlgorithmForConsumptions(wl, metropolisHastingsViewModel.MetropolisHastings, mode);
-            WriteToFile(result.ToList(), 2);
+            //var result = Functions.MetropolisHastingsAlgorithmForConsumptions(wl, metropolisHastingsViewModel.MetropolisHastings, mode);
+            //WriteToFile(result.ToList(), 2);
         }
 
 

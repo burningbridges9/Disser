@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace DisserNET.Models
 {
-    public class ConsumptionsAndTimes
+    public class ValuesAndTimes { }
+    public class ConsumptionsAndTimes : ValuesAndTimes
     {
         public List<double> Consumptions { get; set; }
         public List<double> Times { get; set; }

@@ -812,8 +812,8 @@ namespace DisserNET.Calculs
 
                 nextGradient.FminQ = Fmin;
                 ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes { Times = GetTimes(gradientWells, false), Consumptions = Qk1 };
-                gradientAndConsumptions.ConsumptionsAndTimes = consumptionsAndTimes;
-                gradientAndConsumptions.QGradient = nextGradient;
+                gradientAndConsumptions.ValuesAndTimes = consumptionsAndTimes;
+                gradientAndConsumptions.Grad = nextGradient;
             }
         }
 
@@ -1150,8 +1150,8 @@ namespace DisserNET.Calculs
                     Pressures2s = Pk1.Pressures2s,
                     Pressures3 = Pk1.Pressures3,
                 };
-                gradientAndPressures.PressuresAndTimes = pressuresAndTimes;
-                gradientAndPressures.PGradient = nextGradient;
+                gradientAndPressures.ValuesAndTimes = pressuresAndTimes;
+                gradientAndPressures.Grad = nextGradient;
             }
         }
 
@@ -1363,13 +1363,13 @@ namespace DisserNET.Calculs
                 gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
                 gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
             }
-            QGradientAndConsumptions gradientAndConsumptions = new QGradientAndConsumptions() { QGradient = gradientAndWellsList.Gradient };
+            QGradientAndConsumptions gradientAndConsumptions = new QGradientAndConsumptions() { Grad = gradientAndWellsList.Gradient };
             Functions.GetNextGradientIteration(gradientAndWellsList, gradientWells, out gradientAndConsumptions);
-            if (gradientAndConsumptions.ConsumptionsAndTimes != null)
+            if (gradientAndConsumptions.ValuesAndTimes != null)
             {
                 List<double> staticConsumptions = new List<double>();
                 Functions.PrepareStaticConsumptions(gradientAndWellsList.WellsList, staticConsumptions);
-                gradientAndConsumptions.ConsumptionsAndTimes.StaticConsumptions = staticConsumptions;
+                gradientAndConsumptions.ValuesAndTimes.StaticConsumptions = staticConsumptions;
             }
             return gradientAndConsumptions;
         }
@@ -1404,13 +1404,13 @@ namespace DisserNET.Calculs
                 gradientWells[i].Ksi = gradientAndWellsList.Gradient.ChangedKsi;
                 gradientWells[i].P0 = gradientAndWellsList.Gradient.ChangedP0;
             }
-            PGradientAndPressures pGradientAndPressures = new PGradientAndPressures() { PGradient = gradientAndWellsList.Gradient };
+            PGradientAndPressures pGradientAndPressures = new PGradientAndPressures() { Grad = gradientAndWellsList.Gradient };
             Functions.GetNextPGradientIteration(gradientAndWellsList, gradientWells, out pGradientAndPressures);
-            if (pGradientAndPressures.PressuresAndTimes != null)
+            if (pGradientAndPressures.ValuesAndTimes != null)
             {
                 List<double> staticConsumptions = new List<double>();
                 Functions.PrepareStaticPressures(gradientAndWellsList.WellsList, staticConsumptions);
-                pGradientAndPressures.PressuresAndTimes.StaticPressures = staticConsumptions;
+                pGradientAndPressures.ValuesAndTimes.StaticPressures = staticConsumptions;
             }
             return pGradientAndPressures;
         }

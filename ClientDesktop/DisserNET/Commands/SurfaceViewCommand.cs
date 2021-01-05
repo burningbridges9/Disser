@@ -90,20 +90,20 @@ namespace DisserNET.Commands
                             object P0 = pZeros[i].ToString();
                             object K = ks[v].ToString();
                             object Kappa = kappas[j].ToString();
-                            for (int l = 0; l < MainWindow.MainViewModell.WellViewModel.Wells.Count; l++)
+                            //for (int l = 0; l < MainWindow.MainViewModell.WellViewModel.Wells.Count; l++)
                             {
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
                             }
 
                             #region Q calculation
-                            MainWindow.MainViewModell.ConsumptionsAndTimes = (MainWindow.MainViewModell.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
-                            MainWindow.MainViewModell.plotViewModel.PlotTimeConsumptions(MainWindow.MainViewModell.ConsumptionsAndTimes);
-                            double min = (MainWindow.MainViewModell.CalculateConsumptions as CalculateConsumptionsCommand).CalculateInitialFminQ();
+                            //MainWindow.MainViewModell.ConsumptionsAndTimes = (MainWindow.MainViewModell.CalculateConsumptions as CalculateConsumptionsCommand).SendWellsForConsumptions();
+                            //MainWindow.MainViewModell.plotViewModel.PlotTimeConsumptions(MainWindow.MainViewModell.ConsumptionsAndTimes);
+                            //double min = (MainWindow.MainViewModell.CalculateConsumptions as CalculateConsumptionsCommand).CalculateInitialFminQ();
                             #endregion
 
-                            sw.Write(min);
+                            //sw.Write(min);
                             sw.Write(" ");
                         }
                         sw.Write('\n');
@@ -111,11 +111,11 @@ namespace DisserNET.Commands
                 }
             }
             #endregion
-            MainWindow.MainViewModell.WellViewModel.Wells.Clear();
-            MainWindow.MainViewModell.QGradientViewModel.Gradients.Clear();
-            MainWindow.MainViewModell.QGradientViewModel.GradientsAndConsumptions.Clear();
-            MainWindow.MainViewModell.PGradientViewModel.Gradients.Clear();
-            MainWindow.MainViewModell.PGradientViewModel.PGradientAndPressures.Clear();
+            //MainWindow.MainViewModell.WellViewModel.Wells.Clear();
+            //MainWindow.MainViewModell.QGradientViewModel.Gradients.Clear();
+            //MainWindow.MainViewModell.QGradientViewModel.GradientsAndConsumptions.Clear();
+            //MainWindow.MainViewModell.PGradientViewModel.Gradients.Clear();
+            //MainWindow.MainViewModell.PGradientViewModel.PGradientAndPressures.Clear();
             var surf = new Surface.SurfaceAnimator();
             surf.SurfAnimationFq(_svm.SurfaceModel.Report_file_name_Q);
         }
@@ -186,19 +186,19 @@ namespace DisserNET.Commands
                             object P0 = pZeros[i].ToString();
                             object K = ks[v].ToString();
                             object Kappa = kappas[j].ToString();
-                            for (int l = 0; l < MainWindow.MainViewModell.WellViewModel.Wells.Count; l++)
+                            //for (int l = 0; l < MainWindow.MainViewModell.WellViewModel.Wells.Count; l++)
                             {
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
-                                MainWindow.MainViewModell.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].K = Math.Pow(10.0, -15) * double.Parse(K.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].Kappa = (1.0 / 3600.0) * double.Parse(Kappa.ToString());
+                            //    MainWindow.MainViewModell.WellViewModel.Wells[l].P0 = Math.Pow(10.0, 6) * double.Parse(P0.ToString());
                             }
                             #region P calculation                                                                                                       
-                            MainWindow.MainViewModell.PressuresAndTimes = (MainWindow.MainViewModell.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
+                            //MainWindow.MainViewModell.PressuresAndTimes = (MainWindow.MainViewModell.CalculatePressures as CalculatePressuresCommand).SendWellsForPressures();
                             //_mvm.plotViewModel.PlotTimeConsumptions(MainViewModel.ConsumptionsAndTimes);                                                   
-                            double min = (MainWindow.MainViewModell.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
+                            //double min = (MainWindow.MainViewModell.CalculatePressures as CalculatePressuresCommand).CalculateInitialFminP();
                             #endregion
 
-                            sw.Write(min);
+                            //sw.Write(min);
                             sw.Write(" ");
                         }
                         sw.Write('\n');
@@ -206,7 +206,7 @@ namespace DisserNET.Commands
                 }
             }
             #endregion
-            MainWindow.MainViewModell.WellViewModel.Wells.Clear();
+            //MainWindow.MainViewModell.WellViewModel.Wells.Clear();
         }
     }
 }

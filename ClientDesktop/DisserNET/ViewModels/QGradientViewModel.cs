@@ -70,7 +70,6 @@ namespace DisserNET.ViewModels
 
         public ObservableCollection<QGradientAndConsumptions> GradientsAndConsumptions;
 
-        //public ObservableCollection<DataPoint> StaticConsumptions => GradientsAndConsumptions.LastOrDefault()?.ConsumptionsAndTimes?.ToDataPoints(staticConsumptions: true);
 
         public IList<DataPoint> activeConsumptions;
         public IList<DataPoint> ActiveConsumptions
@@ -112,13 +111,31 @@ namespace DisserNET.ViewModels
         {
             var grAndCons = sender as IEnumerable<QGradientAndConsumptions>;
             var lastGrAndCons = grAndCons.LastOrDefault();
-            if ((lastGrAndCons is not null) && (lastGrAndCons?.ConsumptionsAndTimes is not null || lastGrAndCons?.QGradient is not null))
+            if ((lastGrAndCons is not null) && (lastGrAndCons?.ValuesAndTimes is not null || lastGrAndCons?.Grad is not null))
             {
-                ActiveConsumptions = lastGrAndCons?.ConsumptionsAndTimes.ToDataPoints(false);
-                StaticConsumptions = lastGrAndCons?.ConsumptionsAndTimes.ToDataPoints(true);
+                ActiveConsumptions = lastGrAndCons?.ValuesAndTimes.ToDataPoints(false);
+                StaticConsumptions = lastGrAndCons?.ValuesAndTimes.ToDataPoints(true);
             }
         }
 
+        // TO DO : refactor this
+        public void ConsumptionsCalculated(QGradientAndConsumptions qGradientAndConsumptions)
+        {
+            if (GradientsAndConsumptions.Count != 0)
+                GradientsAndConsumptions.Clear();
+
+            GradientsAndConsumptions.Add(qGradientAndConsumptions);
+            Gradients.Add(qGradientAndConsumptions.Grad);
+            SelectedGradient = qGradientAndConsumptions.Grad; //Gradients.Last(); ??
+        }
+
+        public void CleanUp()
+        {
+            GradientsAndConsumptions?.Clear();
+            Gradients?.Clear();
+            ActiveConsumptions?.Clear();
+            StaticConsumptions?.Clear();
+        }
         public void WellsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             List<Well> w = (sender as IEnumerable<Well>).ToList();
