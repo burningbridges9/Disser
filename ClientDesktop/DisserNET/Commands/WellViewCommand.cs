@@ -22,8 +22,7 @@ namespace DisserNET.Commands
 
     public class CalculatePressuresCommand : WellViewCommand
     {
-        //public delegate void CommandExecuted(PGradientAndPressures grad);
-        public Action<PGradientAndPressures> NotifyExecuted;
+        public Action<PGradientAndPressures> CommandExecuted;
         public CalculatePressuresCommand(WellViewModel wvm) : base(wvm)
         { }
 
@@ -56,7 +55,7 @@ namespace DisserNET.Commands
                 },
                 ValuesAndTimes = res
             };
-            NotifyExecuted?.Invoke(grAndPres);
+            CommandExecuted?.Invoke(grAndPres);
             return res;
         }
     }
@@ -64,8 +63,7 @@ namespace DisserNET.Commands
 
     public class CalculateConsumptionsCommand : WellViewCommand
     {
-        public delegate void CommandExecuted(QGradientAndConsumptions grad);
-        public event CommandExecuted NotifyExecuted;
+        public Action<QGradientAndConsumptions> CommandExecuted;
         public CalculateConsumptionsCommand(WellViewModel wvm) : base(wvm)
         { }
 
@@ -97,51 +95,15 @@ namespace DisserNET.Commands
                 },
                 ValuesAndTimes = res
             };
-            NotifyExecuted?.Invoke(grAndCons);
+            CommandExecuted?.Invoke(grAndCons);
             return res;
         }
 
-        public void CalculateInitialFminQ()
-        {
-            //    if (_wvm.QGradientViewModel.GradientsAndConsumptions.Count != 0)
-            //        _wvm.QGradientViewModel.GradientsAndConsumptions.Clear();
-            //    QGradient g = new QGradient
-            //    {
-            //        ChangedK = _wvm.WellViewModel.Wells[0].K,
-            //        ChangedKappa = _wvm.WellViewModel.Wells[0].Kappa,
-            //        ChangedKsi = _wvm.WellViewModel.Wells[0].Ksi,
-            //        ChangedP0 = _wvm.WellViewModel.Wells[0].P0
-            //    };
-            //_wvm.QGradientViewModel.GradientsAndConsumptions.Add(new QGradientAndConsumptions());
-            //    _wvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient = g;
-            //    _wvm.QGradientViewModel.GradientsAndConsumptions[0].ConsumptionsAndTimes = _wvm.ConsumptionsAndTimes;
-            //    double Fmin = Functions.GetObjectFunctionValue(_wvm.WellViewModel.Wells.ToArray());
-
-            //_wvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient.FminQ = Fmin;
-            //    _wvm.QGradientViewModel.SelectedGradient = _wvm.QGradientViewModel.GradientsAndConsumptions.Last().QGradient;
-            //    _wvm.QGradientViewModel.Gradients.Add(_wvm.QGradientViewModel.GradientsAndConsumptions[0].QGradient);
-            //    return Fmin;
-
-            QGradient g = new QGradient
-            {
-                ChangedK = _wvm.Wells[0].K,
-                ChangedKappa = _wvm.Wells[0].Kappa,
-                ChangedKsi = _wvm.Wells[0].Ksi,
-                ChangedP0 = _wvm.Wells[0].P0,
-                FminQ = Functions.GetObjectFunctionValue(_wvm.Wells.ToArray())
-            };
-            var grAndCons = new QGradientAndConsumptions()
-            {
-                Grad = g,
-                ValuesAndTimes = _wvm.ConsumptionsAndTimes
-            };
-        }
 }
 
     public class ClearCommand : WellViewCommand
     {
-        public delegate void CommandExecuted();
-        public event CommandExecuted NotifyExecuted;
+        public Action CommandExecuted;
         public ClearCommand(WellViewModel wvm) : base(wvm)
         { }
 
@@ -152,8 +114,6 @@ namespace DisserNET.Commands
 
         public override void Execute(object parameter)
         {
-           // _wvm.PlotViewModel.CleanUp();
-           // _wvm.QGradientViewModel.GradientsAndConsumptions.Clear();
             _wvm.PressuresAndTimes?.Pressures1f?.Clear();
             _wvm.PressuresAndTimes?.Pressures1s?.Clear();
             _wvm.PressuresAndTimes?.Pressures2f?.Clear();
@@ -167,7 +127,7 @@ namespace DisserNET.Commands
             _wvm.ConsumptionsAndTimes?.Consumptions?.Clear();
             _wvm.ConsumptionsAndTimes?.StaticConsumptions?.Clear();
             _wvm.ConsumptionsAndTimes?.Times?.Clear();
-            NotifyExecuted?.Invoke();
+            CommandExecuted?.Invoke();
         }
     }
 

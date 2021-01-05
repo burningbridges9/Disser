@@ -19,7 +19,7 @@ namespace DisserNET.ViewModels
         private QGradient _selectedGradient;
         public QGradient SelectedGradient
         {
-            get { return _selectedGradient; }
+            get  => _selectedGradient; 
             set
             {
                 _selectedGradient = value;
@@ -93,7 +93,7 @@ namespace DisserNET.ViewModels
             }
         }
 
-        public ObservableCollection<Gradient> Gradients;
+        public ObservableCollection<QGradient> Gradients;
 
         public WellsList wellsList;
 
@@ -101,7 +101,7 @@ namespace DisserNET.ViewModels
 
         public QGradientViewModel()
         {
-            Gradients = new ObservableCollection<Gradient>();
+            Gradients = new ObservableCollection<QGradient>();
             GradientsAndConsumptions = new ObservableCollection<QGradientAndConsumptions>();
 
             GradientsAndConsumptions.CollectionChanged += GradientAndConsumptionsChanged;
@@ -126,7 +126,7 @@ namespace DisserNET.ViewModels
 
             GradientsAndConsumptions.Add(qGradientAndConsumptions);
             Gradients.Add(qGradientAndConsumptions.Grad);
-            SelectedGradient = qGradientAndConsumptions.Grad; //Gradients.Last(); ??
+            SelectedGradient = Gradients.Last();
         }
 
         public void CleanUp()

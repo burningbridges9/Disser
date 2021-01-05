@@ -8,14 +8,11 @@ namespace DisserNET
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainViewModel MainViewModel;
-
         public MainWindow(MainViewModel mainViewModel)
         {
             InitializeComponent();
-            this.MainViewModel = mainViewModel;//new MainViewModel(Addition.wellViewModel, QGradientClc.gradientViewModel, PGradientClc.gradientViewModel, 
-            //SurfaceClc.surfaceViewModel);
             this.DataContext = mainViewModel;
+            this.QGradientClc.gradientList.ItemsSource = mainViewModel.QGradientViewModel.Gradients; // stupid but works, some day will be binded in view ... TO DO
         }
     }
 }

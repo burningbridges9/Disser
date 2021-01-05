@@ -8,6 +8,5 @@ namespace DisserNET.Views
         {
             InitializeComponent();
         }
-
     }
 }

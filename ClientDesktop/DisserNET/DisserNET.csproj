@@ -23,7 +23,6 @@
     <Folder Include="Commands\" />
     <Folder Include="Views\" />
     <Folder Include="ValueConverters\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MWArray">

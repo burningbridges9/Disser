@@ -97,6 +97,9 @@ namespace DisserNET.ViewModels
         {
             Wells = new ObservableCollection<Well>();
             ChartDataRepository = new ChartDataRepository();
+            CalculatePressures = new CalculatePressuresCommand(this);
+            CalculateConsumptions = new CalculateConsumptionsCommand(this);
+            Clear = new ClearCommand(this);
         }
 
         #region Commands
@@ -157,7 +160,11 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _CalculatePressures ?? new CalculatePressuresCommand(this);
+                return _CalculatePressures;// ?? new CalculatePressuresCommand(this);
+            }
+            private set
+            {
+                _CalculatePressures = value;
             }
         }
 
@@ -166,7 +173,11 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _CalculateConsumptions ?? new CalculateConsumptionsCommand(this);
+                return _CalculateConsumptions;// ?? new CalculateConsumptionsCommand(this);
+            }
+            private set
+            {
+                _CalculateConsumptions = value;
             }
         }
 
@@ -175,7 +186,11 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _Clear ?? new ClearCommand(this);
+                return _Clear;// ?? new ClearCommand(this);
+            }
+            private set
+            {
+                _Clear = value;
             }
         }
         #endregion

@@ -103,10 +103,6 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*"/>
-                <RowDefinition Height="0.5*"/>
-            </Grid.RowDefinitions>
             <oxy:Plot x:Name="PressuresPlot">
                 <oxy:Plot.Visibility>
                     <MultiBinding Converter="{StaticResource plotShowModeConverter}">
@@ -157,33 +153,12 @@
                                     StrokeThickness="1"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
-            <Grid x:Name="ButtonsGrid" Grid.Column="0" Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button x:Name="CalculatePressuresButton" Grid.Row ="0" Grid.Column ="0" Command="{Binding CalculatePressures}">
-                    <TextBlock Text="Pressures"/>
-                </Button>
-                <Button x:Name="ClearButton" Grid.Row ="0" Grid.Column ="1"  Command="{Binding Clear}">
-                    <TextBlock Text="Clear"/>
-                </Button>
-                <Button x:Name="CalculateConsumptionsButton" Grid.Row ="0"  Grid.Column ="2" Command="{Binding CalculateConsumptions}">
-                    <TextBlock Text="Consumptions"/>
-                </Button>
-            </Grid>
         </Grid>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="1.5*"/>
+                <RowDefinition Height="0.9*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" x:Name="Parameters">
                 <Grid.RowDefinitions>
@@ -257,7 +232,7 @@
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="м"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap"              VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <Button x:Name="SubmitAddAuto" Grid.Row="8" Grid.Column="1" Command="{Binding AddAuto}">
+                <Button x:Name="SubmitAddAuto" Grid.Row="8" Grid.Column="0" Command="{Binding AddAuto}">
                     <TextBlock Text="AddAuto"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource addWellConverter}">
@@ -277,7 +252,7 @@
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
-                <Button x:Name="SubmitAdd" Grid.Row="8" Grid.Column="2" Command="{Binding Add}">
+                <Button x:Name="SubmitAdd" Grid.Row="8" Grid.Column="1" Command="{Binding Add}">
                     <TextBlock Text="Add"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource addWellConverter}" >
@@ -297,11 +272,20 @@
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
-                <Button x:Name="SubmitRemoveLast" Grid.Row="8" Grid.Column="3" Command="{Binding RemoveLastWellCommand}">
+                <Button x:Name="SubmitRemoveLast" Grid.Row="8" Grid.Column="2" Command="{Binding RemoveLastWellCommand}">
                     <TextBlock Text="Remove Last"/>
                 </Button>
-                <Button x:Name="SubmitDeleteAll" Grid.Row="8" Grid.Column="4" Command="{Binding DeleteAllWellCommand}">
+                <Button x:Name="SubmitDeleteAll" Grid.Row="8" Grid.Column="3" Command="{Binding DeleteAllWellCommand}">
                     <TextBlock Text="Delete All"/>
+                </Button>
+                <Button x:Name="CalculatePressuresButton" Grid.Row="8" Grid.Column ="4" Command="{Binding CalculatePressures}">
+                    <TextBlock Text="Pressures"/>
+                </Button>
+                <Button x:Name="ClearButton" Grid.Row="8" Grid.Column ="5"  Command="{Binding Clear}">
+                    <TextBlock Text="Clear"/>
+                </Button>
+                <Button x:Name="CalculateConsumptionsButton" Grid.Row="8" Grid.Column ="6" Command="{Binding CalculateConsumptions}">
+                    <TextBlock Text="Consumptions"/>
                 </Button>
             </Grid>
             <Grid Grid.Row="1">

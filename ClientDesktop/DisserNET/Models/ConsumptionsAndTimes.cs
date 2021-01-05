@@ -15,21 +15,19 @@ namespace DisserNET.Models
         public List<DataPoint> ToDataPoints(bool staticConsumptions)
         {
             var dataPoints = new List<DataPoint>();
-            if (staticConsumptions)
-            {
-                foreach (var pt in StaticConsumptions.Zip(Times, Tuple.Create))
-                {
-                    dataPoints.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
-                }
-            }
-            else
-            {
-                foreach (var pt in Consumptions.Zip(Times, Tuple.Create))
-                {
-                    dataPoints.Add(new DataPoint(pt.Item2 / 3600.0, pt.Item1 * 24.0 * 3600.0));
-                }
-            }
+
+            if (staticConsumptions && StaticConsumptions is not null)
+                dataPoints = zip(StaticConsumptions, Times);
+            else if (Consumptions is not null)
+                dataPoints = zip(Consumptions, Times);
             return dataPoints;
+
+            List<DataPoint> zip(List<double> c, List<double> t)
+            {
+                var dataPoints = new List<DataPoint>();
+                c.Zip(t, Tuple.Create).ToList().ForEach(z => dataPoints.Add(new DataPoint(z.Item2 / 3600.0, z.Item1 * 24.0 * 3600.0)));
+                return dataPoints;
+            }
         }
     }
 }
