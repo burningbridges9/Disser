@@ -3,6 +3,7 @@ using DisserNET.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -79,7 +80,13 @@ namespace DisserNET.ViewModels
             }
             if (pressuresAndTimes.StaticPressures != null)
             {
-                // add to chart ..
+                switch (Wells.Count) 
+                {
+                    // TO DO : add other cases
+                    case 3:
+                        ChartDataRepository.StaticPressuresTimes = PressuresAndTimes.ToDataPoints(PressuresAndTimes.StaticPressures, PressuresAndTimes.Times1f.Concat(PressuresAndTimes.Times1s).ToList());
+                        break;
+                }
             }
         }
 
@@ -160,7 +167,7 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _CalculatePressures;// ?? new CalculatePressuresCommand(this);
+                return _CalculatePressures;
             }
             private set
             {
@@ -173,7 +180,7 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _CalculateConsumptions;// ?? new CalculateConsumptionsCommand(this);
+                return _CalculateConsumptions;
             }
             private set
             {
@@ -186,7 +193,7 @@ namespace DisserNET.ViewModels
         {
             get
             {
-                return _Clear;// ?? new ClearCommand(this);
+                return _Clear;
             }
             private set
             {

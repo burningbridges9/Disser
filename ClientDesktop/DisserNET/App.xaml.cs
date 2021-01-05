@@ -38,7 +38,6 @@ namespace DisserNET
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<WellViewModel>();
-            services.AddSingleton<PlotViewModel>();
             services.AddSingleton<QGradientViewModel>();
             services.AddSingleton<PGradientViewModel>();
             services.AddSingleton<SurfaceViewModel>();

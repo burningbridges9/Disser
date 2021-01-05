@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace DisserNET.Commands
 {
-    abstract public class PGradientViewCommand : ICommand
+    abstract public class PGradientViewCommand : GradientCalculateHelper, ICommand
     {
         protected PGradientViewModel _gvm;
         public PGradientViewCommand(PGradientViewModel gvm)
@@ -39,68 +39,33 @@ namespace DisserNET.Commands
         public override void Execute(object parameter)
         {
             var parameters = (object[])parameter;
-            PGradient g;
+            PGradient g = new PGradient();
             if (!_gvm.IsFirstTimeGradientClicked)
             {
-                _gvm.PGradientAndPressures.Last().Grad.Lambda = Convert.ToDouble(parameters[0]);
-                _gvm.PGradientAndPressures.Last().Grad.ChangedK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15);
-                _gvm.PGradientAndPressures.Last().Grad.ChangedKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0);
-                _gvm.PGradientAndPressures.Last().Grad.ChangedKsi = Convert.ToDouble(parameters[3]);
-                _gvm.PGradientAndPressures.Last().Grad.ChangedP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6);
+                var lastGrad = _gvm.PGradientAndPressures?.LastOrDefault()?.Grad;
+                if (lastGrad is not null)
+                {
+                    lastGrad.Lambda = Convert.ToDouble(parameters[0]);
+                    lastGrad.ChangedK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15);
+                    lastGrad.ChangedKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0);
+                    lastGrad.ChangedKsi = Convert.ToDouble(parameters[3]);
+                    lastGrad.ChangedP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6);
+                    FillDeltas(parameters, lastGrad);
 
-                _gvm.PGradientAndPressures.Last().Grad.DeltaK =
-                    Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15) *
-                    Math.Pow(10, Convert.ToDouble(parameters[5].ToString().Substring(parameters[5].ToString().IndexOf('-'),
-                    parameters[5].ToString().IndexOf(')') - parameters[5].ToString().IndexOf('-'))));
+                    lastGrad.UsedK = (bool?)parameters[9];
+                    lastGrad.UsedKappa = (bool?)parameters[10];
+                    lastGrad.UsedKsi = (bool?)parameters[11];
+                    lastGrad.UsedP0 = (bool?)parameters[12];
 
-                _gvm.PGradientAndPressures.Last().Grad.DeltaKappa =
-                    Convert.ToDouble(parameters[2]) * (1.0 / 3600.0) *
-                    Math.Pow(10, Convert.ToDouble(parameters[6].ToString().Substring(parameters[6].ToString().IndexOf('-'),
-                    parameters[6].ToString().IndexOf(')') - parameters[6].ToString().IndexOf('-'))));
-
-                _gvm.PGradientAndPressures.Last().Grad.DeltaKsi =
-                    Convert.ToDouble(parameters[3]) *
-                    Math.Pow(10, Convert.ToDouble(parameters[7].ToString().Substring(parameters[7].ToString().IndexOf('-'),
-                    parameters[7].ToString().IndexOf(')') - parameters[7].ToString().IndexOf('-'))));
-
-                _gvm.PGradientAndPressures.Last().Grad.DeltaP0 =
-                    Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6) *
-                    Math.Pow(10, Convert.ToDouble(parameters[8].ToString().Substring(parameters[8].ToString().IndexOf('-'),
-                    parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
-
-
-                _gvm.PGradientAndPressures.Last().Grad.UsedK = (bool?)parameters[9];
-                _gvm.PGradientAndPressures.Last().Grad.UsedKappa = (bool?)parameters[10];
-                _gvm.PGradientAndPressures.Last().Grad.UsedKsi = (bool?)parameters[11];
-                _gvm.PGradientAndPressures.Last().Grad.UsedP0 = (bool?)parameters[12];
-
-                g = _gvm.PGradientAndPressures.Last().Grad;
-                _gvm.IsFirstTimeGradientClicked = true;
+                    g = lastGrad;
+                    _gvm.IsFirstTimeGradientClicked = true;
+                }
             }
             else
             {
                 g = _gvm.PGradientAndPressures.Last().Grad;
                 g.Lambda = Convert.ToDouble(parameters[0]);
-
-                g.DeltaK =
-                    _gvm.PGradientAndPressures.First().Grad.ChangedK *
-                    Math.Pow(10, Convert.ToDouble(parameters[5].ToString().Substring(parameters[5].ToString().IndexOf('-'),
-                    parameters[5].ToString().IndexOf(')') - parameters[5].ToString().IndexOf('-'))));
-
-                g.DeltaKappa =
-                     _gvm.PGradientAndPressures.First().Grad.ChangedKappa *
-                    Math.Pow(10, Convert.ToDouble(parameters[6].ToString().Substring(parameters[6].ToString().IndexOf('-'),
-                    parameters[6].ToString().IndexOf(')') - parameters[6].ToString().IndexOf('-'))));
-
-                g.DeltaKsi =
-                     _gvm.PGradientAndPressures.First().Grad.ChangedKsi *
-                    Math.Pow(10, Convert.ToDouble(parameters[7].ToString().Substring(parameters[7].ToString().IndexOf('-'),
-                    parameters[7].ToString().IndexOf(')') - parameters[7].ToString().IndexOf('-'))));
-
-                g.DeltaP0 =
-                     _gvm.PGradientAndPressures.First().Grad.ChangedP0 *
-                    Math.Pow(10, Convert.ToDouble(parameters[8].ToString().Substring(parameters[8].ToString().IndexOf('-'),
-                    parameters[8].ToString().IndexOf(')') - parameters[8].ToString().IndexOf('-'))));
+                FillDeltas(parameters, g);
             }
 
             PGradientAndPressures pGradientAndPressures = SendWellsForGradient(g);
@@ -109,8 +74,6 @@ namespace DisserNET.Commands
                 _gvm.PGradientAndPressures.Add(pGradientAndPressures);
                 _gvm.Gradients.Add(pGradientAndPressures.Grad);
                 _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
-                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
-               // MainWindow.MainViewModell.PlotViewModel.PlotTimePressures(pGradientAndPressures.ValuesAndTimes);
             }
         }
 
@@ -142,13 +105,11 @@ namespace DisserNET.Commands
         {
             if (_gvm.PGradientAndPressures.Count > 1)
             {
-                _gvm.PGradientAndPressures.RemoveAt(_gvm.PGradientAndPressures.Count - 1);
-                _gvm.Gradients.RemoveAt(_gvm.PGradientAndPressures.Count - 1);
-                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
-                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
+                _gvm.PGradientAndPressures.Remove(_gvm.PGradientAndPressures.First());
+                _gvm.Gradients.Remove(_gvm.PGradientAndPressures.First().Grad);
+                _gvm.SelectedGradient = _gvm.Gradients.Last();
                 if (_gvm.PGradientAndPressures.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
-                // MainWindow.MainViewModell.PlotViewModel.PlotTimePressures(_gvm.PGradientAndPressures.Last().ValuesAndTimes);
             }
         }
     }
@@ -178,33 +139,6 @@ namespace DisserNET.Commands
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-            }
-        }
-    }
-
-    public class ClearGradientsPCommand : PGradientViewCommand
-    {
-        public ClearGradientsPCommand(PGradientViewModel wvm) : base(wvm)
-        {
-        }
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public override void Execute(object parameter)
-        {
-            if (_gvm.PGradientAndPressures.Count > 1)
-            {
-                _gvm.PGradientAndPressures.RemoveRange(0, _gvm.PGradientAndPressures.Count - 1);
-                while (_gvm.Gradients.Count > 1)
-                {
-                    _gvm.Gradients.RemoveAt(_gvm.Gradients.Count - 1);
-                }
-                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
-                _gvm.SelectedGradient = _gvm.PGradientAndPressures.Last().Grad;
-                _gvm.IsFirstTimeGradientClicked = false;
-                // MainWindow.MainViewModell.PlotViewModel.PlotTimePressures(_gvm.PGradientAndPressures.Last().ValuesAndTimes);
             }
         }
     }

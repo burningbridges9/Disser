@@ -12,7 +12,10 @@ namespace DisserNET
         {
             InitializeComponent();
             this.DataContext = mainViewModel;
-            this.QGradientClc.gradientList.ItemsSource = mainViewModel.QGradientViewModel.Gradients; // stupid but works, some day will be binded in view ... TO DO
+            
+            // stupid but works, some day will be binded in usual way in view ... TO DO
+            this.QGradientClc.gradientList.ItemsSource = mainViewModel.QGradientViewModel.Gradients;
+            this.PGradientClc.gradientList.ItemsSource = mainViewModel.PGradientViewModel.Gradients;
         }
     }
 }

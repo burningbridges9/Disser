@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DisserNET.Views"
+             xmlns:utils="clr-namespace:DisserNET.Utils"
              xmlns:Converter="clr-namespace:DisserNET.ValueConverters"
+             xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="550" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="1000">
     <UserControl.Resources>
         <Converter:NextGradientConverter x:Key="nextGradientConverter"/>
         <Converter:QConverter x:Key="qConverter" />
@@ -78,119 +80,154 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid x:Name="Parameters" Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="79*"></ColumnDefinition>
-                <ColumnDefinition Width="106*"></ColumnDefinition>
-                <ColumnDefinition Width="0"></ColumnDefinition>
-                <ColumnDefinition Width="110*"></ColumnDefinition>
-                <ColumnDefinition Width="120*"></ColumnDefinition>
-                <ColumnDefinition Width="110*"></ColumnDefinition>
-                <ColumnDefinition Width="130*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="FPmin"   Text = "{Binding Path=SelectedGradient.FminP}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-            <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-            <!--<TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center"  FontSize="14"/>-->
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FP->min" VerticalAlignment="Center"  FontSize="14"/>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda"  VerticalAlignment="Center"  FontSize="14"/>
-            <TextBox x:Name="gradK" HorizontalAlignment="Center"     Text ="{Binding Path=SelectedGradient.GradientK, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"/>
-            <TextBox x:Name="gradKappa" HorizontalAlignment="Center" Text ="{Binding Path=SelectedGradient.GradientKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
-            <TextBox x:Name="gradKsi" HorizontalAlignment="Center"   Text ="{Binding Path=SelectedGradient.GradientKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
-            <TextBox x:Name="gradP0" HorizontalAlignment="Center"    Text ="{Binding Path=SelectedGradient.GradientP0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"/>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                          />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                      />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                     />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                        />
-
-
-            <TextBox x:Name="CurrentK"     Text ="{Binding Path=SelectedGradient.ChangedK, UpdateSourceTrigger=PropertyChanged}"     FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-            <TextBox x:Name="CurrentKappa" Text ="{Binding Path=SelectedGradient.ChangedKappa, UpdateSourceTrigger=PropertyChanged}" FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-            <TextBox x:Name="CurrentKsi"   Text ="{Binding Path=SelectedGradient.ChangedKsi, UpdateSourceTrigger=PropertyChanged}"   FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-            <TextBox x:Name="CurrentP0"    Text ="{Binding Path=SelectedGradient.ChangedP0, UpdateSourceTrigger=PropertyChanged}"    FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-            <TextBox x:Name="BeginK"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14"   />
-            <TextBox x:Name="BeginKappa"   Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"    />
-            <TextBox x:Name="BeginKsi"     Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14" />
-            <TextBox x:Name="BeginP0"      Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"     />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" Text="Cur.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                  />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"          />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="3" TextWrapping="Wrap" Text="Cur.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"              />
-
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" Text="delta K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" Text="delta Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" Text="delta Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" Text="delta P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
-
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" Text="Beg.K "    VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"            />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Kappa " VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"       />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Ksi "     VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="5" TextWrapping="Wrap" Text="Beg.P0 "    VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"         />
-
-            <TextBox x:Name="deltaK" HorizontalAlignment="Center"      Grid.Row="0" Text ="10^(-3) * K"    Grid.Column="4" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center" />
-            <TextBox x:Name="deltaKappa" HorizontalAlignment="Center"  Grid.Row="1" Text ="10^(-3) * Kappa"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"                 />
-            <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2" Text ="10^(-3) * Ksi"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"          />
-            <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3" Text ="10^(-3) * P0"    Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"       />
-
-            <CheckBox x:Name="UsedK"  Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0"  Grid.ColumnSpan="2"    FontSize="14"  Width="73"  />
-            <CheckBox x:Name="UsedKappa"  Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"  FontSize="14"  Width="87" Margin="77,6.4,62.4,7"/>
-            <CheckBox x:Name="UsedKsi"  Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="14"  Width="75"/>
-            <CheckBox x:Name="UsedP0"  Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"    FontSize="14"  Width="73"/>
-
-
-            <Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Command="{Binding NextStep}">
-                <TextBlock Text="Next step"/>
-                <Button.CommandParameter>
-                    <MultiBinding Converter="{StaticResource nextGradientConverter}" >
-                        <Binding Path="Text" ElementName="Lambda"/>
-                        <Binding Path="Text" ElementName="BeginK"/>
-                        <Binding Path="Text" ElementName="BeginKappa"/>
-                        <Binding Path="Text" ElementName="BeginKsi"/>
-                        <Binding Path="Text" ElementName="BeginP0"/>
-                        <Binding Path="Text" ElementName="deltaK"/>
-                        <Binding Path="Text" ElementName="deltaKappa"/>
-                        <Binding Path="Text" ElementName="deltaKsi"/>
-                        <Binding Path="Text" ElementName="deltaP0"/>
-                        <Binding Path="IsChecked" ElementName="UsedK"/>
-                        <Binding Path="IsChecked" ElementName="UsedKappa"/>
-                        <Binding Path="IsChecked" ElementName="UsedKsi"/>
-                        <Binding Path="IsChecked" ElementName="UsedP0"/>
-                    </MultiBinding>
-                </Button.CommandParameter>
-            </Button>
-            <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
-                <TextBlock Text="Previous Step"/>
-            </Button>
-            <Button x:Name="Save"   Command="{Binding PSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="8"   Grid.Column="4">
-                <TextBlock Text="Save"/>
-            </Button>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <oxy:Plot x:Name="PressuresPlot">
+                <oxy:Plot.Series>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1Times1, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1fTimes1f, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1sTimes1s, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2Times2, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2fTimes2f, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2sTimes2s, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures3Times3, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="1"/>
+                    <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.StaticPressuresTimes, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Red"
+                                    StrokeThickness="1"/>
+                </oxy:Plot.Series>
+            </oxy:Plot>
         </Grid>
-        <Grid x:Name="ListParameters" Grid.Row="1">    
-            <ListBox x:Name="gradientList" ItemTemplate="{StaticResource listTemplate}" 
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="Parameters" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="79*"></ColumnDefinition>
+                    <ColumnDefinition Width="106*"></ColumnDefinition>
+                    <ColumnDefinition Width="0"></ColumnDefinition>
+                    <ColumnDefinition Width="110*"></ColumnDefinition>
+                    <ColumnDefinition Width="120*"></ColumnDefinition>
+                    <ColumnDefinition Width="110*"></ColumnDefinition>
+                    <ColumnDefinition Width="130*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="FPmin"   Text = "{Binding Path=SelectedGradient.FminP}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+                <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
+                <!--<TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center"  FontSize="14"/>-->
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FP->min" VerticalAlignment="Center"  FontSize="14"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda"  VerticalAlignment="Center"  FontSize="14"/>
+                <TextBox x:Name="gradK" HorizontalAlignment="Center"     Text ="{Binding Path=SelectedGradient.GradientK, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"/>
+                <TextBox x:Name="gradKappa" HorizontalAlignment="Center" Text ="{Binding Path=SelectedGradient.GradientKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
+                <TextBox x:Name="gradKsi" HorizontalAlignment="Center"   Text ="{Binding Path=SelectedGradient.GradientKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
+                <TextBox x:Name="gradP0" HorizontalAlignment="Center"    Text ="{Binding Path=SelectedGradient.GradientP0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                          />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                      />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                     />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                        />
+
+
+                <TextBox x:Name="CurrentK"     Text ="{Binding Path=SelectedGradient.ChangedK, UpdateSourceTrigger=PropertyChanged}"     FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+                <TextBox x:Name="CurrentKappa" Text ="{Binding Path=SelectedGradient.ChangedKappa, UpdateSourceTrigger=PropertyChanged}" FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
+                <TextBox x:Name="CurrentKsi"   Text ="{Binding Path=SelectedGradient.ChangedKsi, UpdateSourceTrigger=PropertyChanged}"   FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
+                <TextBox x:Name="CurrentP0"    Text ="{Binding Path=SelectedGradient.ChangedP0, UpdateSourceTrigger=PropertyChanged}"    FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
+                <TextBox x:Name="BeginK"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14"   />
+                <TextBox x:Name="BeginKappa"   Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"    />
+                <TextBox x:Name="BeginKsi"     Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14" />
+                <TextBox x:Name="BeginP0"      Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"     />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" Text="Cur.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                  />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"          />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="3" TextWrapping="Wrap" Text="Cur.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"              />
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" Text="delta K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" Text="delta Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" Text="delta Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" Text="delta P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" Text="Beg.K "    VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"            />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Kappa " VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"       />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Ksi "     VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="5" TextWrapping="Wrap" Text="Beg.P0 "    VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"         />
+
+                <TextBox x:Name="deltaK" HorizontalAlignment="Center"      Grid.Row="0" Text ="10^(-3) * K"    Grid.Column="4" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center" />
+                <TextBox x:Name="deltaKappa" HorizontalAlignment="Center"  Grid.Row="1" Text ="10^(-3) * Kappa"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"                 />
+                <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2" Text ="10^(-3) * Ksi"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"          />
+                <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3" Text ="10^(-3) * P0"    Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"       />
+
+                <CheckBox x:Name="UsedK"  Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0"  Grid.ColumnSpan="2"    FontSize="14"  Width="73"  />
+                <CheckBox x:Name="UsedKappa"  Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"  FontSize="14"  Width="87" Margin="77,6.4,62.4,7"/>
+                <CheckBox x:Name="UsedKsi"  Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="14"  Width="75"/>
+                <CheckBox x:Name="UsedP0"  Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"    FontSize="14"  Width="73"/>
+
+
+                <Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Command="{Binding NextStep}">
+                    <TextBlock Text="Next step"/>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource nextGradientConverter}" >
+                            <Binding Path="Text" ElementName="Lambda"/>
+                            <Binding Path="Text" ElementName="BeginK"/>
+                            <Binding Path="Text" ElementName="BeginKappa"/>
+                            <Binding Path="Text" ElementName="BeginKsi"/>
+                            <Binding Path="Text" ElementName="BeginP0"/>
+                            <Binding Path="Text" ElementName="deltaK"/>
+                            <Binding Path="Text" ElementName="deltaKappa"/>
+                            <Binding Path="Text" ElementName="deltaKsi"/>
+                            <Binding Path="Text" ElementName="deltaP0"/>
+                            <Binding Path="IsChecked" ElementName="UsedK"/>
+                            <Binding Path="IsChecked" ElementName="UsedKappa"/>
+                            <Binding Path="IsChecked" ElementName="UsedKsi"/>
+                            <Binding Path="IsChecked" ElementName="UsedP0"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
+                    <TextBlock Text="Previous Step"/>
+                </Button>
+                <Button x:Name="Save"   Command="{Binding PSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="8"   Grid.Column="4">
+                    <TextBlock Text="Save"/>
+                </Button>
+
+            </Grid>
+            <Grid x:Name="ListParameters" Grid.Row="1">
+                <utils:AutoScrollingListBox x:Name="gradientList" ItemTemplate="{StaticResource listTemplate}" 
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Visible"
-             ItemsSource="{Binding Gradients}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
+             ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </utils:AutoScrollingListBox>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

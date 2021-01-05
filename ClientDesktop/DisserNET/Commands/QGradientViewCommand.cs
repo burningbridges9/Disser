@@ -9,7 +9,20 @@ using System.Windows.Input;
 
 namespace DisserNET.Commands
 {
-    abstract public class QGradientViewCommand : ICommand
+    public class GradientCalculateHelper
+    {
+        string GetSubstring(object param) => param.ToString().Substring(GetStartIndexOfParam(param), GetLength(param));
+        int GetStartIndexOfParam(object param) => param.ToString().IndexOf('-');
+        int GetLength(object param) => param.ToString().IndexOf(')') - param.ToString().IndexOf('-');
+        protected void FillDeltas<TGrad>(object[] parameters, TGrad lastGrad) where TGrad : Gradient
+        {
+            lastGrad.DeltaK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15) * Math.Pow(10, Convert.ToDouble(GetSubstring(parameters[5])));
+            lastGrad.DeltaKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0) * Math.Pow(10, Convert.ToDouble(GetSubstring(parameters[6])));
+            lastGrad.DeltaKsi = Convert.ToDouble(parameters[3]) * Math.Pow(10, Convert.ToDouble(GetSubstring(parameters[7])));
+            lastGrad.DeltaP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6) * Math.Pow(10, Convert.ToDouble(GetSubstring(parameters[8])));
+        }
+    }
+    abstract public class QGradientViewCommand : GradientCalculateHelper, ICommand
     {
         protected QGradientViewModel _gvm;
         public QGradientViewCommand(QGradientViewModel gvm)
@@ -68,19 +81,7 @@ namespace DisserNET.Commands
             {
                 _gvm.GradientsAndConsumptions.Add(gradientAndConsumptions);
                 _gvm.Gradients.Add(gradientAndConsumptions.Grad);
-                _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
-            }
-
-            //local funcs
-            string getSubstring(object param) => param.ToString().Substring(getStartIndexOfParam(param), getLength(param));
-            int getStartIndexOfParam(object param) => param.ToString().IndexOf('-');
-            int getLength(object param) => param.ToString().IndexOf(')') - param.ToString().IndexOf('-');
-            void FillDeltas(object[] parameters, QGradient lastGrad)
-            {
-                lastGrad.DeltaK = Convert.ToDouble(parameters[1]) * Math.Pow(10.0, -15) * Math.Pow(10, Convert.ToDouble(getSubstring(parameters[5])));
-                lastGrad.DeltaKappa = Convert.ToDouble(parameters[2]) * (1.0 / 3600.0) * Math.Pow(10, Convert.ToDouble(getSubstring(parameters[6])));
-                lastGrad.DeltaKsi = Convert.ToDouble(parameters[3]) * Math.Pow(10, Convert.ToDouble(getSubstring(parameters[7])));
-                lastGrad.DeltaP0 = Convert.ToDouble(parameters[4]) * Math.Pow(10.0, 6) * Math.Pow(10, Convert.ToDouble(getSubstring(parameters[8])));
+                _gvm.SelectedGradient = _gvm.Gradients.Last();
             }
         }
 
@@ -114,7 +115,7 @@ namespace DisserNET.Commands
             {
                 _gvm.GradientsAndConsumptions.Remove(_gvm.GradientsAndConsumptions.First());
                 _gvm.Gradients.Remove(_gvm.GradientsAndConsumptions.First().Grad);
-                _gvm.SelectedGradient = _gvm.Gradients.Last() as QGradient;
+                _gvm.SelectedGradient = _gvm.Gradients.Last();
                 if (_gvm.GradientsAndConsumptions.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;
             }
