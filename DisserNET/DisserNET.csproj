@@ -25,10 +25,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MWArray">
-      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\MWArray\2.15.1.0__e1d84a0da19db86f\MWArray.dll</HintPath>
+      <HintPath>..\MatlabAssemblies\MWArray.dll</HintPath>
     </Reference>
     <Reference Include="Surface">
-      <HintPath>Surface\Surface.dll</HintPath>
+      <HintPath>..\MatlabAssemblies\Surface.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
