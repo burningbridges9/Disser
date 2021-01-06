@@ -2,7 +2,9 @@
 using DisserNET.Models;
 using DisserNET.ViewModels;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace DisserNET.Commands
@@ -57,7 +59,7 @@ namespace DisserNET.Commands
                 StepKsi = double.Parse(parameters[18]),
                 StepP0 = Math.Pow(10.0, 6) * double.Parse(parameters[19]),
                 Mode = mhvm.Mode,
-                SelectLogic = SelectLogic.BasedOnAccepted
+                SelectLogic = SelectLogic.AcceptAll
             };
             mhvm.MetropolisHastings = metropolisHastings;
         }
@@ -72,11 +74,13 @@ namespace DisserNET.Commands
 
         public override bool CanExecute(object parameter) => true;
 
-        public override void Execute(object parameter)
+        public async override void Execute(object parameter)
         {
-            mhvm.AcceptedValues = mhvm.Mode == Mode.Direct ?
-                Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.Mode) :
-                Functions.MetropolisHastingsAlgorithmForPressures(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.Mode);
+            Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.AcceptedValues, mhvm.Mode);
+            //if (mhvm.Mode == Mode.Direct)
+            //    await Task.Run(()=> Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.AcceptedValues, mhvm.Mode));
+            //else
+            //    Functions.MetropolisHastingsAlgorithmForPressures(mhvm.WellsList, mhvm.MetropolisHastings,  mhvm.Mode);
             mhvm.Save();
         }
     }

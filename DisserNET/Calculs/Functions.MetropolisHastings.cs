@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Random;
 using DisserNET.Calculs.Helpers;
+using System.Collections.ObjectModel;
 
 namespace DisserNET.Calculs
 {
     public partial class Functions
     {
-        public static List<AcceptedValueMH> MetropolisHastingsAlgorithmForConsumptions(WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode = Mode.Direct)
+        public static void MetropolisHastingsAlgorithmForConsumptions(WellsList wellsListCurrent, MetropolisHastings modelMH, ObservableCollection<AcceptedValueMH> acceptedValueMHs,  Mode mode = Mode.Direct)
         {
-            List<AcceptedValueMH> acceptedValueMHs = new List<AcceptedValueMH>();
-
             // Preparations
             // calculate some initial values
             wellsListCurrent.Wells.ForEach(x => x.Mode = mode);
@@ -309,6 +308,10 @@ namespace DisserNET.Calculs
                                         IncludedKsi = modelMH.IncludedKsi,
                                         IncludedP0 = modelMH.IncludedP0,
                                     };
+                                    //App.Current.Dispatcher.Invoke((Action)delegate
+                                    //{
+                                    //    acceptedValueMHs.Add(acceptedValue);
+                                    //});
                                     acceptedValueMHs.Add(acceptedValue);
                                 }
                                 break;
@@ -322,7 +325,7 @@ namespace DisserNET.Calculs
                     break;
             }
 
-            return acceptedValueMHs;
+            //return acceptedValueMHs;
         }
         public static List<AcceptedValueMH> MetropolisHastingsAlgorithmForPressures(WellsList wellsListCurrent, MetropolisHastings modelMH, Mode mode = Mode.Reverse)
         {

@@ -28,7 +28,7 @@ namespace DisserNET.Calculs
             var l = new List<AcceptedValueMH>();
             for (int i = 0; i < threadsNumber; i++)
             {
-                tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(() => MetropolisHastingsAlgorithmForConsumptions(wellsListCurrent, modelMH, mode), TaskCreationOptions.LongRunning));
+                //tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(() => MetropolisHastingsAlgorithmForConsumptions(wellsListCurrent, modelMH, mode), TaskCreationOptions.LongRunning));
             }
             var results = new List<AcceptedValueMH>();
             Task.WaitAll(tasks.ToArray());

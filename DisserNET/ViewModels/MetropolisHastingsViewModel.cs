@@ -3,6 +3,7 @@ using DisserNET.Models;
 using DisserNET.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace DisserNET.ViewModels
     {
         private MetropolisHastings metropolisHastings;
         public MetropolisHastings MetropolisHastings { get => metropolisHastings; set { metropolisHastings = value; OnPropertyChanged(prop: "MetropolisHastings"); } }
-        private List<AcceptedValueMH> acceptedValues;
-        public List<AcceptedValueMH> AcceptedValues { get => acceptedValues; set { acceptedValues = value; OnPropertyChanged(prop: "AcceptedValues"); } }
+        private ObservableCollection<AcceptedValueMH> acceptedValues;
+        public ObservableCollection<AcceptedValueMH> AcceptedValues { get => acceptedValues; set { acceptedValues = value; OnPropertyChanged(prop: "AcceptedValues"); } }
 
         public readonly ReportDb reportDb;
         public WellsList WellsList { get; private set; }
@@ -26,6 +27,7 @@ namespace DisserNET.ViewModels
         public MetropolisHastingsViewModel(ReportDb reportDb)
         {
             this.reportDb = reportDb;
+            AcceptedValues = new ObservableCollection<AcceptedValueMH>();
         }
 
         public void WellsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -34,7 +36,7 @@ namespace DisserNET.ViewModels
             WellsList = new WellsList(w);
         }
 
-        public void Save() => reportDb.WriteMHInfo(MetropolisHastings, AcceptedValues);
+        public void Save() => reportDb.WriteMHInfo(MetropolisHastings, AcceptedValues.ToList());
 
         #region Commands and Prop changed
         private ICommand _addMHCommand;

@@ -14,7 +14,7 @@ namespace DisserNET.Utils
     {
         private readonly string dailyFolderFormat = "report_{0:yyyy'-'MM'-'dd}";
         private readonly string experimentFolderFormat =
-            "exp_{0:yyyy'-'MM'-'dd'-'mm};k[{1}-{2}-{3}-{4}],kap[{5}-{6}-{7}-{8}],ksi[{9}-{10}-{11}-{12}],p0[{13}-{14}-{15}-{16}],WC[{17}],S_0[{18}],M[{19}],AL[{20}]";
+            "exp_{0:yyyy'-'MM'-'dd'-'hh'-'mm};k[{1}-{2}-{3}-{4}],kap[{5}-{6}-{7}-{8}],ksi[{9}-{10}-{11}-{12}],p0[{13}-{14}-{15}-{16}],WC[{17}],S_0[{18}],M[{19}],AL[{20}]";
         private readonly string root;
         private readonly string mhParamsNameAndExt = "MH_params.json";
         private readonly string mhAcceptedNameAndExt = "MH_results.json";

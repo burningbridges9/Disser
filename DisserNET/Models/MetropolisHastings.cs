@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace DisserNET.Models
@@ -53,6 +54,7 @@ namespace DisserNET.Models
         public bool IncludedP0 { get => includedP0; set { includedP0 = value; OnPropertyChanged("IncludedP0"); } }
         public bool IncludedKsi { get => includedKsi; set { includedKsi = value; OnPropertyChanged("IncludedKsi"); } }
         public SelectLogic SelectLogic { get => selectLogic; set { selectLogic = value; OnPropertyChanged("SelectLogic"); } }
+
         public Mode Mode { get => mode; set { mode = value; OnPropertyChanged("Mode"); } }
 
         public double S_0 { get => s_0; set { s_0 = value; OnPropertyChanged("S_0"); } }
