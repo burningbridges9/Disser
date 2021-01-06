@@ -1,13 +1,27 @@
-﻿using DisserNET.Models;
+﻿using DisserNET.Calculs;
+using DisserNET.Models;
 using DisserNET.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace DisserNET.Commands
 {
+    abstract public class MetropolisHastingsViewCommand : ICommand
+    {
+        protected MetropolisHastingsViewModel mhvm;
+        public MetropolisHastingsViewCommand(MetropolisHastingsViewModel metropolisHastingsViewModel)
+        {
+            this.mhvm = metropolisHastingsViewModel;
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public abstract bool CanExecute(object parameter);
+
+        public abstract void Execute(object parameter);
+    }
+
     public class AddMHCommand : MetropolisHastingsViewCommand
     {
         public AddMHCommand(MetropolisHastingsViewModel vm) : base(vm)
@@ -19,7 +33,7 @@ namespace DisserNET.Commands
 
         public override void Execute(object parameter)
         {
-            string[] parameters = ((object[])parameter).Select(p=>p.ToString()).ToArray();
+            string[] parameters = ((object[])parameter).Select(p => p.ToString()).ToArray();
             MetropolisHastings metropolisHastings = new MetropolisHastings()
             {
                 WalksCount = int.Parse(parameters[0]),
@@ -46,6 +60,24 @@ namespace DisserNET.Commands
                 SelectLogic = SelectLogic.BasedOnAccepted
             };
             mhvm.MetropolisHastings = metropolisHastings;
+        }
+    }
+
+    public class StartMHCommand : MetropolisHastingsViewCommand
+    {
+        public StartMHCommand(MetropolisHastingsViewModel vm) : base(vm)
+        {
+
+        }
+
+        public override bool CanExecute(object parameter) => true;
+
+        public override void Execute(object parameter)
+        {
+            mhvm.AcceptedValues = mhvm.Mode == Mode.Direct ?
+                Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.Mode) :
+                Functions.MetropolisHastingsAlgorithmForPressures(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.Mode);
+            mhvm.Save();
         }
     }
 }
