@@ -1,4 +1,5 @@
-﻿using DisserNET.ViewModels;
+﻿using DisserNET.Utils;
+using DisserNET.ViewModels;
 using DisserNET.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +43,7 @@ namespace DisserNET
             services.AddSingleton<PGradientViewModel>();
             services.AddSingleton<SurfaceViewModel>();
             services.AddSingleton<MainViewModel>();
-
+            services.AddSingleton<ReportDb>();
             services.AddSingleton<MainWindow>();
         }
 

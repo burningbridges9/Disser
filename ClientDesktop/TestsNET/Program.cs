@@ -1,5 +1,6 @@
 ﻿using DisserNET.Calculs;
 using DisserNET.Models;
+using DisserNET.Utils;
 using MathNet.Numerics.Random;
 using Newtonsoft.Json;
 using System;
@@ -17,7 +18,7 @@ namespace TestsNET
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             //TestParallelMH();
-            TestMH();
+            //TestMH();
             //RestoreFromFile();
         }
         //полный опрос, 4 варианта !!!!!!!
