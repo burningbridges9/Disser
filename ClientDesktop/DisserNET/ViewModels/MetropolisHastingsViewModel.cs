@@ -1,7 +1,9 @@
 ﻿using DisserNET.Commands;
 using DisserNET.Models;
+using DisserNET.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,16 +16,27 @@ namespace DisserNET.ViewModels
     public class MetropolisHastingsViewModel : INotifyPropertyChanged
     {
         private MetropolisHastings metropolisHastings;
-
         public MetropolisHastings MetropolisHastings { get => metropolisHastings; set { metropolisHastings = value; OnPropertyChanged(prop: "MetropolisHastings"); } }
+        private List<AcceptedValueMH> acceptedValues;
+        public List<AcceptedValueMH> AcceptedValues { get => acceptedValues; set { acceptedValues = value; OnPropertyChanged(prop: "AcceptedValues"); } }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        public readonly ReportDb reportDb;
+        public WellsList WellsList { get; private set; }
+        public Mode Mode => WellsList?.Wells?.FirstOrDefault()?.Mode ?? 0;
+        public MetropolisHastingsViewModel(ReportDb reportDb)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            this.reportDb = reportDb;
         }
 
+        public void WellsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            List<Well> w = (sender as IEnumerable<Well>).ToList();
+            WellsList = new WellsList(w);
+        }
 
+        public void Save() => reportDb.WriteMHInfo(MetropolisHastings, AcceptedValues);
+
+        #region Commands and Prop changed
         private ICommand _addMHCommand;
         public ICommand Add
         {
@@ -38,6 +51,7 @@ namespace DisserNET.ViewModels
         }
 
         private ICommand _startMHCommand;
+
         public ICommand Start
         {
             get
@@ -49,5 +63,11 @@ namespace DisserNET.ViewModels
                 return _startMHCommand;
             }
         }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        #endregion
     }
 }

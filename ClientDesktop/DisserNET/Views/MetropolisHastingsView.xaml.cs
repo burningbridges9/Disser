@@ -8,11 +8,8 @@ namespace DisserNET.Views
     /// </summary>
     public partial class MetropolisHastingsView : UserControl
     {
-        public MetropolisHastingsViewModel metropolisHastingsViewModel;
         public MetropolisHastingsView()
         {
-            metropolisHastingsViewModel = new MetropolisHastingsViewModel();
-            DataContext = metropolisHastingsViewModel;
             InitializeComponent();
         }
     }

@@ -38,12 +38,14 @@ namespace DisserNET
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<ReportDb>();
             services.AddSingleton<WellViewModel>();
             services.AddSingleton<QGradientViewModel>();
             services.AddSingleton<PGradientViewModel>();
             services.AddSingleton<SurfaceViewModel>();
+            services.AddSingleton<MetropolisHastingsViewModel>();
             services.AddSingleton<MainViewModel>();
-            services.AddSingleton<ReportDb>();
             services.AddSingleton<MainWindow>();
         }
 

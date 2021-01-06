@@ -10,13 +10,15 @@ namespace DisserNET.ViewModels
         public QGradientViewModel QGradientViewModel { get; set; }
         public PGradientViewModel PGradientViewModel { get; set; }
         public SurfaceViewModel SurfaceViewModel { get; set; }
-        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, PGradientViewModel pGradientViewModel, SurfaceViewModel surfaceViewModel)
+        public MetropolisHastingsViewModel MetropolisHastingsViewModel { get; }
+
+        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, PGradientViewModel pGradientViewModel, SurfaceViewModel surfaceViewModel, MetropolisHastingsViewModel metropolisHastingsViewModel)
         {
             this.WellViewModel = wellViewModel;
             this.QGradientViewModel = qGradientViewModel;
             this.PGradientViewModel = pGradientViewModel;
             this.SurfaceViewModel = surfaceViewModel;
-
+            this.MetropolisHastingsViewModel = metropolisHastingsViewModel;
             BindPostActionsToCommands();
         }
 
@@ -29,6 +31,8 @@ namespace DisserNET.ViewModels
             this.WellViewModel.Wells.CollectionChanged += this.QGradientViewModel.WellsChanged;
             (this.WellViewModel.CalculateConsumptions as CalculateConsumptionsCommand).CommandExecuted += this.QGradientViewModel.ConsumptionsCalculated;
             (this.WellViewModel.Clear as ClearCommand).CommandExecuted += this.QGradientViewModel.CleanUp;
+
+            this.WellViewModel.Wells.CollectionChanged += this.MetropolisHastingsViewModel.WellsChanged;
         }
 
         #region PropertyChanged

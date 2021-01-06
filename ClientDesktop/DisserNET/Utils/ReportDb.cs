@@ -26,7 +26,7 @@ namespace DisserNET.Utils
 
         public ReportDb(IConfiguration configuration)
         {
-            root = configuration.GetValue(typeof(string), "MHReportsPath").ToString() ?? "C:\\Users\\Rustam\\Desktopfsfsfs\\Master\\MHReports";
+            root = configuration.GetValue<string>("AppSettings:MHReportsPath")?.ToString() ?? "C:\\Users\\Rustam\\Desktopfsfsfs\\Master\\MHReports";
         }
 
         public void WriteMHInfo(MetropolisHastings mh, List<AcceptedValueMH> acceptedValues)

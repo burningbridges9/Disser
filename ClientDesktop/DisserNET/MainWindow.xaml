@@ -35,7 +35,7 @@
                 </TabItem>
                 <TabItem x:Name="MHTI" Width="190" Height="50" Header="Metropolis-Hastings" FontSize="20">
                     <Grid>
-                        <pr:MetropolisHastingsView x:Name="MHView" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
+                        <pr:MetropolisHastingsView x:Name="MHView" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2" DataContext="{Binding MetropolisHastingsViewModel}"/>
                     </Grid>
                 </TabItem>
             </TabControl>

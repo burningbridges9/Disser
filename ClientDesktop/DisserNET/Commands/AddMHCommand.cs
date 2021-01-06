@@ -42,8 +42,10 @@ namespace DisserNET.Commands
                 StepKappa = (1.0 / 3600.0) * double.Parse(parameters[17]),
                 StepKsi = double.Parse(parameters[18]),
                 StepP0 = Math.Pow(10.0, 6) * double.Parse(parameters[19]),
+                Mode = mhvm.Mode,
+                SelectLogic = SelectLogic.BasedOnAccepted
             };
-            metropolisHastingsViewModel.MetropolisHastings = metropolisHastings;
+            mhvm.MetropolisHastings = metropolisHastings;
         }
     }
 }

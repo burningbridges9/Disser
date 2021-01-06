@@ -10,10 +10,10 @@ namespace DisserNET.Commands
 {
     abstract public class MetropolisHastingsViewCommand : ICommand
     {
-        protected MetropolisHastingsViewModel metropolisHastingsViewModel;
+        protected MetropolisHastingsViewModel mhvm;
         public MetropolisHastingsViewCommand(MetropolisHastingsViewModel metropolisHastingsViewModel)
         {
-            this.metropolisHastingsViewModel = metropolisHastingsViewModel;
+            this.mhvm = metropolisHastingsViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
