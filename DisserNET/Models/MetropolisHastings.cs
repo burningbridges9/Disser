@@ -29,6 +29,7 @@ namespace DisserNET.Models
         private double c;
         private SelectLogic selectLogic;
         private Mode mode;
+        private MoveLogic moveLogic;
         #endregion
 
         public int WalksCount { get => walksCount; set { walksCount = value; OnPropertyChanged("WalksCount"); } }
@@ -54,6 +55,7 @@ namespace DisserNET.Models
         public bool IncludedP0 { get => includedP0; set { includedP0 = value; OnPropertyChanged("IncludedP0"); } }
         public bool IncludedKsi { get => includedKsi; set { includedKsi = value; OnPropertyChanged("IncludedKsi"); } }
         public SelectLogic SelectLogic { get => selectLogic; set { selectLogic = value; OnPropertyChanged("SelectLogic"); } }
+        public MoveLogic MoveLogic { get => moveLogic; set { moveLogic = value; OnPropertyChanged("MoveLogic"); } }
 
         public Mode Mode { get => mode; set { mode = value; OnPropertyChanged("Mode"); } }
 
@@ -72,5 +74,13 @@ namespace DisserNET.Models
         BasedOnAccepted,
         BasedOnWalks,
         AcceptAll,
+    }
+
+    public enum MoveLogic
+    {
+        Cyclic,
+        StickToBorder,
+        StepBack,
+        Reject,
     }
 }

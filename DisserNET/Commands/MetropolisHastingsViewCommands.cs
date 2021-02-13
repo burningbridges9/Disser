@@ -59,7 +59,8 @@ namespace DisserNET.Commands
                 StepKsi = double.Parse(parameters[18]),
                 StepP0 = Math.Pow(10.0, 6) * double.Parse(parameters[19]),
                 Mode = mhvm.Mode,
-                SelectLogic = SelectLogic.AcceptAll
+                SelectLogic = SelectLogic.AcceptAll,
+                MoveLogic = MoveLogic.Cyclic,
             };
             mhvm.MetropolisHastings = metropolisHastings;
         }
@@ -76,7 +77,7 @@ namespace DisserNET.Commands
 
         public async override void Execute(object parameter)
         {
-            Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.AcceptedValues, mhvm.Mode);
+            Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.AcceptedValues.ToList(), mhvm.Mode);
             //if (mhvm.Mode == Mode.Direct)
             //    await Task.Run(()=> Functions.MetropolisHastingsAlgorithmForConsumptions(mhvm.WellsList, mhvm.MetropolisHastings, mhvm.AcceptedValues, mhvm.Mode));
             //else

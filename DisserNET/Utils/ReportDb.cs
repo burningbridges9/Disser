@@ -14,7 +14,7 @@ namespace DisserNET.Utils
     {
         private readonly string dailyFolderFormat = "report_{0:yyyy'-'MM'-'dd}";
         private readonly string experimentFolderFormat =
-            "exp_{0:yyyy'-'MM'-'dd'-'hh'-'mm};k[{1}-{2}-{3}-{4}],kap[{5}-{6}-{7}-{8}],ksi[{9}-{10}-{11}-{12}],p0[{13}-{14}-{15}-{16}],WC[{17}],S_0[{18}],M[{19}],AL[{20}]";
+            "exp_{0:yyyy'-'MM'-'dd'-'hh'-'mm};k[{1}-{2}-{3}-{4}],kap[{5}-{6}-{7}-{8}],ksi[{9}-{10}-{11}-{12}],p0[{13}-{14}-{15}-{16}],WC[{17}],S_0[{18}],M[{19}],AL[{20}],ML[{21}]";
         private readonly string root;
         private readonly string mhParamsNameAndExt = "MH_params.json";
         private readonly string mhAcceptedNameAndExt = "MH_results.json";
@@ -26,7 +26,7 @@ namespace DisserNET.Utils
 
         public ReportDb(IConfiguration configuration)
         {
-            root = configuration.GetValue<string>("AppSettings:MHReportsPath")?.ToString() ?? "C:\\Users\\Rustam\\Desktopfsfsfs\\Master\\MHReports";
+            root = configuration?.GetValue<string>("AppSettings:MHReportsPath")?.ToString() ?? "C:\\Users\\Rustam\\Desktop\\Master\\MHReports";
         }
 
         public void WriteMHInfo(MetropolisHastings mh, List<AcceptedValueMH> acceptedValues)
@@ -35,11 +35,11 @@ namespace DisserNET.Utils
             CheckCreated(dir);
 
             var expFolderName = string.Format(experimentFolderFormat, DateTime.Now,
-                mh.MinK, mh.MaxK, mh.StepK, mh.IncludedK,
-                mh.MinKappa, mh.MaxKappa, mh.StepKappa, mh.IncludedKappa,
+                Calculs.Converter.ConvertBack(mh.MinK,Calculs.ValueToConvert.K) , Calculs.Converter.ConvertBack(mh.MaxK, Calculs.ValueToConvert.K), mh.StepK, mh.IncludedK,
+                Calculs.Converter.ConvertBack(mh.MinKappa, Calculs.ValueToConvert.Kappa), Calculs.Converter.ConvertBack(mh.MaxKappa, Calculs.ValueToConvert.Kappa), mh.StepKappa, mh.IncludedKappa,
                 mh.MinKsi, mh.MaxKsi, mh.StepKsi, mh.IncludedKsi,
-                mh.MinP0, mh.MaxP0, mh.StepP0, mh.IncludedP0,
-                mh.WalksCount, mh.S_0, mh.Mode, mh.SelectLogic);
+                Calculs.Converter.ConvertBack(mh.MinP0, Calculs.ValueToConvert.P), Calculs.Converter.ConvertBack(mh.MaxP0, Calculs.ValueToConvert.P), mh.StepP0, mh.IncludedP0,
+                mh.WalksCount, mh.S_0, mh.Mode, mh.SelectLogic, mh.MoveLogic);
 
             var expFolderDir = Path.Combine(dir, expFolderName);
             CheckCreated(expFolderDir);
