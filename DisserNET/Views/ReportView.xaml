@@ -37,8 +37,8 @@
             </Grid.ColumnDefinitions>
             <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="AcceptedCount" VerticalAlignment="Center"  FontSize="14"/>
             <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="F->min"   VerticalAlignment="Center"  FontSize="14"/>
-            <TextBlock   Text = "{Binding Path=AcceptedValueMH.AcceptedCount, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center"       />
-            <TextBlock   Text = "{Binding Path=AcceptedValueMH.Fmin, UpdateSourceTrigger=PropertyChanged}" FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" />
+            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.AcceptedCount, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center"       />
+            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.Fmin, UpdateSourceTrigger=PropertyChanged}" FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" />
 
             <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
             <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
@@ -49,12 +49,12 @@
             <Button HorizontalAlignment="Center" x:Name="SubmitAdd" Grid.Row="8"  Grid.Column="0" Command="{Binding SelectFolder}">
                 <TextBlock Text="Select folder"/>
             </Button>
-            <TextBlock   HorizontalAlignment="Center"     Text="{Binding Path=AcceptedValueMH.K, Converter={StaticResource kConverter}, UpdateSourceTrigger=PropertyChanged}"      Grid.Row="2"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
-            <TextBlock   HorizontalAlignment="Center" Text="{Binding Path=AcceptedValueMH.Kappa, Converter={StaticResource kappaConverter}, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3"      Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"                 />
-            <TextBlock   HorizontalAlignment="Center"   Text="{Binding Path=AcceptedValueMH.Ksi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="4"    Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"          />
-            <TextBlock   HorizontalAlignment="Center"    Text="{Binding Path=AcceptedValueMH.P0, Converter={StaticResource pConverter}, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="5"   Grid.Column="1" TextWrapping="Wrap"     VerticalAlignment="Center"     FontSize="14" TextAlignment="Center"       />
-            <TextBox       Text="{Binding Path=Comment, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="6"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
-            <TextBox        Text="{Binding Path=FolderPath, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="7"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBlock   HorizontalAlignment="Center"     Text="{Binding Path=ReportModel.AcceptedValueMH.K, UpdateSourceTrigger=PropertyChanged}"      Grid.Row="2"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBlock   HorizontalAlignment="Center" Text="{Binding Path=ReportModel.AcceptedValueMH.Kappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3"      Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"                 />
+            <TextBlock   HorizontalAlignment="Center"   Text="{Binding Path=ReportModel.AcceptedValueMH.Ksi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="4"    Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"          />
+            <TextBlock   HorizontalAlignment="Center"    Text="{Binding Path=ReportModel.AcceptedValueMH.P0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="5"   Grid.Column="1" TextWrapping="Wrap"     VerticalAlignment="Center"     FontSize="14" TextAlignment="Center"       />
+            <TextBox       Text="{Binding Path=ReportModel.Comment, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="6"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBlock        Text="{Binding Path=ReportModel.FolderPath, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="7"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -86,25 +86,25 @@
                     <ColumnDefinition Width="100*"/>
                     <ColumnDefinition Width="129*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TextBoxMinK" Text="8" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBox x:Name="TextBoxMaxK" Text="11" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxMinKappa" Text="1" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxKappa" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMinKsi" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxKsi" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxMinP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxP0" Text="3" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="TextBoxMinK" Text="{Binding Path=ReportModel.MetropolisHastings.MinK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+                <TextBlock x:Name="TextBoxMaxK" Text="{Binding Path=ReportModel.MetropolisHastings.MaxK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="TextBoxMinKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MinKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="TextBoxMaxKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="TextBoxMinKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MinKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="TextBoxMaxKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="TextBoxMinP0" Text="{Binding Path=ReportModel.MetropolisHastings.MinP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="TextBoxMaxP0" Text="{Binding Path=ReportModel.MetropolisHastings.MaxP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
 
 
 
-                <CheckBox x:Name="IncludeK" IsChecked="{Binding Path=MetropolisHastings.IncludeK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
-                <TextBox x:Name="StepK" Text="{Binding Path=MetropolisHastings.StepK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
-                <CheckBox x:Name="IncludeKappa" IsChecked="{Binding Path=MetropolisHastings.IncludeKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
-                <TextBox x:Name="StepKappa" Text="{Binding Path=MetropolisHastings.StepKappa, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <CheckBox x:Name="IncludeKsi"  IsChecked="{Binding Path=MetropolisHastings.IncludeKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
-                <TextBox x:Name="StepKsi" Text="{Binding Path=MetropolisHastings.StepKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <CheckBox x:Name="IncludeP0" IsChecked="{Binding Path=MetropolisHastings.IncludeP0, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
-                <TextBox x:Name="StepP0" Text="{Binding Path=MetropolisHastings.StepP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <CheckBox x:Name="IncludeK" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
+                <TextBlock x:Name="StepK" Text="{Binding Path=ReportModel.MetropolisHastings.StepK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <CheckBox x:Name="IncludeKappa" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
+                <TextBlock x:Name="StepKappa" Text="{Binding Path=ReportModel.MetropolisHastings.StepKappa, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <CheckBox x:Name="IncludeKsi"  IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
+                <TextBlock x:Name="StepKsi" Text="{Binding Path=ReportModel.MetropolisHastings.StepKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <CheckBox x:Name="IncludeP0" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeP0, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
+                <TextBlock x:Name="StepP0" Text="{Binding Path=ReportModel.MetropolisHastings.StepP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Min K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Max K"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Min Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
@@ -144,10 +144,10 @@
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="8" TextWrapping="Wrap" Text="Ns"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="8" TextWrapping="Wrap" Text="C" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="8" TextWrapping="Wrap" Text="S_0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBox x:Name="Walks" Text="{Binding Path=MetropolisHastings.WalksCount, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBox x:Name="Ns" Text="{Binding Path=MetropolisHastings.Ns, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="C" Text="{Binding Path=MetropolisHastings.C, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="S_0" Text="{Binding Path=MetropolisHastings.S_0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="Walks" Text="{Binding Path=ReportModel.MetropolisHastings.WalksCount, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+                <TextBlock x:Name="Ns" Text="{Binding Path=ReportModel.MetropolisHastings.Ns, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="C" Text="{Binding Path=ReportModel.MetropolisHastings.C, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock x:Name="S_0" Text="{Binding Path=ReportModel.MetropolisHastings.S_0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
             </Grid>
         </Grid>
     </Grid>

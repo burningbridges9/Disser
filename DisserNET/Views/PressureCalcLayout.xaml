@@ -186,7 +186,7 @@
                 <TextBox x:Name="TextBoxP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxT1" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxT2" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxN" Text="100" Grid.Column="1"  HorizontalAlignment="Center" Height="23"             Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxN" Text="50" Grid.Column="1"  HorizontalAlignment="Center" Height="23"             Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
                 <TextBox x:Name="TextBoxCalculatedP" Text="{Binding Path=SelectedWell.CalcMP, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxCalculatedQ" Text="{Binding Path=SelectedWell.CalcMQ, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
 

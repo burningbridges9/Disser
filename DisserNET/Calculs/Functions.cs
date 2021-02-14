@@ -1127,7 +1127,8 @@ namespace DisserNET.Calculs
                         Fmin = Math.Pow((gradientWells[0].P - Pk1.Pressures1f.Last()), 2)
                                 + Math.Pow((gradientWells[1].P - Pk1.Pressures2f.Last()), 2)
                                 + Math.Pow((gradientWells[2].P - Pk1.Pressures3.Last()), 2);
-                        Fmin = Math.Sqrt(Fmin / (Math.Pow(gradientWells[0].P, 2) + Math.Pow(gradientWells[1].P, 2) + Math.Pow(gradientWells[2].P, 2)));
+                        Fmin = (Fmin / (Math.Pow(gradientWells[0].P, 2) + Math.Pow(gradientWells[1].P, 2) + Math.Pow(gradientWells[2].P, 2)));
+                      
                         break;
 
                 }

@@ -56,7 +56,8 @@ namespace DisserNET.Commands
                     if (mhComment == null)
                     {
                         mhComment = Path.Combine(Path.GetDirectoryName(mhParams), rvm.reportDb.MhCommentNameAndExt);
-                        File.Create(mhComment);                        
+                        //File.Create(mhComment);
+                        //File.
                     }
 
                     rvm.ReportModel = new ReportModel(mhParams, mhRes, mhComment);
