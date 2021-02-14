@@ -1,0 +1,154 @@
+﻿<UserControl x:Class="DisserNET.Views.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisserNET.Views"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:Converter="clr-namespace:DisserNET.ValueConverters" xmlns:utils="clr-namespace:DisserNET.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Converter:AddWellConverter x:Key="addWellConverter"/>
+        <Converter:KConverter x:Key="kConverter" />
+        <Converter:KappaConverter x:Key="kappaConverter" />
+        <Converter:PConverter x:Key="pConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="79*"></ColumnDefinition>
+                <ColumnDefinition Width="110*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="AcceptedCount" VerticalAlignment="Center"  FontSize="14"/>
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="F->min"   VerticalAlignment="Center"  FontSize="14"/>
+            <TextBlock   Text = "{Binding Path=AcceptedValueMH.AcceptedCount, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center"       />
+            <TextBlock   Text = "{Binding Path=AcceptedValueMH.Fmin, UpdateSourceTrigger=PropertyChanged}" FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" />
+
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Comment" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
+            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Folder" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
+            <Button HorizontalAlignment="Center" x:Name="SubmitAdd" Grid.Row="8"  Grid.Column="0" Command="{Binding SelectFolder}">
+                <TextBlock Text="Select folder"/>
+            </Button>
+            <TextBlock   HorizontalAlignment="Center"     Text="{Binding Path=AcceptedValueMH.K, Converter={StaticResource kConverter}, UpdateSourceTrigger=PropertyChanged}"      Grid.Row="2"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBlock   HorizontalAlignment="Center" Text="{Binding Path=AcceptedValueMH.Kappa, Converter={StaticResource kappaConverter}, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3"      Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"                 />
+            <TextBlock   HorizontalAlignment="Center"   Text="{Binding Path=AcceptedValueMH.Ksi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="4"    Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"          />
+            <TextBlock   HorizontalAlignment="Center"    Text="{Binding Path=AcceptedValueMH.P0, Converter={StaticResource pConverter}, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="5"   Grid.Column="1" TextWrapping="Wrap"     VerticalAlignment="Center"     FontSize="14" TextAlignment="Center"       />
+            <TextBox       Text="{Binding Path=Comment, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="6"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBox        Text="{Binding Path=FolderPath, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="7"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" x:Name="Parameters">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="114*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="114*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="114*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="129*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TextBoxMinK" Text="8" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+                <TextBox x:Name="TextBoxMaxK" Text="11" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxMinKappa" Text="1" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="TextBoxMaxKappa" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="TextBoxMinKsi" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="TextBoxMaxKsi" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxMinP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="TextBoxMaxP0" Text="3" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
+
+
+
+                <CheckBox x:Name="IncludeK" IsChecked="{Binding Path=MetropolisHastings.IncludeK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
+                <TextBox x:Name="StepK" Text="{Binding Path=MetropolisHastings.StepK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <CheckBox x:Name="IncludeKappa" IsChecked="{Binding Path=MetropolisHastings.IncludeKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
+                <TextBox x:Name="StepKappa" Text="{Binding Path=MetropolisHastings.StepKappa, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <CheckBox x:Name="IncludeKsi"  IsChecked="{Binding Path=MetropolisHastings.IncludeKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
+                <TextBox x:Name="StepKsi" Text="{Binding Path=MetropolisHastings.StepKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <CheckBox x:Name="IncludeP0" IsChecked="{Binding Path=MetropolisHastings.IncludeP0, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
+                <TextBox x:Name="StepP0" Text="{Binding Path=MetropolisHastings.StepP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Min K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Max K"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Min Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Max Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="Min Ksi" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="Max Ksi"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Min P0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Max P0"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="4" TextWrapping="Wrap" Text="Include K"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="4" TextWrapping="Wrap" Text="Step K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" Text="Include Kappa"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="4" TextWrapping="Wrap" Text="Step Kappa"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="4" TextWrapping="Wrap" Text="Include Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="4" TextWrapping="Wrap" Text="Step Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="4" TextWrapping="Wrap" Text="Include P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="4" TextWrapping="Wrap" Text="Step P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="6" TextWrapping="Wrap" Text=""   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="6" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" Text=""    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="6" TextWrapping="Wrap" Text="м^2/ч"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text=""     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="-"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="8" TextWrapping="Wrap" Text="Walks" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="8" TextWrapping="Wrap" Text="Ns"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="8" TextWrapping="Wrap" Text="C" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="8" TextWrapping="Wrap" Text="S_0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBox x:Name="Walks" Text="{Binding Path=MetropolisHastings.WalksCount, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+                <TextBox x:Name="Ns" Text="{Binding Path=MetropolisHastings.Ns, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="C" Text="{Binding Path=MetropolisHastings.C, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="S_0" Text="{Binding Path=MetropolisHastings.S_0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -45,6 +45,7 @@ namespace DisserNET
             services.AddSingleton<PGradientViewModel>();
             services.AddSingleton<SurfaceViewModel>();
             services.AddSingleton<MetropolisHastingsViewModel>();
+            services.AddSingleton<ReportViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
         }

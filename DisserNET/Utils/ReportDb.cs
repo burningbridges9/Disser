@@ -18,11 +18,17 @@ namespace DisserNET.Utils
         private readonly string root;
         private readonly string mhParamsNameAndExt = "MH_params.json";
         private readonly string mhAcceptedNameAndExt = "MH_results.json";
+        private readonly string mhCommentNameAndExt = "MH_Comment.txt";
         private readonly string KValsNameAndExt = "K.txt";
         private readonly string KappaValsNameAndExt = "Kappa.txt";
         private readonly string KsiValsNameAndExt = "Ksi.txt";
         private readonly string P0ValsNameAndExt = "P0.txt";
         private readonly string FminValsNameAndExt = "Fmin.txt";
+
+        public string BaseDir => root;
+        public string MhParamsNameAndExt => mhParamsNameAndExt; 
+        public string MhAcceptedNameAndExt => mhAcceptedNameAndExt;
+        public string MhCommentNameAndExt => mhCommentNameAndExt;
 
         public ReportDb(IConfiguration configuration)
         {
@@ -43,8 +49,10 @@ namespace DisserNET.Utils
 
             var expFolderDir = Path.Combine(dir, expFolderName);
             CheckCreated(expFolderDir);
-            WrapAndWriteJson<MetropolisHastings>(mh, expFolderDir, mhParamsNameAndExt);
-            WrapAndWriteJson<AcceptedValueMH>(acceptedValues.LastOrDefault(), expFolderDir, mhAcceptedNameAndExt);
+            WrapAndWriteJson<MetropolisHastings>(mh.GetNormalized(), expFolderDir, mhParamsNameAndExt);
+            var result = acceptedValues.SingleOrDefault(x => x.Fmin == acceptedValues.Select(x => x.Fmin).Min()).GetNormalized();
+            result.AcceptedCount = acceptedValues.Last().AcceptedCount;
+            WrapAndWriteJson<AcceptedValueMH>(result, expFolderDir, mhAcceptedNameAndExt);
 
             if (mh.IncludedK)
                 WriteValues(acceptedValues.Select(a => a.K).ToList(), Math.Pow(10.0, 15), expFolderDir, KValsNameAndExt);
@@ -69,8 +77,6 @@ namespace DisserNET.Utils
             using StreamWriter sw = new StreamWriter(Path.Combine(dir, nameAndExt), false, Encoding.Default);
             v.ForEach(val => sw.Write(val * c + " "));
         }
-
-
 
         void CheckCreated(string dir)
         {

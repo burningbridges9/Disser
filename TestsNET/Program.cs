@@ -18,46 +18,49 @@ namespace TestsNET
         static void Main(string[] args)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            //TestParallelMH();
-            TestMH();
-            //RestoreFromFile();
+
+
+#pragma warning disable CA1416 // Validate platform compatibility
+            //MetropolisHastings modelMH = new MetropolisHastings()
+            //{
+            //    C = 1,
+            //    WalksCount = 10, // 250000, 500000 
+            //    Ns = 10,
+            //    S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
+            //    IncludedK = true,
+            //    IncludedKappa = true,
+            //    IncludedKsi = false,
+            //    IncludedP0 = false,
+
+            //    MinK = Math.Pow(10.0, -15) * 7.5,
+            //    MinKappa = (1.0 / 3600.0) * 0.5,
+            //    MinKsi = 0,
+            //    MinP0 = Math.Pow(10.0, 6) * 2,
+
+            //    MaxK = Math.Pow(10.0, -15) * 9.5,
+            //    MaxKappa = (1.0 / 3600.0) * 3.5,
+            //    MaxKsi = 0,
+            //    MaxP0 = Math.Pow(10.0, 6) * 4,
+
+            //    StepK = Math.Pow(10.0, -15) * 0.1,
+            //    StepKappa = (1.0 / 3600.0) * 0.15,
+            //    StepKsi = 0,
+            //    StepP0 = Math.Pow(10.0, 6) * 2,
+
+            //    SelectLogic = SelectLogic.AcceptAll,
+            //    Mode = Mode.Direct,
+            //    MoveLogic = MoveLogic.Cyclic
+            //};
+            //TestMH(modelMH);
+
+            SerialTest();
         }
-        //полный опрос, 4 варианта !!!!!!!
-        //
-        private static void TestMH()
+
+
+        private static void TestMH(MetropolisHastings modelMH)
         {
             ReportDb reportDb = new ReportDb(null);
 #pragma warning disable CA1416 // Validate platform compatibility
-            MetropolisHastings modelMH = new MetropolisHastings()
-            {
-                C = 1,
-                WalksCount = 500000, // 250000, 500000 
-                Ns = 10,
-                S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
-                IncludedK = true,
-                IncludedKappa = true,
-                IncludedKsi = false,
-                IncludedP0 = false,
-
-                MinK = Math.Pow(10.0, -15) * 8,
-                MinKappa = (1.0 / 3600.0) * 3,
-                MinKsi = 0,
-                MinP0 = Math.Pow(10.0, 6) * 2,
-
-                MaxK = Math.Pow(10.0, -15) * 12,
-                MaxKappa = (1.0 / 3600.0) * 5,
-                MaxKsi = 0,
-                MaxP0 = Math.Pow(10.0, 6) * 4,
-
-                StepK = Math.Pow(10.0, -15) * 0.4,
-                StepKappa = (1.0 / 3600.0) * 0.2,
-                StepKsi = 0,
-                StepP0 = Math.Pow(10.0, 6) * 2,
-
-                SelectLogic = SelectLogic.BasedOnAccepted,
-                Mode = Mode.Direct,
-                MoveLogic = MoveLogic.Cyclic
-            };
             Mode mode = Mode.Direct;
             WellsList wellsList = new WellsList(GetWells());
             //var list = Functions.MetropolisHastingsAlgorithmForPressures(wellsList, modelMH, mode);
@@ -212,6 +215,401 @@ namespace TestsNET
                 wells.Add(well);
             }
             return wells;
+        }
+
+
+
+        static void SerialTest()
+        {
+            List<MetropolisHastings> l = new List<MetropolisHastings>()
+            {
+#region 14_02_2021
+                //// 0.0002
+                //// 20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                //// 30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 2,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 3,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0002, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+
+                //// 0.0001
+                //// 20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                //// 30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 2,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 3,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.0001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+
+                // // 0.001
+                //// 20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                //// 30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 7.5,
+                //    MinKappa = (1.0 / 3600.0) * 0.5,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 2,
+
+                //    MaxK = Math.Pow(10.0, -15) * 9.5,
+                //    MaxKappa = (1.0 / 3600.0) * 3.5,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (9.5-7.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (3.5-0.5)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 3,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////20x20
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/20.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/20.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+                ////30x30
+                //new MetropolisHastings()
+                //{
+                //    C = 1,
+                //    WalksCount = 500000, // 250000, 500000 
+                //    Ns = 10,
+                //    S_0 = 0.001, // 0.015; 0.04; 0.025 // 0.01; 0.005
+                //    IncludedK = true,
+                //    IncludedKappa = true,
+                //    IncludedKsi = false,
+                //    IncludedP0 = false,
+
+                //    MinK = Math.Pow(10.0, -15) * 9.5,
+                //    MinKappa = (1.0 / 3600.0) * 2.0,
+                //    MinKsi = 0,
+                //    MinP0 = Math.Pow(10.0, 6) * 3,
+
+                //    MaxK = Math.Pow(10.0, -15) * 10.5,
+                //    MaxKappa = (1.0 / 3600.0) * 4.0,
+                //    MaxKsi = 0,
+                //    MaxP0 = Math.Pow(10.0, 6) * 3,
+
+                //    StepK = Math.Pow(10.0, -15) * (10.5-9.5)/30.0,
+                //    StepKappa = (1.0 / 3600.0) * (4.0-2.0)/30.0,
+                //    StepKsi = 0,
+                //    StepP0 = Math.Pow(10.0, 6) * 0,
+
+                //    SelectLogic = SelectLogic.BasedOnAccepted,
+                //    Mode = Mode.Direct,
+                //    MoveLogic = MoveLogic.Cyclic
+                //},
+
+	#endregion
+            };
+
+
+            foreach (var m in l)
+            {
+                TestMH(m);
+            }
         }
     }
 }

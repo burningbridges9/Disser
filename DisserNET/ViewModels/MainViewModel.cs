@@ -11,14 +11,18 @@ namespace DisserNET.ViewModels
         public PGradientViewModel PGradientViewModel { get; set; }
         public SurfaceViewModel SurfaceViewModel { get; set; }
         public MetropolisHastingsViewModel MetropolisHastingsViewModel { get; }
+        public ReportViewModel ReportViewModel { get; }
 
-        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, PGradientViewModel pGradientViewModel, SurfaceViewModel surfaceViewModel, MetropolisHastingsViewModel metropolisHastingsViewModel)
+        public MainViewModel(WellViewModel wellViewModel, QGradientViewModel qGradientViewModel, 
+            PGradientViewModel pGradientViewModel, SurfaceViewModel surfaceViewModel,
+            MetropolisHastingsViewModel metropolisHastingsViewModel, ReportViewModel reportViewModel)
         {
             this.WellViewModel = wellViewModel;
             this.QGradientViewModel = qGradientViewModel;
             this.PGradientViewModel = pGradientViewModel;
             this.SurfaceViewModel = surfaceViewModel;
             this.MetropolisHastingsViewModel = metropolisHastingsViewModel;
+            this.ReportViewModel = reportViewModel;
             BindPostActionsToCommands();
         }
 
