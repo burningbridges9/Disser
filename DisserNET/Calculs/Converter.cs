@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DisserNET.Calculs
 {
-    public enum ValueToConvert
+    public enum ValueType
     {
         K,
         Kappa,
@@ -21,17 +21,17 @@ namespace DisserNET.Calculs
         /// <param name="val"></param>
         /// <param name="valueToConvert"></param>
         /// <returns></returns>
-        public static double Convert(double val, ValueToConvert valueToConvert)
+        public static double Convert(double val, ValueType valueToConvert)
         {
             switch (valueToConvert)
             {
-                case ValueToConvert.K:
+                case ValueType.K:
                     return val * Math.Pow(10.0, -15);
-                case ValueToConvert.Kappa:
+                case ValueType.Kappa:
                     return val * (1.0 / 3600.0);
-                case ValueToConvert.Ksi:
+                case ValueType.Ksi:
                     return val;
-                case ValueToConvert.P:
+                case ValueType.P:
                     return val * Math.Pow(10.0, 6);
                 default:
                     return 0;
@@ -44,17 +44,17 @@ namespace DisserNET.Calculs
         /// <param name="val"></param>
         /// <param name="valueToConvert"></param>
         /// <returns></returns>
-        public static double ConvertBack(double val, ValueToConvert valueToConvert)
+        public static double ConvertBack(double val, ValueType valueToConvert)
         {
             switch (valueToConvert)
             {
-                case ValueToConvert.K:
+                case ValueType.K:
                     return val * Math.Pow(10.0, 15);
-                case ValueToConvert.Kappa:
+                case ValueType.Kappa:
                     return val * 3600.0;
-                case ValueToConvert.Ksi:
+                case ValueType.Ksi:
                     return val;
-                case ValueToConvert.P:
+                case ValueType.P:
                     return val * Math.Pow(10.0, -6);
                 default:
                     return 0;

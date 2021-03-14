@@ -41,10 +41,10 @@ namespace DisserNET.Utils
             CheckCreated(dir);
 
             var expFolderName = string.Format(experimentFolderFormat, DateTime.Now,
-                Calculs.Converter.ConvertBack(mh.MinK,Calculs.ValueToConvert.K) , Calculs.Converter.ConvertBack(mh.MaxK, Calculs.ValueToConvert.K), mh.StepK, mh.IncludedK,
-                Calculs.Converter.ConvertBack(mh.MinKappa, Calculs.ValueToConvert.Kappa), Calculs.Converter.ConvertBack(mh.MaxKappa, Calculs.ValueToConvert.Kappa), mh.StepKappa, mh.IncludedKappa,
+                Calculs.Converter.ConvertBack(mh.MinK,Calculs.ValueType.K) , Calculs.Converter.ConvertBack(mh.MaxK, Calculs.ValueType.K), mh.StepK, mh.IncludedK,
+                Calculs.Converter.ConvertBack(mh.MinKappa, Calculs.ValueType.Kappa), Calculs.Converter.ConvertBack(mh.MaxKappa, Calculs.ValueType.Kappa), mh.StepKappa, mh.IncludedKappa,
                 mh.MinKsi, mh.MaxKsi, mh.StepKsi, mh.IncludedKsi,
-                Calculs.Converter.ConvertBack(mh.MinP0, Calculs.ValueToConvert.P), Calculs.Converter.ConvertBack(mh.MaxP0, Calculs.ValueToConvert.P), mh.StepP0, mh.IncludedP0,
+                Calculs.Converter.ConvertBack(mh.MinP0, Calculs.ValueType.P), Calculs.Converter.ConvertBack(mh.MaxP0, Calculs.ValueType.P), mh.StepP0, mh.IncludedP0,
                 mh.WalksCount, mh.S_0, mh.Mode, mh.SelectLogic, mh.MoveLogic);
 
             var expFolderDir = Path.Combine(dir, expFolderName);

@@ -105,8 +105,9 @@ namespace DisserNET.Commands
         {
             if (_gvm.PGradientAndPressures.Count > 1)
             {
-                _gvm.PGradientAndPressures.Remove(_gvm.PGradientAndPressures.First());
-                _gvm.Gradients.Remove(_gvm.PGradientAndPressures.First().Grad);
+                var grd = _gvm.PGradientAndPressures.Last().Grad;
+                _gvm.PGradientAndPressures.Remove(_gvm.PGradientAndPressures.Last());
+                _gvm.Gradients.Remove(grd);
                 _gvm.SelectedGradient = _gvm.Gradients.Last();
                 if (_gvm.PGradientAndPressures.Count == 1)
                     _gvm.IsFirstTimeGradientClicked = false;

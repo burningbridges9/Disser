@@ -773,7 +773,7 @@ namespace DisserNET.Calculs
             };
             (int i1, int i2, int i3, int i4) = IncludeProjections(gradientAndWellsList);
             (double kNext, double kappaNext, double ksiNext, double p0Next) = GetNextValues(gradientAndWellsList, gradientK, gradientKappa, gradientKsi, gradientP0, nextGradient, i1, i2, i3, i4);
-            if ((kNext > 0) && (kappaNext > 0) && (ksiNext >= 0) && (p0Next >= 0))
+            if ((kNext > 0) && (kappaNext > 0) && (ksiNext >= -1) && (p0Next >= 0))
             {
                 GetChangedValuesForGradient(nextGradient, kNext, kappaNext, ksiNext, p0Next);
                 List<Well> Qk1wells = new List<Well>();
@@ -1098,7 +1098,7 @@ namespace DisserNET.Calculs
 
             (int i1, int i2, int i3, int i4) = IncludeProjections(gradientAndWellsList);
             (double kNext, double kappaNext, double ksiNext, double p0Next) = GetNextValues(gradientAndWellsList, gradientK, gradientKappa, gradientKsi, gradientP0, nextGradient, i1, i2, i3, i4);
-            if ((kNext > 0) && (kappaNext > 0) && (ksiNext >= 0) && (p0Next >= 0))
+            if ((kNext > 0) && (kappaNext > 0) && (ksiNext >= -1) && (p0Next >= 0))
             {
                 GetChangedValuesForGradient(nextGradient, kNext, kappaNext, ksiNext, p0Next);
                 List<Well> Pk1wells = new List<Well>();
@@ -1158,19 +1158,19 @@ namespace DisserNET.Calculs
 
         private static void GetChangedValuesForGradient(Gradient nextGradient, double kNext, double kappaNext, double ksiNext, double p0Next)
         {
-            nextGradient.ChangedK = Converter.Convert(kNext, ValueToConvert.K);
-            nextGradient.ChangedKappa = Converter.Convert(kappaNext, ValueToConvert.Kappa);
-            nextGradient.ChangedKsi = Converter.Convert(ksiNext, ValueToConvert.Ksi);
-            nextGradient.ChangedP0 = Converter.Convert(p0Next, ValueToConvert.P);
+            nextGradient.ChangedK = Converter.Convert(kNext, ValueType.K);
+            nextGradient.ChangedKappa = Converter.Convert(kappaNext, ValueType.Kappa);
+            nextGradient.ChangedKsi = Converter.Convert(ksiNext, ValueType.Ksi);
+            nextGradient.ChangedP0 = Converter.Convert(p0Next, ValueType.P);
         }
 
         private static (double kNext, double kappaNext, double ksiNext, double p0Next) GetNextValues<T>(GradientAndWellsList<T> gradientAndWellsList, double gradientK, double gradientKappa, double gradientKsi, double gradientP0, T nextGradient,
             int i1, int i2, int i3, int i4) where T : Gradient
         {
-            var kNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedK, ValueToConvert.K) - i1 * nextGradient.Lambda * gradientK;
-            var kappaNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedKappa, ValueToConvert.Kappa) - i2 * nextGradient.Lambda * gradientKappa;
-            var ksiNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedKsi, ValueToConvert.Ksi) - i3 * nextGradient.Lambda * gradientKsi;
-            var p0Next = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedP0, ValueToConvert.P) - i4 * nextGradient.Lambda * gradientP0;
+            var kNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedK, ValueType.K) - i1 * nextGradient.Lambda * gradientK;
+            var kappaNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedKappa, ValueType.Kappa) - i2 * nextGradient.Lambda * gradientKappa;
+            var ksiNext = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedKsi, ValueType.Ksi) - i3 * nextGradient.Lambda * gradientKsi;
+            var p0Next = Converter.ConvertBack(gradientAndWellsList.Gradient.ChangedP0, ValueType.P) - i4 * nextGradient.Lambda * gradientP0;
             return (kNext, kappaNext, ksiNext, p0Next);
         }
 
@@ -1269,18 +1269,20 @@ namespace DisserNET.Calculs
                                   + Math.Pow(gradientWells[2].P, 2));
                     gradientKappa = (fkappa - f) / (gradientAndWellsList.Gradient.DeltaKappa * 3600.0 * Math.Pow(10, 3));
 
+                    var fksi = (Math.Pow(gradientWells[0].P - PksiDelta.Pressures1f.Last(), 2)
+                                 + Math.Pow(gradientWells[1].P - PksiDelta.Pressures2f.Last(), 2)
+                                 + Math.Pow(gradientWells[2].P - PksiDelta.Pressures3.Last(), 2))
+                                 / (Math.Pow(gradientWells[0].P, 2)
+                                 + Math.Pow(gradientWells[1].P, 2)
+                                 + Math.Pow(gradientWells[2].P, 2));
+
                     if (gradientAndWellsList.Gradient.DeltaKsi == 0)
                     {
                         gradientKsi = 0;
                     }
                     else
                     {
-                        gradientKsi = ((Math.Pow((gradientWells[0].P - PksiDelta.Pressures1f.Last()), 2) +
-                            Math.Pow((gradientWells[1].P - PksiDelta.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - PksiDelta.Pressures3.Last()), 2))
-                            - (Math.Pow((gradientWells[0].P - Pk.Pressures1f.Last()), 2)
-                            + Math.Pow((gradientWells[1].P - Pk.Pressures2f.Last()), 2)
-                            + Math.Pow((gradientWells[2].P - Pk.Pressures3.Last()), 2))) / gradientAndWellsList.Gradient.DeltaKsi;
+                        gradientKsi = (fksi - f) / (gradientAndWellsList.Gradient.DeltaKsi);
                     }
                     if (gradientAndWellsList.Gradient.DeltaP0 == 0)
                     {

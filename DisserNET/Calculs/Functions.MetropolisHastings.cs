@@ -113,6 +113,24 @@ namespace DisserNET.Calculs
                             else if (current_p0 < modelMH.MinP0)
                                 current_p0 = modelMH.MinP0;
 
+                            foreach (var v in modelMH.MHStartValues)
+                            {
+                                switch (v.ValueType)
+                                {
+                                    case ValueType.K:
+                                        current_k = v.Value;
+                                        break;
+                                    case ValueType.Kappa:
+                                        current_kappa = v.Value;
+                                        break;
+                                    case ValueType.Ksi:
+                                        current_ksi = v.Value;
+                                        break;
+                                    case ValueType.P:
+                                        current_p0 = v.Value;
+                                        break;
+                                }
+                            }
 
                             first = false;
                         }
@@ -512,6 +530,8 @@ namespace DisserNET.Calculs
                             else if (current_kappa < modelMH.MinKappa)
                                 current_kappa = modelMH.MinKappa;
 
+                            //current_kappa = (1.0 / 3600.0) * 310;
+
                             if (current_ksi > modelMH.MaxKsi)
                                 current_ksi = modelMH.MaxKsi;
                             else if (current_ksi < modelMH.MinKsi)
@@ -522,6 +542,24 @@ namespace DisserNET.Calculs
                             else if (current_p0 < modelMH.MinP0)
                                 current_p0 = modelMH.MinP0;
 
+                            foreach (var v in modelMH.MHStartValues)
+                            {
+                                switch (v.ValueType)
+                                {
+                                    case ValueType.K:
+                                        current_k = v.Value;
+                                        break;
+                                    case ValueType.Kappa:
+                                        current_kappa = v.Value;
+                                        break;
+                                    case ValueType.Ksi:
+                                        current_ksi = v.Value;
+                                        break;
+                                    case ValueType.P:
+                                        current_p0 = v.Value;
+                                        break;
+                                }
+                            }
 
                             first = false;
                         }
@@ -563,90 +601,85 @@ namespace DisserNET.Calculs
                             wellsListCurrent.Wells[l].Ksi = next_ksi;
                             wellsListCurrent.Wells[l].Mode = mode;
                         }
-                        TryAccept(wellsListCurrent, modelMH, acceptedValueMHs, ref currentFmin, ref acceptedCount, accepted, i, next_k, next_kappa, next_ksi, next_p0);
-                        //switch (modelMH.SelectLogic)
-                        //{
-                        //    case SelectLogic.BasedOnAccepted:
-                        //        if (accepted)
-                        //        {
-                        //            ++acceptedCount;
-                        //            Console.WriteLine($"acceptedCount = {acceptedCount}");
-                        //            if (acceptedCount % modelMH.Ns == 0)
-                        //            {
-                        //                GetPressures(wellsListCurrent);
-                        //                currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        //                AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                        //                {
-                        //                    AcceptedCount = acceptedCount,
-                        //                    Fmin = currentFmin,
-                        //                    K = next_k,
-                        //                    Kappa = next_kappa,
-                        //                    Ksi = next_ksi,
-                        //                    P0 = next_p0,
-                        //                    IncludedK = modelMH.IncludedK,
-                        //                    IncludedKappa = modelMH.IncludedKappa,
-                        //                    IncludedKsi = modelMH.IncludedKsi,
-                        //                    IncludedP0 = modelMH.IncludedP0,
-                        //                };
-                        //                acceptedValueMHs.Add(acceptedValue);
-                        //            }
-                        //        }
-                        //        break;
-                        //    case SelectLogic.BasedOnWalks:
-                        //        if ((i + 1) % modelMH.Ns == 0)
-                        //        {
-                        //            GetPressures(wellsListCurrent);
-                        //            currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        //            AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                        //            {
-                        //                AcceptedCount = acceptedCount,
-                        //                Fmin = currentFmin,
-                        //                K = next_k,
-                        //                Kappa = next_kappa,
-                        //                Ksi = next_ksi,
-                        //                P0 = next_p0,
-                        //                IncludedK = modelMH.IncludedK,
-                        //                IncludedKappa = modelMH.IncludedKappa,
-                        //                IncludedKsi = modelMH.IncludedKsi,
-                        //                IncludedP0 = modelMH.IncludedP0,
-                        //            };
-                        //            acceptedValueMHs.Add(acceptedValue);
-                        //            Console.WriteLine($"selectedCount = {acceptedValueMHs.Count}");
-                        //        }
-                        //        if (accepted)
-                        //        {
-                        //            ++acceptedCount;
-                        //            Console.WriteLine($"acceptedCount = {acceptedCount}");
-                        //        }
-                        //        break;
-                        //    case SelectLogic.AcceptAll:
-                        //        ++acceptedCount;
-                        //        Console.WriteLine($"acceptedCount = {acceptedCount}");
-                        //        if (true)
-                        //        {
-                        //            GetPressures(wellsListCurrent);
-                        //            currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        //            AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                        //            {
-                        //                AcceptedCount = acceptedCount,
-                        //                Fmin = currentFmin,
-                        //                K = next_k,
-                        //                Kappa = next_kappa,
-                        //                Ksi = next_ksi,
-                        //                P0 = next_p0,
-                        //                IncludedK = modelMH.IncludedK,
-                        //                IncludedKappa = modelMH.IncludedKappa,
-                        //                IncludedKsi = modelMH.IncludedKsi,
-                        //                IncludedP0 = modelMH.IncludedP0,
-                        //            };
-                        //            acceptedValueMHs.Add(acceptedValue);
-                        //        }
-                        //        break;
-                        //}
-
+                        TryAccept(wellsListCurrent, modelMH, acceptedValueMHs, ref currentFmin, ref acceptedCount, accepted, i, next_k, next_kappa, next_ksi, next_p0);                        
                     }
                     break;
                 case 3:
+                    for (int i = 0; i < modelMH.WalksCount; i++)
+                    {
+                        Console.WriteLine($"i = {i}");
+                        HCalc hCalc = new HCalc();
+                        double w = rng.NextDouble();
+                        double p = rng.NextDouble();
+
+                        GetPressures(wellsListCurrent);
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        GetCurrentValues(wellsListCurrent, out double current_k, out double current_kappa, out double current_ksi, out double current_p0);
+                        if (first)
+                        {
+                            if (current_k > modelMH.MaxK)
+                                current_k = modelMH.MaxK;
+                            else if (current_k < modelMH.MinK)
+                                current_k = modelMH.MinK;
+
+                            if (current_kappa > modelMH.MaxKappa)
+                                current_kappa = modelMH.MaxKappa;
+                            else if (current_kappa < modelMH.MinKappa)
+                                current_kappa = modelMH.MinKappa;
+
+                            if (current_ksi > modelMH.MaxKsi)
+                                current_ksi = modelMH.MaxKsi;
+                            else if (current_ksi < modelMH.MinKsi)
+                                current_ksi = modelMH.MinKsi;
+
+                            if (current_p0 > modelMH.MaxP0)
+                                current_p0 = modelMH.MaxP0;
+                            else if (current_p0 < modelMH.MinP0)
+                                current_p0 = modelMH.MinP0;
+
+
+                            first = false;
+                        }
+
+                        #region evaluate candidates
+                        GetTempValues(modelMH, hCalc, w, 3, current_k, current_kappa, current_ksi, current_p0,
+                            out double temp_k, out double temp_kappa, out double temp_ksi, out double temp_p0);
+                        List<Well> updatedWithTempWells = new List<Well>();
+                        updatedWithTempWells.AddRange(wellsListCurrent.Wells);
+                        WellsList tempWellsList = new WellsList(updatedWithTempWells);
+                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
+                        {
+                            tempWellsList.Wells[l].K = temp_k;
+                            tempWellsList.Wells[l].Kappa = temp_kappa;
+                            tempWellsList.Wells[l].P0 = temp_p0;
+                            tempWellsList.Wells[l].Ksi = temp_ksi;
+                            tempWellsList.Wells[l].Mode = mode;
+                            tempWellsList.Wells[l].CalcMP = 0;
+                            tempWellsList.Wells[l].CalculatedP = 0;
+                        }
+                        PressuresAndTimes tempPressuresAndTimes = GetPressures(tempWellsList);
+                        double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
+                        double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        #endregion
+
+                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i,
+                            out double next_k, out double next_kappa, out double next_ksi, out double next_p0);
+
+
+                        List<Well> updatedWithNextValsWells = new List<Well>();
+                        updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
+                        wellsListCurrent = new WellsList(updatedWithNextValsWells);
+                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
+                        {
+                            wellsListCurrent.Wells[l].K = next_k;
+                            wellsListCurrent.Wells[l].Kappa = next_kappa;
+                            wellsListCurrent.Wells[l].P0 = next_p0;
+                            wellsListCurrent.Wells[l].Ksi = next_ksi;
+                            wellsListCurrent.Wells[l].Mode = mode;
+                        }
+                        TryAccept(wellsListCurrent, modelMH, acceptedValueMHs, ref currentFmin, ref acceptedCount, accepted, i, next_k, next_kappa, next_ksi, next_p0);
+                    }
                     break;
                 case 4:
                     break;

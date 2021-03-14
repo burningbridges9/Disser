@@ -38,10 +38,10 @@ namespace DisserNET.Models
 
         public AcceptedValueMH GetNormalized()
         {
-            var k = Converter.ConvertBack(this.K, ValueToConvert.K);
-            var kappa = Converter.ConvertBack(this.Kappa, ValueToConvert.Kappa);
-            var ksi = Converter.ConvertBack(this.Ksi, ValueToConvert.Ksi);
-            var p = Converter.ConvertBack(this.P0, ValueToConvert.P);
+            var k = Converter.ConvertBack(this.K, ValueType.K);
+            var kappa = Converter.ConvertBack(this.Kappa, ValueType.Kappa);
+            var ksi = Converter.ConvertBack(this.Ksi, ValueType.Ksi);
+            var p = Converter.ConvertBack(this.P0, ValueType.P);
             var a = new AcceptedValueMH()
             {
                 AcceptedCount = this.AcceptedCount,
@@ -50,8 +50,8 @@ namespace DisserNET.Models
                 Fmin = this.Fmin,
                 IncludedK = this.IncludedK,
                 IncludedKappa = this.IncludedKappa,
-                IncludedP0 = this.IncludedK,
-                IncludedKsi = this.IncludedKappa,
+                IncludedP0 = this.IncludedP0,
+                IncludedKsi = this.IncludedKsi,
                 K = k,
                 Kappa = kappa,
                 Ksi = ksi,

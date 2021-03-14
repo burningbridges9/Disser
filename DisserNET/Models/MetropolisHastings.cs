@@ -1,5 +1,6 @@
 ﻿using DisserNET.Calculs;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -75,30 +76,33 @@ namespace DisserNET.Models
         public int NP0 { get => np0; set { np0 = value; OnPropertyChanged("NP0"); } }
 
 
+        public List<MetropolisHastingsStartValue> MHStartValues { get; set; } = new List<MetropolisHastingsStartValue>();
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
+
         public MetropolisHastings GetNormalized()
         {
-            var kmin = Converter.ConvertBack(this.MinK, ValueToConvert.K);
-            var kmax = Converter.ConvertBack(this.MaxK, ValueToConvert.K);
-            var kappaMin = Converter.ConvertBack(this.MinKappa, ValueToConvert.Kappa);
-            var kappaMax = Converter.ConvertBack(this.MaxKappa, ValueToConvert.Kappa);
-            var ksiMin = Converter.ConvertBack(this.MinKsi, ValueToConvert.Ksi);
-            var ksiMax = Converter.ConvertBack(this.MaxKsi, ValueToConvert.Ksi);
-            var pMin = Converter.ConvertBack(this.MinP0, ValueToConvert.P);
-            var pMax = Converter.ConvertBack(this.MaxP0, ValueToConvert.P);
-            var sk = Converter.ConvertBack(this.StepK, ValueToConvert.K);
-            var skappa = Converter.ConvertBack(this.StepKappa, ValueToConvert.Kappa);
-            var sksi = Converter.ConvertBack(this.StepKsi, ValueToConvert.Ksi);
-            var sp = Converter.ConvertBack(this.StepP0, ValueToConvert.P);
-            var nK= (int)((this.MaxK - this.MinK)/StepK);
-            var nKappa = (int)((this.MaxKappa - this.MinKappa) / StepKappa);
+            var kmin = Converter.ConvertBack(this.MinK, Calculs.ValueType.K);
+            var kmax = Converter.ConvertBack(this.MaxK, Calculs.ValueType.K);
+            var kappaMin = Converter.ConvertBack(this.MinKappa, Calculs.ValueType.Kappa);
+            var kappaMax = Converter.ConvertBack(this.MaxKappa, Calculs.ValueType.Kappa);
+            var ksiMin = Converter.ConvertBack(this.MinKsi, Calculs.ValueType.Ksi);
+            var ksiMax = Converter.ConvertBack(this.MaxKsi, Calculs.ValueType.Ksi);
+            var pMin = Converter.ConvertBack(this.MinP0, Calculs.ValueType.P);
+            var pMax = Converter.ConvertBack(this.MaxP0, Calculs.ValueType.P);
+            var sk = Converter.ConvertBack(this.StepK, Calculs.ValueType.K);
+            var skappa = Converter.ConvertBack(this.StepKappa, Calculs.ValueType.Kappa);
+            var sksi = Converter.ConvertBack(this.StepKsi, Calculs.ValueType.Ksi);
+            var sp = Converter.ConvertBack(this.StepP0, Calculs.ValueType.P);
+            var nK= StepK!= 0 ? (int)((this.MaxK - this.MinK)/StepK) : 0;
+            var nKappa = StepKappa != 0 ? (int)((this.MaxKappa - this.MinKappa) / StepKappa): 0;
             var nKsi = StepKsi != 0 ? (int)((this.MaxKsi - this.MinKsi) / StepKsi) : 0;
-            var nP0 = (int)((this.MaxP0 - this.MinP0) / StepP0);
+            var nP0 = StepP0 != 0 ?(int)((this.MaxP0 - this.MinP0) / StepP0): 0;
             var a = new MetropolisHastings()
             {
 
@@ -137,6 +141,17 @@ namespace DisserNET.Models
                 SelectLogic = this.SelectLogic,
             };
             return a;
+        }
+    }
+
+    public class MetropolisHastingsStartValue
+    {
+        public DisserNET.Calculs.ValueType ValueType { get; }
+        public double Value { get; }
+        public MetropolisHastingsStartValue(Calculs.ValueType valueType, double value)
+        {
+            this.ValueType = valueType;
+            this.Value = Calculs.Converter.Convert(value, valueType);
         }
     }
 

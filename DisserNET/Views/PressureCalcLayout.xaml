@@ -103,7 +103,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <oxy:Plot x:Name="PressuresPlot">
+            <oxy:Plot x:Name="PressuresPlot"  LegendBackground="LightGray" LegendPosition="BottomRight" Title="Расчет давлений">
                 <oxy:Plot.Visibility>
                     <MultiBinding Converter="{StaticResource plotShowModeConverter}">
                         <Binding Path="Name" ElementName="PressuresPlot"/>
@@ -113,31 +113,39 @@
                 <oxy:Plot.Series>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1Times1, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Blue"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2">
+                    </oxy:LineSeries>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1fTimes1f, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Red"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2"
+                                    Title="P_1"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures1sTimes1s, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Blue"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2"
+                                    Title="P_1 без учета Q_2 и Q_3"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2Times2, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Red"
-                                    StrokeThickness="1"/>
+                                    Color="Green"
+                                    StrokeThickness="2"
+                                    Title="P_2"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2fTimes2f, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Blue"
-                                    StrokeThickness="1"/>
+                                    Color="Green"
+                                    StrokeThickness="2"
+                                    Title="P_2"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures2sTimes2s, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Red"
-                                    StrokeThickness="1"/>
+                                    Color="Brown"
+                                    StrokeThickness="2"
+                                    Title="P_2 без учета Q_3"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.Pressures3Times3, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Blue"
-                                    StrokeThickness="1"/>
+                                    Color="Black"
+                                    StrokeThickness="2"
+                                    Title="P_3"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.StaticPressuresTimes, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Red"
-                                    StrokeThickness="1"/>
+                                    Color="BlueViolet"
+                                    StrokeThickness="2"
+                                    Title="P - кусочно-постоянное"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
-            <oxy:Plot x:Name="ConsumptionsPlot">
+            <oxy:Plot x:Name="ConsumptionsPlot" LegendBackground="LightGray" LegendPosition="BottomRight" Title="Расчет расходов">
                 <oxy:Plot.Visibility>
                     <MultiBinding Converter="{StaticResource plotShowModeConverter}">
                         <Binding Path="Name" ElementName="ConsumptionsPlot"/>
@@ -147,10 +155,12 @@
                 <oxy:Plot.Series>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.StaticConsumptionsTimes, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Blue"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2"
+                                    Title="Q - кусочно-постоянное"/>
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.ConsumptionsTimes, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Red"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2"
+                                    Title="Q"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
         </Grid>
@@ -181,9 +191,9 @@
                     <ColumnDefinition Width="100*"/>
                     <ColumnDefinition Width="129*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TextBoxQ" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"                Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBox x:Name="TextBoxP" Text="5" Grid.Column="1"  HorizontalAlignment="Center" Height="23"               Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBox x:Name="TextBoxQ" Text="25" Grid.Column="1" HorizontalAlignment="Center" Height="23"                Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
+                <TextBox x:Name="TextBoxP" Text="25" Grid.Column="1"  HorizontalAlignment="Center" Height="23"               Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxP0" Text="15" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxT1" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxT2" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"               Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
                 <TextBox x:Name="TextBoxN" Text="50" Grid.Column="1"  HorizontalAlignment="Center" Height="23"             Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
@@ -193,11 +203,11 @@
 
 
                 <TextBox x:Name="TextBoxMu" Text="1"    Grid.Column="5" HorizontalAlignment="Center" Height="23"    Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxKappa" Text="4"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
-                <TextBox x:Name="TextBoxK"  Text="10"    Grid.Column="5"   HorizontalAlignment="Center" Height="23" Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"/>
-                <TextBox x:Name="TextBoxH0" Text="1"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxKappa" Text="300"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <TextBox x:Name="TextBoxK"  Text="30"    Grid.Column="5"   HorizontalAlignment="Center" Height="23" Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"/>
+                <TextBox x:Name="TextBoxH0" Text="5"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
                 <TextBox x:Name="TextBoxRw" Text="0.1"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxRs" Text="0.3"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxRs" Text="0.5"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
                 <TextBox x:Name="TextBoxKsi" Text="0"    Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Q = " VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="P = "  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
