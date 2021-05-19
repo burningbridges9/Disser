@@ -15,6 +15,8 @@ namespace DisserNET.Utils
         private readonly string dailyFolderFormat = "report_{0:yyyy'-'MM'-'dd}";
         private readonly string experimentFolderFormat =
             "exp_{0:yyyy'-'MM'-'dd'-'hh'-'mm};k[{1}-{2}-{3}-{4}],kap[{5}-{6}-{7}-{8}],ksi[{9}-{10}-{11}-{12}],p0[{13}-{14}-{15}-{16}],WC[{17}],S_0[{18}],M[{19}],AL[{20}],ML[{21}]";
+        private readonly string experimentFolderFormatGuid =
+            "exp_{0:yyyy'-'MM'-'dd'-'hh'-'mm}_{1}";
         private readonly string root;
         private readonly string mhParamsNameAndExt = "MH_params.json";
         private readonly string mhAcceptedNameAndExt = "MH_results.json";
@@ -40,12 +42,14 @@ namespace DisserNET.Utils
             var dir = Path.Combine(root, string.Format(dailyFolderFormat, DateTime.Now));
             CheckCreated(dir);
 
-            var expFolderName = string.Format(experimentFolderFormat, DateTime.Now,
-                Calculs.Converter.ConvertBack(mh.MinK,Calculs.ValueType.K) , Calculs.Converter.ConvertBack(mh.MaxK, Calculs.ValueType.K), mh.StepK, mh.IncludedK,
-                Calculs.Converter.ConvertBack(mh.MinKappa, Calculs.ValueType.Kappa), Calculs.Converter.ConvertBack(mh.MaxKappa, Calculs.ValueType.Kappa), mh.StepKappa, mh.IncludedKappa,
-                mh.MinKsi, mh.MaxKsi, mh.StepKsi, mh.IncludedKsi,
-                Calculs.Converter.ConvertBack(mh.MinP0, Calculs.ValueType.P), Calculs.Converter.ConvertBack(mh.MaxP0, Calculs.ValueType.P), mh.StepP0, mh.IncludedP0,
-                mh.WalksCount, mh.S_0, mh.Mode, mh.SelectLogic, mh.MoveLogic);
+            var expFolderName = string.Format(experimentFolderFormatGuid, DateTime.Now, Guid.NewGuid());
+
+          //var expFolderName = string.Format(experimentFolderFormat, DateTime.Now,
+          //      Calculs.Converter.ConvertBack(mh.MinK,Calculs.ValueType.K) , Calculs.Converter.ConvertBack(mh.MaxK, Calculs.ValueType.K), mh.StepK, mh.IncludedK,
+          //      Calculs.Converter.ConvertBack(mh.MinKappa, Calculs.ValueType.Kappa), Calculs.Converter.ConvertBack(mh.MaxKappa, Calculs.ValueType.Kappa), mh.StepKappa, mh.IncludedKappa,
+          //      mh.MinKsi, mh.MaxKsi, mh.StepKsi, mh.IncludedKsi,
+          //      Calculs.Converter.ConvertBack(mh.MinP0, Calculs.ValueType.P), Calculs.Converter.ConvertBack(mh.MaxP0, Calculs.ValueType.P), mh.StepP0, mh.IncludedP0,
+          //      mh.WalksCount, mh.S_0, mh.Mode, mh.SelectLogic, mh.MoveLogic);
 
             var expFolderDir = Path.Combine(dir, expFolderName);
             CheckCreated(expFolderDir);

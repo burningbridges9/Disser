@@ -160,7 +160,7 @@
                     <oxy:LineSeries ItemsSource="{Binding ChartDataRepository.ConsumptionsTimes, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Red"
                                     StrokeThickness="2"
-                                    Title="Q"/>
+                                    Title="Q - рассчитанное"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
         </Grid>

@@ -22,18 +22,84 @@ namespace DisserNET.Calculs
             return (int)((DateTime.Now.Ticks << 4) + (Interlocked.Increment(ref _seedCount)));
         }
 
-        public static List<AcceptedValueMH> ParallelMetropolisHastingsAlgorithm(WellsList wellsListCurrent, MetropolisHastings modelMH, int threadsNumber, Mode mode = Mode.Direct)
+        static List<Well> GetWells()
         {
+            List<Well> wells = new List<Well>();
+            for (int i = 1; i <= 3; i++)
+            {
+                Well well = new Well
+                {
+                    Q = 1.0 / (24.0 * 3600.0) * Convert.ToDouble(25) * i,
+                    P = Math.Pow(10.0, 6) * Convert.ToDouble(25) * i,
+                    P0 = Math.Pow(10.0, 6) * Convert.ToDouble(15),
+                    Time1 = 3600.0 * Convert.ToDouble(10) * (i - 1),
+                    Time2 = 3600.0 * Convert.ToDouble(10) * i,
+                    H0 = Convert.ToDouble(5),
+                    Mu = Math.Pow(10.0, -3) * Convert.ToDouble(1), // 1- water, 5 - oil
+                    Rw = Convert.ToDouble(0.1),
+                    K = Math.Pow(10.0, -15) * Convert.ToDouble(30),
+                    Kappa = (1.0 / 3600.0) * Convert.ToDouble(300), // 300- water, 75 - oil
+                    Rs = Convert.ToDouble(0.5),
+                    Ksi = Convert.ToDouble(5),
+                    N = Convert.ToInt32(50),
+                };
+                wells.Add(well);
+            }
+            return wells;
+        }
+
+        public static async Task<List<AcceptedValueMH>> ParallelMetropolisHastingsAlgorithm(WellsList wellsListCurrent, MetropolisHastings modelMH, int threadsNumber, Mode mode = Mode.Direct)
+        {
+            #region Old
             var tasks = new List<Task<List<AcceptedValueMH>>>();
             var l = new List<AcceptedValueMH>();
             for (int i = 0; i < threadsNumber; i++)
             {
-                //tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(() => MetropolisHastingsAlgorithmForConsumptions(wellsListCurrent, modelMH, mode), TaskCreationOptions.LongRunning));
+                tasks.Add(Task<List<AcceptedValueMH>>.Factory.StartNew(
+                    () =>
+                    {
+                        WellsList wellsList = new WellsList(GetWells());
+                        List<AcceptedValueMH> list = new List<AcceptedValueMH>();
+                        if (mode == Mode.Direct)
+                            Functions.MetropolisHastingsAlgorithmForConsumptions(wellsList, modelMH, list, mode);
+                        else
+                            Functions.MetropolisHastingsAlgorithmForPressures(wellsList, modelMH, list, mode);
+                        return list;
+                    }, TaskCreationOptions.None));
             }
+            await Task.WhenAll(tasks.AsParallel().Select(async task => await task));
             var results = new List<AcceptedValueMH>();
-            Task.WaitAll(tasks.ToArray());
             tasks.ForEach(x => results.AddRange(x.Result));
             return results;
+            #endregion
+
+            #region dich
+            //MetropolisParallelObject[] metropolisParallelObjects = new MetropolisParallelObject[threadsNumber];
+            //System.Random rng = new CryptoRandomSource(threadSafe: true);
+            //List<AcceptedValueMH> list = new List<AcceptedValueMH>();
+            //Thread[] threads = new Thread[threadsNumber];
+            //for (int i = 0; i < threadsNumber; i++)
+            //{
+            //    metropolisParallelObjects[i] = new MetropolisParallelObject()
+            //    {
+            //        mode = mode,
+            //        ModelMH = modelMH,
+            //        WellsListCurrent = new WellsList(GetWells()),
+            //        rng = rng,
+            //    };
+            //    threads[i] = new Thread(new ParameterizedThreadStart(Functions.ParallelMetropolisHastingsAlgorithm));
+            //    threads[i].Start(metropolisParallelObjects[i]);
+            //}
+            //AutoResetEvent.WaitAll(new WaitHandle[] { waitHandler });
+            ////for (int i = 0; i < threadsNumber; i++)
+            ////    threads[i].Join();
+            //foreach (var o in metropolisParallelObjects)
+            //{
+            //    list.AddRange(o.AcceptedValues);
+            //}
+            //return list;
+            #endregion
+
         }
 
         public static void ParallelMetropolisHastingsAlgorithm(object obj)
@@ -42,209 +108,12 @@ namespace DisserNET.Calculs
             WellsList wellsListCurrent = metropolisParallelObject.WellsListCurrent;
             MetropolisHastings modelMH = metropolisParallelObject.ModelMH;
             Mode mode = metropolisParallelObject.mode;
-            // Preparations
-            // calculate some initial values
-            //if(mode == Mode.Direct) then do some actions
             wellsListCurrent.Wells.ForEach(x => x.Mode = mode);
-            PressuresAndTimes pressuresAndTimes = GetPressures(wellsListCurrent);
-            ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
-
-
-            System.Random rng = new Random();
-            int acceptedCount = 0;
-
-            switch (modelMH.M)
-            {
-                case 1:
-                    for (int i = 0; i < modelMH.WalksCount; i++)
-                    {
-                        HCalc hCalc = new HCalc();
-                        double w = rng.NextDouble();
-                        double p = rng.NextDouble();
-
-                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        double current_k, current_kappa, current_ksi, current_p0;
-                        GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
-
-                        #region evaluate candidates
-                        double temp_k, temp_kappa, temp_ksi, temp_p0;
-                        GetTempValues(modelMH, hCalc, w, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
-
-                        List<Well> updatedWithTempWells = new List<Well>();
-                        updatedWithTempWells.AddRange(wellsListCurrent.Wells);
-                        WellsList tempWellsList = new WellsList(updatedWithTempWells);
-                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
-                        {
-                            tempWellsList.Wells[l].K = temp_k;
-                            tempWellsList.Wells[l].Kappa = temp_kappa;
-                            tempWellsList.Wells[l].P0 = temp_p0;
-                            tempWellsList.Wells[l].Ksi = temp_ksi;
-                            tempWellsList.Wells[l].Mode = mode;
-                            tempWellsList.Wells[l].CalcMQ = 0;
-                            tempWellsList.Wells[l].CalculatedQ = 0;
-                        }
-                        ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
-                        double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
-                        #endregion
-
-                        acceptedCount = accepted ? ++acceptedCount : acceptedCount;
-
-                        double next_k, next_kappa, next_ksi, next_p0;
-                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
-
-                        //wellsListCurrent.Clear();
-                        List<Well> updatedWithNextValsWells = new List<Well>();
-                        updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
-                        wellsListCurrent = new WellsList(updatedWithNextValsWells);
-                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
-                        {
-                            wellsListCurrent.Wells[l].K = next_k;
-                            wellsListCurrent.Wells[l].Kappa = next_kappa;
-                            wellsListCurrent.Wells[l].P0 = next_p0;
-                            wellsListCurrent.Wells[l].Ksi = next_ksi;
-                            wellsListCurrent.Wells[l].Mode = mode;
-                            wellsListCurrent.Wells[l].CalcMQ = 0;
-                            wellsListCurrent.Wells[l].CalculatedQ = 0;
-                        }
-
-                        ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-
-                        if (acceptedCount % modelMH.Ns == 0)
-                        {
-                            AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                            {
-                                AcceptedCount = acceptedCount,
-                                ProbabilityDensity = likelihoodValue,
-                                Fmin = currentFmin,
-                                K = next_k,
-                                Kappa = next_kappa,
-                                Ksi = next_ksi,
-                                P0 = next_p0,
-                                IncludedK = modelMH.IncludedK,
-                                IncludedKappa = modelMH.IncludedKappa,
-                                IncludedKsi = modelMH.IncludedKsi,
-                                IncludedP0 = modelMH.IncludedP0,
-                            };
-                            metropolisParallelObject.AcceptedValues.Add(acceptedValue);
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int i = 0; i < modelMH.WalksCount; i++)
-                    {
-
-                        HCalc hCalc = new HCalc();
-                        double w;
-                        double d;
-                        double p;
-
-                        lock (lockObj)
-                        {
-                            //Console.WriteLine($"i = {i}");
-                            //Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
-                            w = _tlRng.Value.NextDouble();
-                            d = _tlRng.Value.NextDouble();
-                            p = _tlRng.Value.NextDouble();
-                            //Console.WriteLine($"w = {w}");
-                            //Console.WriteLine($"d = {d}");
-                            //Console.WriteLine($"p = {p}");
-                        }
-                        GetConsumptions(wellsListCurrent);
-                        double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        //Console.WriteLine($"currentFmin = {currentFmin}");
-
-                        double current_k, current_kappa, current_ksi, current_p0;
-                        GetCurrentValues(wellsListCurrent, out current_k, out current_kappa, out current_ksi, out current_p0);
-
-                        #region evaluate candidates
-                        double temp_k, temp_kappa, temp_ksi, temp_p0;
-                        GetTempValues(modelMH, hCalc, w, d, current_k, current_kappa, current_ksi, current_p0, out temp_k, out temp_kappa, out temp_ksi, out temp_p0);
-                        List<Well> updatedWithTempWells = new List<Well>();
-                        updatedWithTempWells.AddRange(wellsListCurrent.Wells);
-                        WellsList tempWellsList = new WellsList(updatedWithTempWells);
-                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
-                        {
-                            tempWellsList.Wells[l].K = temp_k;
-                            tempWellsList.Wells[l].Kappa = temp_kappa;
-                            tempWellsList.Wells[l].P0 = temp_p0;
-                            tempWellsList.Wells[l].Ksi = temp_ksi;
-                            tempWellsList.Wells[l].Mode = mode;
-                            tempWellsList.Wells[l].CalcMQ = 0;
-                            tempWellsList.Wells[l].CalculatedQ = 0;
-                        }
-                        ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
-                        double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        //Console.WriteLine($"temp_k = {temp_k}");
-                        //Console.WriteLine($"temp_kappa = {temp_kappa}");
-                        //Console.WriteLine($"tempFmin = {tempFmin}");
-                        double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = AcceptTempModelProbability(likelihoodValue, out bool accepted);
-                        #endregion
-
-                        double next_k, next_kappa, next_ksi, next_p0;
-                        GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i, out next_k, out next_kappa, out next_ksi, out next_p0);
-
-
-                        List<Well> updatedWithNextValsWells = new List<Well>();
-                        updatedWithNextValsWells.AddRange(wellsListCurrent.Wells);
-                        wellsListCurrent = new WellsList(updatedWithNextValsWells);
-                        for (int l = 0; l < tempWellsList.Wells.Count; l++)
-                        {
-                            wellsListCurrent.Wells[l].K = next_k;
-                            wellsListCurrent.Wells[l].Kappa = next_kappa;
-                            wellsListCurrent.Wells[l].P0 = next_p0;
-                            wellsListCurrent.Wells[l].Ksi = next_ksi;
-                            wellsListCurrent.Wells[l].Mode = mode;
-                            wellsListCurrent.Wells[l].CalcMQ = 0;
-                            wellsListCurrent.Wells[l].CalculatedQ = 0;
-                        }
-                        ConsumptionsAndTimes nextConsumptionsAndTimes = GetConsumptions(wellsListCurrent);
-
-
-                        lock (lockObj)
-                        {
-                            Console.WriteLine($"i = {i}");
-                            Console.WriteLine($"ThreadId = {Thread.CurrentThread.ManagedThreadId}");
-                            Console.WriteLine($"acceptedCount = {acceptedCount}");
-                            Console.WriteLine($"next_k = {next_k}");
-                            Console.WriteLine($"next_kappa = {next_kappa}");
-                            Console.WriteLine($"currentFmin = {currentFmin}");
-                            Console.WriteLine($"tempFmin = {tempFmin}");
-                        }
-
-
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        if (accepted)
-                        {
-                            ++acceptedCount;
-                            if (acceptedCount % modelMH.Ns == 0)
-                            {
-                                AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                                {
-                                    AcceptedCount = acceptedCount,
-                                    Fmin = currentFmin,
-                                    K = next_k,
-                                    Kappa = next_kappa,
-                                    Ksi = next_ksi,
-                                    P0 = next_p0,
-                                    IncludedK = modelMH.IncludedK,
-                                    IncludedKappa = modelMH.IncludedKappa,
-                                    IncludedKsi = modelMH.IncludedKsi,
-                                    IncludedP0 = modelMH.IncludedP0,
-                                };
-                                metropolisParallelObject.AcceptedValues.Add(acceptedValue);
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-            }
+            List<AcceptedValueMH> acceptedValueMHs = metropolisParallelObject.AcceptedValues;
+            if (mode == Mode.Reverse)
+                MetropolisHastingsAlgorithmForPressures(wellsListCurrent, modelMH, acceptedValueMHs);
+            else
+                MetropolisHastingsAlgorithmForConsumptions(wellsListCurrent, modelMH, acceptedValueMHs);
         }
 
     }

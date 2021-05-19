@@ -4,23 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DisserNET.Calculs
 {
     public partial class Functions
     {
-        public static double Pressure(Well W, double q, double t)
-        {
-            double P, arg;
-            arg = Math.Pow(W.Rs, 2) / (4.0 * W.Kappa * t);
-            if (t == 0.0)
-            {
-                return 0;
-            }
-            return P = (q * W.Mu) / (4.0 * Math.PI * W.H0 * W.K) * (W.Ksi + IntegralCalculator.EIntegral(arg));
-        }
-
+        public static double Pressure(Well W, double q, double t) => t == 0.0 ? 0 : (q * W.Mu) / (4.0 * Math.PI * W.H0 * W.K) * (W.Ksi + IntegralCalculator.EIntegral(Math.Pow(W.Rs, 2) / (4.0 * W.Kappa * t)));
+        
         public static PressuresAndTimes GetTimesAndPressures(WellsList wells)
         {
             List<double> times = GetTimes(wells.Wells, true);
@@ -28,115 +20,115 @@ namespace DisserNET.Calculs
             var pressuresAndTimes = new PressuresAndTimes();
             #region Unused
 
-            if (wells.Wells.Count == 1)
-            {
-                List<double> tOne = new List<double>(wells.Wells[0].N);
-                List<double> pOne = new List<double>(wells.Wells[0].N);
-                double step = (wells.Wells[0].Time2 - wells.Wells[0].Time1) / (wells.Wells[0].N - 1);
-                for (int i = 0; i < wells.Wells[0].N; i++)
-                {
-                    tOne.Add(wells.Wells[0].Time1 + i * step);
-                }
-                for (int i = 0; i != wells.Wells[0].N; i++)
-                {
-                    if (tOne[i] == 0.0)
-                    {
-                        pOne.Add(0 + wells.Wells[0].P0);
-                    }
-                    else
-                    {
-                        pOne.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, tOne[i]) + wells.Wells[0].P0);
-                    }
-                }
-                pressures = pOne;
-                times = tOne;
-                pressuresAndTimes.Pressures1 = pressures;
-                pressuresAndTimes.Times1 = times;
-                //indexes.Add(times.Count);
-                wells.Wells[0].P = pressures.Last();
-            }
+            //if (wells.Wells.Count == 1)
+            //{
+            //    List<double> tOne = new List<double>(wells.Wells[0].N);
+            //    List<double> pOne = new List<double>(wells.Wells[0].N);
+            //    double step = (wells.Wells[0].Time2 - wells.Wells[0].Time1) / (wells.Wells[0].N - 1);
+            //    for (int i = 0; i < wells.Wells[0].N; i++)
+            //    {
+            //        tOne.Add(wells.Wells[0].Time1 + i * step);
+            //    }
+            //    for (int i = 0; i != wells.Wells[0].N; i++)
+            //    {
+            //        if (tOne[i] == 0.0)
+            //        {
+            //            pOne.Add(0 + wells.Wells[0].P0);
+            //        }
+            //        else
+            //        {
+            //            pOne.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, tOne[i]) + wells.Wells[0].P0);
+            //        }
+            //    }
+            //    pressures = pOne;
+            //    times = tOne;
+            //    pressuresAndTimes.Pressures1 = pressures;
+            //    pressuresAndTimes.Times1 = times;
+            //    //indexes.Add(times.Count);
+            //    wells.Wells[0].P = pressures.Last();
+            //}
 
-            if (wells.Wells.Count == 2)
-            {
-                List<double> tOne = new List<double>();
-                List<double> tTwo = new List<double>();
-                List<double> pOne = new List<double>();
-                List<double> pTwo = new List<double>();
-                int counter1 = 0;
-                double step1 = (wells.Wells[0].Time2 - wells.Wells[0].Time1) / (wells.Wells[0].N - 1);
-                double step2 = (wells.Wells[1].Time2 - wells.Wells[1].Time1) / (wells.Wells[1].N - 1);
-                for (int i = 0; i != wells.Wells[0].N; i++)
-                {
-                    tOne.Add(wells.Wells[0].Time1 + i * step1);
-                }
-                for (int i = 0; i != wells.Wells[1].N; i++)
-                {
-                    tTwo.Add(wells.Wells[1].Time1 + i * step2);
-                }
-                times.AddRange(tOne);
-                times.AddRange(tTwo);
-                for (int i = 0; i != times.Count; i++)
-                {
-                    if (times[i] == 0.0)
-                    {
-                        pOne.Add(0.0 + wells.Wells[0].P0);
-                    }
-                    else
-                    {
-                        pOne.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, times[i]) + wells.Wells[0].P0);
+            //if (wells.Wells.Count == 2)
+            //{
+            //    List<double> tOne = new List<double>();
+            //    List<double> tTwo = new List<double>();
+            //    List<double> pOne = new List<double>();
+            //    List<double> pTwo = new List<double>();
+            //    int counter1 = 0;
+            //    double step1 = (wells.Wells[0].Time2 - wells.Wells[0].Time1) / (wells.Wells[0].N - 1);
+            //    double step2 = (wells.Wells[1].Time2 - wells.Wells[1].Time1) / (wells.Wells[1].N - 1);
+            //    for (int i = 0; i != wells.Wells[0].N; i++)
+            //    {
+            //        tOne.Add(wells.Wells[0].Time1 + i * step1);
+            //    }
+            //    for (int i = 0; i != wells.Wells[1].N; i++)
+            //    {
+            //        tTwo.Add(wells.Wells[1].Time1 + i * step2);
+            //    }
+            //    times.AddRange(tOne);
+            //    times.AddRange(tTwo);
+            //    for (int i = 0; i != times.Count; i++)
+            //    {
+            //        if (times[i] == 0.0)
+            //        {
+            //            pOne.Add(0.0 + wells.Wells[0].P0);
+            //        }
+            //        else
+            //        {
+            //            pOne.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, times[i]) + wells.Wells[0].P0);
 
-                        if ((times[i] >= wells.Wells[1].Time1) && (i >= wells.Wells[0].N))
-                        {
-                            counter1++;
-                            {
-                                pTwo.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, times[i])
-                                       + Pressure(wells.Wells[0], wells.Wells[1].Q - wells.Wells[0].Q, times[i] - wells.Wells[1].Time1) + wells.Wells[0].P0);
+            //            if ((times[i] >= wells.Wells[1].Time1) && (i >= wells.Wells[0].N))
+            //            {
+            //                counter1++;
+            //                {
+            //                    pTwo.Add(Pressure(wells.Wells[0], wells.Wells[0].Q, times[i])
+            //                           + Pressure(wells.Wells[0], wells.Wells[1].Q - wells.Wells[0].Q, times[i] - wells.Wells[1].Time1) + wells.Wells[0].P0);
 
-                            }
-                        }
+            //                }
+            //            }
 
-                    }
-                }
-                List<double> P1f = new List<double>();
-                List<double> P1s = new List<double>();
-                List<double> T1f = new List<double>();
-                List<double> T1s = new List<double>();
-                for (int i = 0; i != times.Count - counter1; i++)
-                {
-                    P1f.Add(pOne[i]);
-                    T1f.Add(times[i]);
-                }
-                for (int i = 0; i != counter1; i++)
-                {
-                    P1s.Add(pOne[times.Count - counter1 + i]);
-                    T1s.Add(times[times.Count - counter1 + i]);
-                }
+            //        }
+            //    }
+            //    List<double> P1f = new List<double>();
+            //    List<double> P1s = new List<double>();
+            //    List<double> T1f = new List<double>();
+            //    List<double> T1s = new List<double>();
+            //    for (int i = 0; i != times.Count - counter1; i++)
+            //    {
+            //        P1f.Add(pOne[i]);
+            //        T1f.Add(times[i]);
+            //    }
+            //    for (int i = 0; i != counter1; i++)
+            //    {
+            //        P1s.Add(pOne[times.Count - counter1 + i]);
+            //        T1s.Add(times[times.Count - counter1 + i]);
+            //    }
 
-                List<double> P2new = new List<double>(counter1);
-                List<double> T2new = new List<double>(counter1);
-                for (int i = 0; i < counter1; i++)
-                {
-                    T2new.Add(times[times.Count - counter1 + i]);
-                    P2new.Add(pTwo[i]);
-                }
+            //    List<double> P2new = new List<double>(counter1);
+            //    List<double> T2new = new List<double>(counter1);
+            //    for (int i = 0; i < counter1; i++)
+            //    {
+            //        T2new.Add(times[times.Count - counter1 + i]);
+            //        P2new.Add(pTwo[i]);
+            //    }
 
-                // T2new to P1S
-                pressures.AddRange(P1f);
-                wells.Wells[0].P = P1f.Last();
-                //indexes.Add(pressures.Count);
-                pressures.AddRange(P2new);
-                wells.Wells[1].P = P2new.Last();
-                pressures.RemoveAt(wells.Wells[0].N);
-                // indexes.Add(pressures.Count);
-                times.RemoveAt(wells.Wells[0].N);
+            //    // T2new to P1S
+            //    pressures.AddRange(P1f);
+            //    wells.Wells[0].P = P1f.Last();
+            //    //indexes.Add(pressures.Count);
+            //    pressures.AddRange(P2new);
+            //    wells.Wells[1].P = P2new.Last();
+            //    pressures.RemoveAt(wells.Wells[0].N);
+            //    // indexes.Add(pressures.Count);
+            //    times.RemoveAt(wells.Wells[0].N);
 
-                pressuresAndTimes.Pressures1f = P1f;
-                pressuresAndTimes.Times1f = T1f;
-                pressuresAndTimes.Pressures1s = P1s;
-                pressuresAndTimes.Times1s = T1s;
-                pressuresAndTimes.Pressures2 = P2new;
-                pressuresAndTimes.Times2 = T2new;
-            }
+            //    pressuresAndTimes.Pressures1f = P1f;
+            //    pressuresAndTimes.Times1f = T1f;
+            //    pressuresAndTimes.Pressures1s = P1s;
+            //    pressuresAndTimes.Times1s = T1s;
+            //    pressuresAndTimes.Pressures2 = P2new;
+            //    pressuresAndTimes.Times2 = T2new;
+            //}
 
             #endregion
             if (wells.Wells.Count == 3)
@@ -154,18 +146,21 @@ namespace DisserNET.Calculs
                 double step1 = (wells.Wells[0].Time2 - wells.Wells[0].Time1) / (wells.Wells[0].N - 1);
                 double step2 = (wells.Wells[1].Time2 - wells.Wells[1].Time1) / (wells.Wells[1].N - 1);
                 double step3 = (wells.Wells[2].Time2 - wells.Wells[2].Time1) / (wells.Wells[2].N - 1);
+
                 for (int i = 0; i != wells.Wells[0].N; i++)
                 {
-                    tOne.Add(wells.Wells[0].Time1 + i * step1);
-                }
-                for (int i = 0; i != wells.Wells[1].N; i++)
-                {
+                    tOne.Add(wells.Wells[0].Time1 + i * step1); 
                     tTwo.Add(wells.Wells[1].Time1 + i * step2);
-                }
-                for (int i = 0; i != wells.Wells[2].N; i++)
-                {
                     tThree.Add(wells.Wells[2].Time1 + i * step3);
                 }
+                //for (int i = 0; i != wells.Wells[1].N; i++)
+                //{
+                //    tTwo.Add(wells.Wells[1].Time1 + i * step2);
+                //}
+                //for (int i = 0; i != wells.Wells[2].N; i++)
+                //{
+                //    tThree.Add(wells.Wells[2].Time1 + i * step3);
+                //}
                 double Q1, Q2, Q3;
                 if (wells.Wells[0].Mode == Mode.Reverse)
                 {
@@ -285,35 +280,35 @@ namespace DisserNET.Calculs
 
         public static List<double> GetTimes(List<Well> wells, bool cameFromPressure)
         {
-            List<double> times = new List<double>();
+            var times = new double[wells[0].N * wells.Count];
             double step1, step2, step3;
             switch (wells.Count)
             {
                 #region Unused
 
-                case 1:
-                    step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
-                    for (int i = 0; i < wells[0].N; i++)
-                    {
-                        times.Add(wells[0].Time1 + i * step1);
-                    }
-                    break;
-                case 2:
-                    step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
-                    step2 = (wells[1].Time2 - wells[1].Time1) / (wells[1].N - 1);
-                    for (int i = 0; i != wells[0].N; i++)
-                    {
-                        times.Add(wells[0].Time1 + i * step1);
-                    }
-                    for (int i = 0; i != wells[1].N; i++)
-                    {
-                        times.Add(wells[1].Time1 + i * step2);
-                    }
-                    if (wells[0].Mode == Mode.Reverse)
-                    {
-                        times.RemoveAt(wells[0].N);
-                    }
-                    break;
+                //case 1:
+                //    step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
+                //    for (int i = 0; i < wells[0].N; i++)
+                //    {
+                //        times.Add(wells[0].Time1 + i * step1);
+                //    }
+                //    break;
+                //case 2:
+                //    step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
+                //    step2 = (wells[1].Time2 - wells[1].Time1) / (wells[1].N - 1);
+                //    for (int i = 0; i != wells[0].N; i++)
+                //    {
+                //        times.Add(wells[0].Time1 + i * step1);
+                //    }
+                //    for (int i = 0; i != wells[1].N; i++)
+                //    {
+                //        times.Add(wells[1].Time1 + i * step2);
+                //    }
+                //    if (wells[0].Mode == Mode.Reverse)
+                //    {
+                //        times.RemoveAt(wells[0].N);
+                //    }
+                //    break;
                 #endregion
                 case 3:
                     step1 = (wells[0].Time2 - wells[0].Time1) / (wells[0].N - 1);
@@ -321,31 +316,41 @@ namespace DisserNET.Calculs
                     step3 = (wells[2].Time2 - wells[2].Time1) / (wells[2].N - 1);
                     for (int i = 0; i != wells[0].N; i++)
                     {
-                        times.Add(wells[0].Time1 + i * step1);
+                        //times.Add(wells[0].Time1 + i * step1); 
+                        //times.Add(wells[1].Time1 + i * step2); 
+                        //times.Add(wells[2].Time1 + i * step3);
+                        times[i] = (wells[0].Time1 + i * step1);
+                        times[i + wells[0].N] = (wells[1].Time1 + i * step2);
+                        times[i + wells[0].N * 2] = (wells[2].Time1 + i * step3);
                     }
-                    for (int i = 0; i != wells[1].N; i++)
-                    {
-                        times.Add(wells[1].Time1 + i * step2);
-                    }
-                    for (int i = 0; i != wells[2].N; i++)
-                    {
-                        times.Add(wells[2].Time1 + i * step3);
-                    }
+                    //for (int i = 0; i != wells[1].N; i++)
+                    //{
+                    //    times.Add(wells[1].Time1 + i * step2);
+                    //}
+                    //for (int i = 0; i != wells[2].N; i++)
+                    //{
+                    //    times.Add(wells[2].Time1 + i * step3);
+                    //}
                     if (!cameFromPressure)
                     {
-                        times.RemoveAt(wells[0].N);
-                        times.RemoveAt(wells[0].N + wells[1].N - 1);
+                        //times.RemoveAt(wells[0].N);
+                        //times.RemoveAt(wells[0].N + wells[1].N - 1);
+                        var tmpTimes = times.ToList();
+                        tmpTimes.RemoveAt(wells[0].N);
+                        tmpTimes.RemoveAt(wells[0].N + wells[1].N - 1);
+                        return tmpTimes;
                     }
                     break;
             }
 
-            return times;
+            return times.ToList();
         }
 
         #region Prepare slae
         public static void PrepareEqPressures(WellsList wells, out List<double> eqPressures)
         {
             eqPressures = new List<double>();
+            
             if (wells.Wells[0].Mode == Mode.Direct)
             {
                 switch (wells.Wells.Count)
@@ -361,12 +366,21 @@ namespace DisserNET.Calculs
                             eqPressures.Add(wells.Wells[1].CalculatedP - wells.Wells[0].P0);
                         break;
                     case 3:
+                        var pr = new double[wells.Indexes[2]];
                         for (int i = 0; i < wells.Indexes[0]; i++)
-                            eqPressures.Add(wells.Wells[0].CalculatedP - wells.Wells[0].P0);
-                        for (int i = wells.Indexes[0]; i <= wells.Indexes[1]; i++)
-                            eqPressures.Add(wells.Wells[1].CalculatedP - wells.Wells[0].P0);
-                        for (int i = wells.Indexes[1]; i < wells.Indexes[2]; i++)
-                            eqPressures.Add(wells.Wells[2].CalculatedP - wells.Wells[0].P0);
+                        {
+                            pr[i] = wells.Wells[0].CalculatedP - wells.Wells[0].P0;
+                            pr[i + wells.Indexes[0]] = wells.Wells[1].CalculatedP - wells.Wells[0].P0;
+                            pr[i + wells.Indexes[1]- 1] = wells.Wells[2].CalculatedP - wells.Wells[0].P0;
+                        }
+                        eqPressures = pr.ToList();
+                        return;
+                        //for (int i = 0; i < wells.Indexes[0]; i++)
+                        //    eqPressures.Add(wells.Wells[0].CalculatedP - wells.Wells[0].P0);
+                        //for (int i = wells.Indexes[0]; i <= wells.Indexes[1]; i++)
+                        //    eqPressures.Add(wells.Wells[1].CalculatedP - wells.Wells[0].P0);
+                        //for (int i = wells.Indexes[1]; i < wells.Indexes[2]; i++)
+                        //    eqPressures.Add(wells.Wells[2].CalculatedP - wells.Wells[0].P0);
                         break;
                 }
 
@@ -589,20 +603,36 @@ namespace DisserNET.Calculs
 
         public static void GaussSeidel(List<List<double>> A, List<double> B, List<double> X)
         {
-            for (int i = 0; i < X.Count; i++)
+            //for (int i = 0; i < X.Count; i++)
+            //{
+            //    var sum = 0.0;
+            //    for (int j = 0; j < i; j++)
+            //    {
+            //        sum += A[i][j] * X[j];
+            //    }
+            //    X[i] = (B[i] - sum) / A[i][i];
+            //}
+
+            List<double> prev = new List<double>();
+            do
             {
-                var sum = 0.0;
-                for (int j = 0; j < i; j++)
+                prev = X.ToList();
+                for (int i = 0; i < X.Count; i++)
                 {
-                    sum += A[i][j] * X[j];
+                    double var = 0;
+                    for (int j = 0; j < i; j++)
+                        var += (A[i][j] * X[j]);
+                    for (int j = i + 1; j < X.Count; j++)
+                        var += (A[i][j] * prev[j]);
+                    X[i] = (B[i] - var) / A[i][i];
                 }
-                X[i] = (B[i] - sum) / A[i][i];
             }
+            while (!Converge(X, prev));
         }
 
         private static bool Converge(List<double> xk, List<double> xkp)
         {
-            double eps = 0.000001;
+            double eps = 0.001;
             double norm = 0;
             for (int i = 0; i < xk.Count; i++)
                 norm += (xk[i] - xkp[i]) * (xk[i] - xkp[i]);
@@ -613,9 +643,7 @@ namespace DisserNET.Calculs
         public static List<double> GetConsumtions(WellsList wells)
         {
             List<double> times = GetTimes(wells.Wells, false);
-            List<double> consumptions = new List<double>();
-            for (int i = 0; i < times.Count - 1; i++)
-                consumptions.Add(0);
+            List<double> consumptions = Enumerable.Repeat<double>(0.0, times.Count - 1).ToList();
             List<List<double>> coefs;
             List<double> eqPressures;
             PrepareEqPressures(wells, out eqPressures);
@@ -1307,25 +1335,31 @@ namespace DisserNET.Calculs
 
 
 
-        public static PressuresAndTimes GetPressures(WellsList wellsList)
+        public static PressuresAndTimes GetPressures(WellsList wellsList, bool prepareStatic = true)
         {
             PressuresAndTimes pressuresAndTimes = Functions.GetTimesAndPressures(wellsList);
             List<double> staticPressures = new List<double>();
-            Functions.PrepareStaticPressures(wellsList, staticPressures);
-            if (wellsList.Wells[0].Mode == Mode.Reverse)
-                pressuresAndTimes.StaticPressures = staticPressures;
+            if (prepareStatic)
+            {
+                Functions.PrepareStaticPressures(wellsList, staticPressures);
+                if (wellsList.Wells[0].Mode == Mode.Reverse)
+                    pressuresAndTimes.StaticPressures = staticPressures;
+            }
             wellsList.Wells[0].CalculatedP = pressuresAndTimes.Pressures1f.Last();
             wellsList.Wells[1].CalculatedP = pressuresAndTimes.Pressures2f.Last();
             wellsList.Wells[2].CalculatedP = pressuresAndTimes.Pressures3.Last();
             return pressuresAndTimes;
         }
 
-        public static ConsumptionsAndTimes GetConsumptions(WellsList wellsList)
+        public static ConsumptionsAndTimes GetConsumptions(WellsList wellsList, bool prepareStatic = true)
         {
             ConsumptionsAndTimes consumptionsAndTimes = new ConsumptionsAndTimes();
             var consumptions = Functions.GetConsumtions(wellsList);
             List<double> staticConsumptions = new List<double>();
-            Functions.PrepareStaticConsumptions(wellsList, staticConsumptions);
+            if (prepareStatic)
+            {
+                Functions.PrepareStaticConsumptions(wellsList, staticConsumptions);
+            }
             consumptionsAndTimes.Times = Functions.GetTimes(wellsList.Wells, false);
             consumptionsAndTimes.Consumptions = consumptions;
             if (wellsList.Wells[0].Mode == Mode.Direct)
@@ -1423,6 +1457,11 @@ namespace DisserNET.Calculs
             double fMin = 0;
             if (wells[0].Mode == Mode.Direct)
             {
+                fMin = Math.Pow(wells[0].Q - wells[0].CalculatedQ, 2)
+                                   + Math.Pow(wells[1].Q - wells[1].CalculatedQ, 2)
+                                   + Math.Pow(wells[2].Q - wells[2].CalculatedQ, 2);
+                fMin = fMin / (Math.Pow(wells[0].Q, 2) + Math.Pow(wells[1].Q, 2) + Math.Pow(wells[2].Q, 2));
+                return fMin;
                 switch (wells.Count())
                 {
                     case 3:
@@ -1435,13 +1474,20 @@ namespace DisserNET.Calculs
             }
             else
             {
+                double num = Math.Pow(wells[0].P - wells[0].CalculatedP, 2)
+                                   + Math.Pow(wells[1].P - wells[1].CalculatedP, 2)
+                                   + Math.Pow(wells[2].P - wells[2].CalculatedP, 2);
+                double denum = Math.Pow(wells[0].P, 2) + Math.Pow(wells[1].P, 2) + Math.Pow(wells[2].P, 2);
+                fMin = num / denum;
+                return fMin;
                 switch (wells.Count())
                 {
                     case 3:
-                        fMin = Math.Pow(wells[0].P - wells[0].CalculatedP, 2)
+                        num = Math.Pow(wells[0].P - wells[0].CalculatedP, 2)
                                 + Math.Pow(wells[1].P - wells[1].CalculatedP, 2)
                                 + Math.Pow(wells[2].P - wells[2].CalculatedP, 2);
-                        fMin = fMin / (Math.Pow(wells[0].P, 2) + Math.Pow(wells[1].P, 2) + Math.Pow(wells[2].P, 2));
+                        denum = Math.Pow(wells[0].P, 2) + Math.Pow(wells[1].P, 2) + Math.Pow(wells[2].P, 2);
+                        fMin = num / denum;
                         break;
                 }
             }

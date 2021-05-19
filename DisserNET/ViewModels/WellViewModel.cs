@@ -96,7 +96,7 @@ namespace DisserNET.ViewModels
             ChartDataRepository.ConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: false);
             if (consumptionsAndTimes.StaticConsumptions != null)
             {
-                ChartDataRepository.StaticConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: true);
+                //ChartDataRepository.StaticConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: true);
             }
         }
 

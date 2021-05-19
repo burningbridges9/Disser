@@ -5,6 +5,8 @@ using System.Linq;
 using MathNet.Numerics.Random;
 using DisserNET.Calculs.Helpers;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DisserNET.Calculs
 {
@@ -82,7 +84,7 @@ namespace DisserNET.Calculs
                 case 2:
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
-                        Console.WriteLine($"i = {i}");
+                        //Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
                         double d = rng.NextDouble();
@@ -185,7 +187,7 @@ namespace DisserNET.Calculs
                         double w = rng.NextDouble();
                         double p = rng.NextDouble();
 
-                        GetConsumptions(wellsListCurrent);
+                        GetConsumptions(wellsListCurrent, prepareStatic: false);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         GetCurrentValues(wellsListCurrent, out double current_k, out double current_kappa, out double current_ksi, out double current_p0);
                         if (first)
@@ -209,7 +211,24 @@ namespace DisserNET.Calculs
                                 current_p0 = modelMH.MaxP0;
                             else if (current_p0 < modelMH.MinP0)
                                 current_p0 = modelMH.MaxP0;
-
+                            foreach (var v in modelMH.MHStartValues)
+                            {
+                                switch (v.ValueType)
+                                {
+                                    case ValueType.K:
+                                        current_k = v.Value;
+                                        break;
+                                    case ValueType.Kappa:
+                                        current_kappa = v.Value;
+                                        break;
+                                    case ValueType.Ksi:
+                                        current_ksi = v.Value;
+                                        break;
+                                    case ValueType.P:
+                                        current_p0 = v.Value;
+                                        break;
+                                }
+                            }
 
                             first = false;
                         }
@@ -230,10 +249,11 @@ namespace DisserNET.Calculs
                             tempWellsList.Wells[l].CalcMQ = 0;
                             tempWellsList.Wells[l].CalculatedQ = 0;
                         }
-                        ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList);
+                        ConsumptionsAndTimes tempConsumptionsAndTimes = GetConsumptions(tempWellsList, prepareStatic: false);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        //double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out accepted);
                         #endregion
 
                         GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i,
@@ -263,103 +283,6 @@ namespace DisserNET.Calculs
             //return acceptedValueMHs;
         }
 
-        private static void TryAccept(WellsList wellsListCurrent, MetropolisHastings modelMH, List<AcceptedValueMH> acceptedValueMHs, 
-            ref double currentFmin, ref int acceptedCount, bool accepted, int i, double next_k, double next_kappa, double next_ksi, double next_p0)
-        {
-            switch (modelMH.SelectLogic)
-            {
-                case SelectLogic.BasedOnAccepted:
-                    if (accepted)
-                    {
-                        ++acceptedCount;
-                        Console.WriteLine($"acceptedCount = {acceptedCount}");
-                        if (acceptedCount % modelMH.Ns == 0)
-                        {
-                            if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
-                                GetConsumptions(wellsListCurrent);
-                            else
-                                GetPressures(wellsListCurrent);
-                            currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                            AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                            {
-                                AcceptedCount = acceptedCount,
-                                Fmin = currentFmin,
-                                K = next_k,
-                                Kappa = next_kappa,
-                                Ksi = next_ksi,
-                                P0 = next_p0,
-                                IncludedK = modelMH.IncludedK,
-                                IncludedKappa = modelMH.IncludedKappa,
-                                IncludedKsi = modelMH.IncludedKsi,
-                                IncludedP0 = modelMH.IncludedP0,
-                            };
-                            acceptedValueMHs.Add(acceptedValue);
-                        }
-                    }
-                    break;
-                case SelectLogic.BasedOnWalks:
-                    if ((i + 1) % modelMH.Ns == 0)
-                    {
-                        if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
-                            GetConsumptions(wellsListCurrent);
-                        else
-                            GetPressures(wellsListCurrent);
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                        {
-                            AcceptedCount = acceptedCount,
-                            Fmin = currentFmin,
-                            K = next_k,
-                            Kappa = next_kappa,
-                            Ksi = next_ksi,
-                            P0 = next_p0,
-                            IncludedK = modelMH.IncludedK,
-                            IncludedKappa = modelMH.IncludedKappa,
-                            IncludedKsi = modelMH.IncludedKsi,
-                            IncludedP0 = modelMH.IncludedP0,
-                        };
-                        acceptedValueMHs.Add(acceptedValue);
-                        Console.WriteLine($"selectedCount = {acceptedValueMHs.Count}");
-                    }
-                    if (accepted)
-                    {
-                        ++acceptedCount;
-                        Console.WriteLine($"acceptedCount = {acceptedCount}");
-                    }
-                    break;
-                case SelectLogic.AcceptAll:
-                    ++acceptedCount;
-                    Console.WriteLine($"acceptedCount = {acceptedCount}");
-                    if (true)
-                    {
-                        if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
-                            GetConsumptions(wellsListCurrent);
-                        else
-                            GetPressures(wellsListCurrent);
-                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-                        AcceptedValueMH acceptedValue = new AcceptedValueMH()
-                        {
-                            AcceptedCount = acceptedCount,
-                            Fmin = currentFmin,
-                            K = next_k,
-                            Kappa = next_kappa,
-                            Ksi = next_ksi,
-                            P0 = next_p0,
-                            IncludedK = modelMH.IncludedK,
-                            IncludedKappa = modelMH.IncludedKappa,
-                            IncludedKsi = modelMH.IncludedKsi,
-                            IncludedP0 = modelMH.IncludedP0,
-                        };
-                        //App.Current.Dispatcher.Invoke((Action)delegate
-                        //{
-                        //    acceptedValueMHs.Add(acceptedValue);
-                        //});
-                        acceptedValueMHs.Add(acceptedValue);
-                    }
-                    break;
-            }
-        }
-
         public static void MetropolisHastingsAlgorithmForPressures(WellsList wellsListCurrent, MetropolisHastings modelMH, List<AcceptedValueMH> acceptedValueMHs, Mode mode = Mode.Reverse)
         {
             // Preparations
@@ -368,7 +291,7 @@ namespace DisserNET.Calculs
             ConsumptionsAndTimes consumptionsAndTimes = GetConsumptions(wellsListCurrent);
             GetPressures(wellsListCurrent);
             double currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
-            System.Random rng = SystemRandomSource.Default;
+            System.Random rng = new Random();
             int acceptedCount = 0;
             bool accepted = false;
             bool first = true;
@@ -509,11 +432,11 @@ namespace DisserNET.Calculs
                 case 2:
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
-                        Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
-                        double w = rng.NextDouble();
-                        double d = rng.NextDouble();
-                        double p = rng.NextDouble();
+                        double w= rng.NextDouble();
+                        double d= rng.NextDouble();
+                        double p= rng.NextDouble();
+                        //Console.WriteLine($"i = {i}");
 
                         GetPressures(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
@@ -583,7 +506,8 @@ namespace DisserNET.Calculs
                         PressuresAndTimes tempPressuresAndTimes = GetPressures(tempWellsList);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        //double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out accepted);
                         #endregion
 
                         GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i,
@@ -607,12 +531,11 @@ namespace DisserNET.Calculs
                 case 3:
                     for (int i = 0; i < modelMH.WalksCount; i++)
                     {
-                        Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
                         double w = rng.NextDouble();
                         double p = rng.NextDouble();
 
-                        GetPressures(wellsListCurrent);
+                        GetPressures(wellsListCurrent, prepareStatic: false);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         GetCurrentValues(wellsListCurrent, out double current_k, out double current_kappa, out double current_ksi, out double current_p0);
                         if (first)
@@ -637,6 +560,24 @@ namespace DisserNET.Calculs
                             else if (current_p0 < modelMH.MinP0)
                                 current_p0 = modelMH.MinP0;
 
+                            foreach (var v in modelMH.MHStartValues)
+                            {
+                                switch (v.ValueType)
+                                {
+                                    case ValueType.K:
+                                        current_k = v.Value;
+                                        break;
+                                    case ValueType.Kappa:
+                                        current_kappa = v.Value;
+                                        break;
+                                    case ValueType.Ksi:
+                                        current_ksi = v.Value;
+                                        break;
+                                    case ValueType.P:
+                                        current_p0 = v.Value;
+                                        break;
+                                }
+                            }
 
                             first = false;
                         }
@@ -657,10 +598,11 @@ namespace DisserNET.Calculs
                             tempWellsList.Wells[l].CalcMP = 0;
                             tempWellsList.Wells[l].CalculatedP = 0;
                         }
-                        PressuresAndTimes tempPressuresAndTimes = GetPressures(tempWellsList);
+                        PressuresAndTimes tempPressuresAndTimes = GetPressures(tempWellsList, prepareStatic: false);
                         double tempFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
                         double likelihoodValue = LikelihoodFunction(modelMH, tempFmin, currentFmin);
-                        double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        //double p_i = modelMH.SelectLogic == SelectLogic.AcceptAll ? 1 : AcceptTempModelProbability(likelihoodValue, out accepted);
+                        double p_i = AcceptTempModelProbability(likelihoodValue, out accepted);
                         #endregion
 
                         GetNextValues(modelMH, p, current_k, current_kappa, current_ksi, current_p0, temp_k, temp_kappa, temp_ksi, temp_p0, p_i,
@@ -685,6 +627,133 @@ namespace DisserNET.Calculs
                     break;
             }
 
+        }
+
+
+        private static void TryAccept(WellsList wellsListCurrent, MetropolisHastings modelMH, List<AcceptedValueMH> acceptedValueMHs,
+            ref double currentFmin, ref int acceptedCount, bool accepted, int i, double next_k, double next_kappa, double next_ksi, double next_p0)
+        {
+            if (accepted)
+            {
+                ++acceptedCount;
+                //Console.WriteLine($"acceptedCount = {acceptedCount}");
+                if (acceptedCount % modelMH.Ns == 0)
+                {
+                    Console.WriteLine($"i = {i}");
+                    if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
+                        GetConsumptions(wellsListCurrent, prepareStatic: false);
+                    else
+                        GetPressures(wellsListCurrent, prepareStatic: false);
+                    currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                    AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                    {
+                        AcceptedCount = acceptedCount,
+                        Fmin = currentFmin,
+                        K = next_k,
+                        Kappa = next_kappa,
+                        Ksi = next_ksi,
+                        P0 = next_p0,
+                        IncludedK = modelMH.IncludedK,
+                        IncludedKappa = modelMH.IncludedKappa,
+                        IncludedKsi = modelMH.IncludedKsi,
+                        IncludedP0 = modelMH.IncludedP0,
+                    };
+                    acceptedValueMHs.Add(acceptedValue);
+                }
+            }
+            return;
+            switch (modelMH.SelectLogic)
+            {
+                case SelectLogic.BasedOnAccepted:
+                    if (accepted)
+                    {
+                        ++acceptedCount;
+                        //Console.WriteLine($"acceptedCount = {acceptedCount}");
+                        if (acceptedCount % modelMH.Ns == 0)
+                        {
+                            if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
+                                GetConsumptions(wellsListCurrent);
+                            else
+                                GetPressures(wellsListCurrent);
+                            currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                            AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                            {
+                                AcceptedCount = acceptedCount,
+                                Fmin = currentFmin,
+                                K = next_k,
+                                Kappa = next_kappa,
+                                Ksi = next_ksi,
+                                P0 = next_p0,
+                                IncludedK = modelMH.IncludedK,
+                                IncludedKappa = modelMH.IncludedKappa,
+                                IncludedKsi = modelMH.IncludedKsi,
+                                IncludedP0 = modelMH.IncludedP0,
+                            };
+                            acceptedValueMHs.Add(acceptedValue);
+                        }
+                    }
+                    break;
+                case SelectLogic.BasedOnWalks:
+                    if ((i + 1) % modelMH.Ns == 0)
+                    {
+                        if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
+                            GetConsumptions(wellsListCurrent);
+                        else
+                            GetPressures(wellsListCurrent);
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                        {
+                            AcceptedCount = acceptedCount,
+                            Fmin = currentFmin,
+                            K = next_k,
+                            Kappa = next_kappa,
+                            Ksi = next_ksi,
+                            P0 = next_p0,
+                            IncludedK = modelMH.IncludedK,
+                            IncludedKappa = modelMH.IncludedKappa,
+                            IncludedKsi = modelMH.IncludedKsi,
+                            IncludedP0 = modelMH.IncludedP0,
+                        };
+                        acceptedValueMHs.Add(acceptedValue);
+                        //Console.WriteLine($"selectedCount = {acceptedValueMHs.Count}");
+                    }
+                    if (accepted)
+                    {
+                        ++acceptedCount;
+                        //Console.WriteLine($"acceptedCount = {acceptedCount}");
+                    }
+                    break;
+                case SelectLogic.AcceptAll:
+                    ++acceptedCount;
+                    Console.WriteLine($"acceptedCount = {acceptedCount}");
+                    if (true)
+                    {
+                        if (wellsListCurrent.Wells.First().Mode == Mode.Direct)
+                            GetConsumptions(wellsListCurrent);
+                        else
+                            GetPressures(wellsListCurrent);
+                        currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
+                        AcceptedValueMH acceptedValue = new AcceptedValueMH()
+                        {
+                            AcceptedCount = acceptedCount,
+                            Fmin = currentFmin,
+                            K = next_k,
+                            Kappa = next_kappa,
+                            Ksi = next_ksi,
+                            P0 = next_p0,
+                            IncludedK = modelMH.IncludedK,
+                            IncludedKappa = modelMH.IncludedKappa,
+                            IncludedKsi = modelMH.IncludedKsi,
+                            IncludedP0 = modelMH.IncludedP0,
+                        };
+                        //App.Current.Dispatcher.Invoke((Action)delegate
+                        //{
+                        //    acceptedValueMHs.Add(acceptedValue);
+                        //});
+                        acceptedValueMHs.Add(acceptedValue);
+                    }
+                    break;
+            }
         }
 
         private static void GetTempValues(MetropolisHastings modelMH, HCalc hCalc, double w, double current_k, double current_kappa, double current_ksi, double current_p0, out double temp_k, out double temp_kappa, out double temp_ksi, out double temp_p0)
@@ -797,26 +866,11 @@ namespace DisserNET.Calculs
         private static double TemporaryValueCalcWithBoundaries(double minValue, double maxValue, double H, double currentValue, MoveLogic moveLogic = MoveLogic.Cyclic)
         {
             double returnValue = currentValue;
+            return CyclicMove(minValue, maxValue, H, currentValue);
             switch (moveLogic)
             {
                 case MoveLogic.Cyclic:
-                    if (currentValue + H < minValue)
-                    {
-                        returnValue = maxValue - (minValue - (currentValue + H));
-                    }
-                    else if (minValue <= currentValue + H && maxValue >= currentValue + H)
-                    {
-                        returnValue = currentValue + H;
-                    }
-                    else if (maxValue < currentValue + H)
-                    {
-                        returnValue = minValue + ((currentValue + H) - maxValue);
-                    }
-                    else
-                    {
-
-                    }
-                    return returnValue;
+                    return CyclicMove(minValue, maxValue, H, currentValue);
 
                 case MoveLogic.StickToBorder:
                     if (currentValue + H < minValue)
@@ -862,6 +916,24 @@ namespace DisserNET.Calculs
                 default:
                     return returnValue;
             }
+        }
+
+        private static double CyclicMove(double minValue, double maxValue, double H, double currentValue)
+        {
+            double returnValue = 0;
+            if (currentValue + H < minValue)
+            {
+                returnValue = maxValue - (minValue - (currentValue + H));
+            }
+            else if (minValue <= currentValue + H && maxValue >= currentValue + H)
+            {
+                returnValue = currentValue + H;
+            }
+            else if (maxValue < currentValue + H)
+            {
+                returnValue = minValue + ((currentValue + H) - maxValue);
+            }
+            return returnValue;
         }
     }
 }
