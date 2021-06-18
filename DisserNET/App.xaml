@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:DisserNET" 
              xmlns:VMs="clr-namespace:DisserNET.ViewModels">
     <Application.Resources>
-        <!--<VMs:ViewModelLocator x:Key="ViewModelLocator"/>-->
     </Application.Resources>
 </Application>

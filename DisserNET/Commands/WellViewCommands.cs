@@ -3,14 +3,31 @@ using DisserNET.Models;
 using DisserNET.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace DisserNET.Commands
 {
-    abstract public class WellViewCommand : ICommand
+    abstract public class WellViewCommand : ICommand, INotifyPropertyChanged
     {
         protected WellViewModel _wvm;
+
+        public WellViewModel WVM => _wvm;
+
+        bool _CanExe;
+        public bool CanExe
+        {
+            get => _CanExe;
+            set
+            {
+                _CanExe = value;
+                OnPropertyChanged("CanExe");
+            }
+        }
+
         public WellViewCommand(WellViewModel wvm)
         {
             _wvm = wvm;
@@ -18,17 +35,22 @@ namespace DisserNET.Commands
         public event EventHandler CanExecuteChanged;
         public abstract bool CanExecute(object parameter);
         public abstract void Execute(object parameter);
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
     }
 
     public class AddWellCommand : WellViewCommand
     {
-        public AddWellCommand(WellViewModel wvm) : base(wvm)
-        {
-        }
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public AddWellCommand(WellViewModel wvm) : base(wvm) { CanExe = true; WVM.Wells.CollectionChanged += CollectionChanged; }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = WVM.Wells?.Count < 3;
+
+        public override bool CanExecute(object parameter) => true;
         public override void Execute(object parameter)
         {
             var parameters = (object[])parameter;
@@ -51,17 +73,16 @@ namespace DisserNET.Commands
             _wvm.Wells.Add(well);
             _wvm.SelectedWell = well;
         }
+        
     }
 
     public class AddAutoWellCommand : WellViewCommand
     {
-        public AddAutoWellCommand(WellViewModel wvm) : base(wvm)
-        {
-        }
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public AddAutoWellCommand(WellViewModel wvm) : base(wvm) { CanExe = true; WVM.Wells.CollectionChanged += CollectionChanged; }
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = !WVM.Wells.Any() || WVM.Wells == null;
+
+        public override bool CanExecute(object parameter) => true;
         public override void Execute(object parameter)
         {
             var parameters = (object[])parameter;
@@ -90,29 +111,26 @@ namespace DisserNET.Commands
     }
     public class DeleteAllWellCommand : WellViewCommand
     {
-        public DeleteAllWellCommand(WellViewModel wvm) : base(wvm)
-        {
-        }
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public DeleteAllWellCommand(WellViewModel wvm) : base(wvm) { WVM.Wells.CollectionChanged += CollectionChanged; }
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = _wvm.Wells?.Any() ?? false;
+
+        public override bool CanExecute(object parameter) => true;
+
         public override void Execute(object parameter)
         {
-            if (_wvm.Wells.Count > 0)
-                _wvm.Wells.Clear();
-            //_wvm.SelectedWell = _wvm.Wells.Last();
+            _wvm.Wells?.Clear();
+            WVM.PressuresAndTimes = null;
+            WVM.ConsumptionsAndTimes = null;
+            WVM.ChartDataRepository.Reset();
         }
     }
     public class RemoveLastWellCommand : WellViewCommand
     {
-        public RemoveLastWellCommand(WellViewModel wvm) : base(wvm)
-        {
-        }
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public RemoveLastWellCommand(WellViewModel wvm) : base(wvm) => WVM.Wells.CollectionChanged += CollectionChanged;
+
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = WVM.Wells?.Any() ?? false;
+
+        public override bool CanExecute(object parameter) => true;
         public override void Execute(object parameter)
         {
             if (_wvm.Wells.Count > 0)
@@ -122,13 +140,11 @@ namespace DisserNET.Commands
     public class CalculatePressuresCommand : WellViewCommand
     {
         public Action<PGradientAndPressures> CommandExecuted;
-        public CalculatePressuresCommand(WellViewModel wvm) : base(wvm)
-        { }
+        public CalculatePressuresCommand(WellViewModel wvm) : base(wvm) { WVM.Wells.CollectionChanged += CollectionChanged; }
 
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = _wvm.Wells?.Any() ?? false;
+
+        public override bool CanExecute(object parameter) => true;
 
         public override void Execute(object parameter)
         {
@@ -163,13 +179,10 @@ namespace DisserNET.Commands
     public class CalculateConsumptionsCommand : WellViewCommand
     {
         public Action<QGradientAndConsumptions> CommandExecuted;
-        public CalculateConsumptionsCommand(WellViewModel wvm) : base(wvm)
-        { }
+        public CalculateConsumptionsCommand(WellViewModel wvm) : base(wvm) { WVM.Wells.CollectionChanged += CollectionChanged; }
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = _wvm.Wells?.Any() ?? false;
 
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public override bool CanExecute(object parameter) => true;
         public override void Execute(object parameter)
         {
             if (_wvm.PressuresAndTimes?.Pressures1f.Count == 0 || _wvm.PressuresAndTimes == null)
@@ -203,30 +216,17 @@ namespace DisserNET.Commands
     public class ClearCommand : WellViewCommand
     {
         public Action CommandExecuted;
-        public ClearCommand(WellViewModel wvm) : base(wvm)
-        { }
+        public ClearCommand(WellViewModel wvm) : base(wvm) { WVM.Wells.CollectionChanged += CollectionChanged; }
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => CanExe = _wvm.Wells?.Any() ?? false;
 
-        public override bool CanExecute(object parameter)
-        {
-            return true;
-        }
+        public override bool CanExecute(object parameter) => true;
 
         public override void Execute(object parameter)
         {
-            _wvm.PressuresAndTimes?.Pressures1f?.Clear();
-            _wvm.PressuresAndTimes?.Pressures1s?.Clear();
-            _wvm.PressuresAndTimes?.Pressures2f?.Clear();
-            _wvm.PressuresAndTimes?.Pressures2s?.Clear();
-            _wvm.PressuresAndTimes?.Pressures3?.Clear();
-            _wvm.PressuresAndTimes?.Times1f?.Clear();
-            _wvm.PressuresAndTimes?.Times1s?.Clear();
-            _wvm.PressuresAndTimes?.Times2f?.Clear();
-            _wvm.PressuresAndTimes?.Times2s?.Clear();
-            _wvm.PressuresAndTimes?.Times3?.Clear();
-            _wvm.ConsumptionsAndTimes?.Consumptions?.Clear();
-            _wvm.ConsumptionsAndTimes?.StaticConsumptions?.Clear();
-            _wvm.ConsumptionsAndTimes?.Times?.Clear();
-            CommandExecuted?.Invoke();
+            _wvm.Wells?.Clear();
+            WVM.PressuresAndTimes = null;
+            WVM.ConsumptionsAndTimes = null;
+            WVM.ChartDataRepository.Reset();
         }
     }
 

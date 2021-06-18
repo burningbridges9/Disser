@@ -165,6 +165,20 @@ namespace DisserNET.Models
         }
         #endregion
 
+        public void Reset()
+        {
+            StaticPressuresTimes = new List<DataPoint>();
+            StaticConsumptionsTimes = new List<DataPoint>();
+            ConsumptionsTimes = new List<DataPoint>();
+            Pressures1fTimes1f = new List<DataPoint>();
+            Pressures1sTimes1s = new List<DataPoint>();
+            Pressures1Times1 = new List<DataPoint>();
+            Pressures2fTimes2f = new List<DataPoint>();
+            Pressures2sTimes2s = new List<DataPoint>();
+            Pressures2Times2 = new List<DataPoint>();
+            Pressures3Times3 = new List<DataPoint>();
+        }
+
         #region Property changed
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

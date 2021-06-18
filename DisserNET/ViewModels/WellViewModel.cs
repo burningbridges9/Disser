@@ -96,7 +96,7 @@ namespace DisserNET.ViewModels
             ChartDataRepository.ConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: false);
             if (consumptionsAndTimes.StaticConsumptions != null)
             {
-                //ChartDataRepository.StaticConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: true);
+                ChartDataRepository.StaticConsumptionsTimes = ConsumptionsAndTimes.ToDataPoints(staticConsumptions: true);
             }
         }
 
@@ -123,8 +123,8 @@ namespace DisserNET.ViewModels
             }
         }
 
-        private ICommand _removeLastWellCommand;
-        public ICommand RemoveLastWellCommand
+        private RemoveLastWellCommand _removeLastWellCommand;
+        public RemoveLastWellCommand RemoveLastWellCommand
         {
             get
             {
@@ -137,17 +137,7 @@ namespace DisserNET.ViewModels
         }
 
         private ICommand _deleteAllWellCommand;
-        public ICommand DeleteAllWellCommand
-        {
-            get
-            {
-                if (_deleteAllWellCommand == null)
-                {
-                    _deleteAllWellCommand = new DeleteAllWellCommand(this);
-                }
-                return _deleteAllWellCommand;
-            }
-        }
+        public ICommand DeleteAllWellCommand => _deleteAllWellCommand ?? (_deleteAllWellCommand = new DeleteAllWellCommand(this));
 
         private ICommand _addAutoWellCommand;
         public ICommand AddAuto

@@ -32,8 +32,8 @@ namespace DisserNET.Calculs
                     {
                         Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
-                        double w = StaticRandom.Rand(); //rng.NextDouble();
-                        double p = StaticRandom.Rand(); //rng.NextDouble();
+                        double w = rng.NextDouble();
+                        double p = rng.NextDouble();
 
                         GetConsumptions(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());
@@ -302,8 +302,8 @@ namespace DisserNET.Calculs
                     {
                         Console.WriteLine($"i = {i}");
                         HCalc hCalc = new HCalc();
-                        double w = StaticRandom.Rand(); //rng.NextDouble();
-                        double p = StaticRandom.Rand(); //rng.NextDouble();
+                        double w = rng.NextDouble();
+                        double p = rng.NextDouble();
 
                         GetPressures(wellsListCurrent);
                         currentFmin = GetObjectFunctionValue(wellsListCurrent.Wells.ToArray());

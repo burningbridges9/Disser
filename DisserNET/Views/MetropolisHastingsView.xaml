@@ -13,6 +13,22 @@
         <Converter:KConverter x:Key="kConverter" />
         <Converter:KappaConverter x:Key="kappaConverter" />
         <Converter:PConverter x:Key="pConverter" />
+        <Style x:Key="TextBlockSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="18"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="5,20,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
+        <Style x:Key="TextBoxSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="15"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="0,5,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
         <DataTemplate x:Key="listTemplate">
             <StackPanel Orientation="Vertical">
                 <Border BorderBrush="Black" BorderThickness="2">
@@ -51,102 +67,117 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" x:Name="Parameters">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="114*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="114*"/>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="114*"/>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="129*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="80*"/>
+                    <ColumnDefinition Width="80*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TextBoxMinK" Text="8" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBox x:Name="TextBoxMaxK" Text="11" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxMinKappa" Text="1" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxKappa" Text="5" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMinKsi" Text="0" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxKsi" Text="0" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="TextBoxMinP0" Text="3" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="TextBoxMaxP0" Text="3" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
+                <TextBox x:Name="TextBoxMinK" Text="8" Grid.Column="1"   Style="{StaticResource TextBoxSt}"  />
+                <TextBox x:Name="TextBoxMaxK" Text="11" Grid.Column="1"  Style="{StaticResource TextBoxSt}"      Grid.Row="1"  />
+                <TextBox x:Name="TextBoxMinKappa" Text="1" Grid.Column="1" Style="{StaticResource TextBoxSt}" Grid.Row="2"  />
+                <TextBox x:Name="TextBoxMaxKappa" Text="5" Grid.Column="1" Style="{StaticResource TextBoxSt}" Grid.Row="3"  />
+                <TextBox x:Name="TextBoxMinKsi" Text="0" Grid.Column="1" Style="{StaticResource TextBoxSt}"  Grid.Row="4"  />
+                <TextBox x:Name="TextBoxMaxKsi" Text="0" Grid.Column="1" Style="{StaticResource TextBoxSt}" Grid.Row="5"  />
+                <TextBox x:Name="TextBoxMinP0" Text="3" Grid.Column="1" Style="{StaticResource TextBoxSt}"   Grid.Row="6" />
+                <TextBox x:Name="TextBoxMaxP0" Text="3" Grid.Column="1" Style="{StaticResource TextBoxSt}" Grid.Row="7"   />
 
 
 
-                <CheckBox x:Name="IncludeK" IsChecked="True" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
-                <TextBox x:Name="StepK" Text="0.6"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
-                <CheckBox x:Name="IncludeKappa" IsChecked="True" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
-                <TextBox x:Name="StepKappa" Text="0.8"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <CheckBox x:Name="IncludeKsi" IsChecked="False" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
-                <TextBox x:Name="StepKsi" Text="0"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <CheckBox x:Name="IncludeP0" IsChecked="False" Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
-                <TextBox x:Name="StepP0" Text="0"  Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Min K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Max K"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Min Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Max Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="Min Ksi" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="Max Ksi"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Min P0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Max P0"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <CheckBox x:Name="IncludeK" IsChecked="True" Grid.Column="5" HorizontalAlignment="Left" Height="20"   VerticalAlignment="Center" Width="20"  />
+                <TextBox x:Name="StepK" Text="0.6"  Grid.Column="5" Grid.Row="1" Style="{StaticResource TextBoxSt}" />
+                <CheckBox x:Name="IncludeKappa" IsChecked="True" Grid.Column="5"   HorizontalAlignment="Left" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
+                <TextBox x:Name="StepKappa" Text="0.8"    Grid.Column="5" Grid.Row="3" Style="{StaticResource TextBoxSt}" />
+                <CheckBox x:Name="IncludeKsi" IsChecked="False" Grid.Column="5"  HorizontalAlignment="Left" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
+                <TextBox x:Name="StepKsi" Text="0"    Grid.Column="5" Grid.Row="5" Style="{StaticResource TextBoxSt}"/>
+                <CheckBox x:Name="IncludeP0" IsChecked="False" Grid.Column="5" HorizontalAlignment="Left" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
+                <TextBox x:Name="StepP0" Text="0"  Grid.Column="5"  Grid.Row="7" Style="{StaticResource TextBoxSt}"/>
+                <TextBlock Text="Min k" Style="{StaticResource TextBlockSt}" />
+                <TextBlock Grid.Row="1" Style="{StaticResource TextBlockSt}" Text="Max k"    />
+                <TextBlock Grid.Row="2" Style="{StaticResource TextBlockSt}" Text="Min χ"/>
+                <TextBlock Grid.Row="3" Style="{StaticResource TextBlockSt}" Text="Max χ"/>
+                <TextBlock Grid.Row="4" Style="{StaticResource TextBlockSt}" Text="Min ξ"  />
+                <TextBlock Grid.Row="5" Style="{StaticResource TextBlockSt}" Text="Max ξ"  />
+                <TextBlock Grid.Row="6" Style="{StaticResource TextBlockSt}" >
+                    Min P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="7" Style="{StaticResource TextBlockSt}">
+                    Max P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock Grid.Column="2" Style="{StaticResource TextBlockSt}" Text="mD"/>
+                <TextBlock  Grid.Row="1" Grid.Column="2" Text="mD" Style="{StaticResource TextBlockSt}"  />
+                <TextBlock  Grid.Row="2" Grid.Column="2"   Style="{StaticResource TextBlockSt}" >
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock  Grid.Row="3" Grid.Column="2"  Style="{StaticResource TextBlockSt}">
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock  Grid.Row="4" Grid.Column="2" Text="-"   Style="{StaticResource TextBlockSt}" />
+                <TextBlock  Grid.Row="5" Grid.Column="2" Text="-"   Style="{StaticResource TextBlockSt}"  />
+                <TextBlock  Grid.Row="6" Grid.Column="2" Text="MPa" Style="{StaticResource TextBlockSt}"  />
+                <TextBlock  Grid.Row="7" Grid.Column="2" Text="MPa" Style="{StaticResource TextBlockSt}"  />
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="4" TextWrapping="Wrap" Text="Include K"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="4" TextWrapping="Wrap" Text="Step K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" Text="Include Kappa"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="4" TextWrapping="Wrap" Text="Step Kappa"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="4" TextWrapping="Wrap" Text="Include Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="4" TextWrapping="Wrap" Text="Step Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="4" TextWrapping="Wrap" Text="Include P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="4" TextWrapping="Wrap" Text="Step P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock  Grid.Column="4" Text="Include k"  Style="{StaticResource TextBlockSt}" Margin="5,15,0,0" />
+                <TextBlock   Grid.Row="1" Grid.Column="4" Text="Step k" Style="{StaticResource TextBlockSt}" />
+                <TextBlock   Grid.Row="2" Grid.Column="4" Text="Include χ" Style="{StaticResource TextBlockSt}"  />
+                <TextBlock   Grid.Row="3" Grid.Column="4" Text="Step χ"  Style="{StaticResource TextBlockSt}"/>
+                <TextBlock   Grid.Row="4" Grid.Column="4" Text="Include ξ" Style="{StaticResource TextBlockSt}" />
+                <TextBlock   Grid.Row="5" Grid.Column="4" Text="Step ξ"    Style="{StaticResource TextBlockSt}" />
+                <TextBlock   Grid.Row="6" Grid.Column="4" Style="{StaticResource TextBlockSt}" >
+                    Include P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock   Grid.Row="7" Grid.Column="4" Style="{StaticResource TextBlockSt}" >
+                    Step P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="6" TextWrapping="Wrap" Text=""   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="6" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" Text=""    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="6" TextWrapping="Wrap" Text="м^2/ч"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text=""     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="-"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock Style="{StaticResource TextBlockSt}"  Grid.Column="5" />
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="1" Grid.Column="6" Text="mD"   />
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="2" Grid.Column="5" Text=""    />
+                <TextBlock Style="{StaticResource TextBlockSt}"  Grid.Row="3" Grid.Column="6">
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="4" Grid.Column="5" Text=""    />
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="7" Grid.Column="6" Text="MPa"  />
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="8" TextWrapping="Wrap" Text="Walks" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="8" TextWrapping="Wrap" Text="Ns"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="8" TextWrapping="Wrap" Text="C" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="8" TextWrapping="Wrap" Text="S_0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBox x:Name="Walks" Text="1000" Grid.Column="9" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBox x:Name="Ns" Text="10"      Grid.Column="9"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBox x:Name="C" Text="1"        Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBox x:Name="S_0" Text="0.025"  Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock Style="{StaticResource TextBlockSt}"  Grid.Column="9" Text="Trials"            />
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="1" Grid.Column="9" >
+                    N<Run BaselineAlignment="Subscript" FontSize="10">s</Run>
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="2" Grid.Column="9"  Text="C"  />
+                <TextBlock Style="{StaticResource TextBlockSt}"   Grid.Row="3" Grid.Column="9" >
+                    S<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBox x:Name="Walks" Text="1000" Grid.Column="10" Style="{StaticResource TextBoxSt}"   />
+                <TextBox x:Name="Ns" Text="10"      Grid.Column="10" Style="{StaticResource TextBoxSt}"     Grid.Row="1" />
+                <TextBox x:Name="C" Text="1"        Grid.Column="10" Style="{StaticResource TextBoxSt}"    Grid.Row="2"   />
+                <TextBox x:Name="S_0" Text="0.025"  Grid.Column="10" Style="{StaticResource TextBoxSt}"    Grid.Row="3"   />
 
-                <Button x:Name="SubmitAdd" Grid.Row="5" Grid.RowSpan="2" Grid.Column="8" Command="{Binding Add}">
+                <Button x:Name="SubmitAdd" Grid.Row="7" Grid.RowSpan="1" Grid.Column="9" MaxHeight="200" Command="{Binding Add}">
                     <TextBlock Text="Add"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource addWellConverter}" >
@@ -173,25 +204,14 @@
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
-                <Button x:Name="Start" Grid.Row="5" Grid.RowSpan="2" Grid.Column="9" Command="{Binding Start}">
+                <Button x:Name="Start" Grid.Row="7" Grid.RowSpan="1" Grid.Column="10" Command="{Binding Start}">
                     <TextBlock Text="Start"/>
                 </Button>
-                <Button x:Name="Clear" Grid.Row="5" Grid.RowSpan="2" Grid.Column="10">
+                <Button x:Name="Clear" Grid.Row="7" Grid.RowSpan="1" Grid.Column="11">
                     <TextBlock Text="Clear"/>
                 </Button>
             </Grid>
-            <Grid x:Name="ListParameters" Grid.Row="1">
-                <utils:AutoScrollingListBox x:Name="acceptedList" ItemTemplate="{StaticResource listTemplate}" 
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </utils:AutoScrollingListBox>
 
-            </Grid>
         </Grid>
     </Grid>
 </UserControl>

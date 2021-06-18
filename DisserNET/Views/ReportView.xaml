@@ -13,141 +13,184 @@
         <Converter:KConverter x:Key="kConverter" />
         <Converter:KappaConverter x:Key="kappaConverter" />
         <Converter:PConverter x:Key="pConverter" />
+        <Style x:Key="TextBlockSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="18"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="5,20,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
+        <Style x:Key="TextBoxSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="15"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="0,5,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="79*"></ColumnDefinition>
                 <ColumnDefinition Width="110*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="AcceptedCount" VerticalAlignment="Center"  FontSize="14"/>
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="F->min"   VerticalAlignment="Center"  FontSize="14"/>
-            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.AcceptedCount, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center"       />
-            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.Fmin, UpdateSourceTrigger=PropertyChanged}" FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TextBlockSt}" Text="Accepted"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource TextBlockSt}" >
+                    F<Run BaselineAlignment="Subscript" FontSize="10">min</Run>
+            </TextBlock>
+            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.AcceptedCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBlockSt}" Grid.Column="1"  Grid.Row="0"  />
+            <TextBlock   Text = "{Binding Path=ReportModel.AcceptedValueMH.Fmin, UpdateSourceTrigger=PropertyChanged}"          Style="{StaticResource TextBlockSt}" Grid.Column="1"  Grid.Row="1" />
 
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Comment" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
-            <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Folder" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
-            <Button HorizontalAlignment="Center" x:Name="SubmitAdd" Grid.Row="8"  Grid.Column="0" Command="{Binding SelectFolder}">
-                <TextBlock Text="Select folder"/>
-            </Button>
-            <TextBlock   HorizontalAlignment="Center"     Text="{Binding Path=ReportModel.AcceptedValueMH.K, UpdateSourceTrigger=PropertyChanged}"      Grid.Row="2"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
-            <TextBlock   HorizontalAlignment="Center" Text="{Binding Path=ReportModel.AcceptedValueMH.Kappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3"      Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"                 />
-            <TextBlock   HorizontalAlignment="Center"   Text="{Binding Path=ReportModel.AcceptedValueMH.Ksi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="4"    Grid.Column="1" TextWrapping="Wrap"  VerticalAlignment="Center"        FontSize="14" TextAlignment="Center"          />
-            <TextBlock   HorizontalAlignment="Center"    Text="{Binding Path=ReportModel.AcceptedValueMH.P0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="5"   Grid.Column="1" TextWrapping="Wrap"     VerticalAlignment="Center"     FontSize="14" TextAlignment="Center"       />
-            <TextBox       Text="{Binding Path=ReportModel.Comment, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="6"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
-            <TextBlock        Text="{Binding Path=ReportModel.FolderPath, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"      Grid.Row="7"  Grid.Column="1" TextWrapping="Wrap"    VerticalAlignment="Center"    FontSize="14" TextAlignment="Center" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource TextBlockSt}" Text="k"                />
+            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource TextBlockSt}" Text="χ" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBlockSt}" Text="ξ"              />
+            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource TextBlockSt}" >
+                    P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+            </TextBlock>
+            <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource TextBlockSt}" Text="Folder" />
+            <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button  x:Name="SubmitAdd" Grid.Column="0" Command="{Binding SelectFolder}">
+                    <TextBlock Text="Select folder"/>
+                </Button>
+                <Button  x:Name="BuildGraph" Grid.Column="1" Command="{Binding SelectFolder}">
+                    <TextBlock Text="Plot"/>
+                </Button>
+            </Grid>
+            <TextBlock     Text="{Binding Path=ReportModel.AcceptedValueMH.K, UpdateSourceTrigger=PropertyChanged}"      Grid.Row="2"  Grid.Column="1" Style="{StaticResource TextBlockSt}"/>
+            <TextBlock Text="{Binding Path=ReportModel.AcceptedValueMH.Kappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3"      Grid.Column="1" Style="{StaticResource TextBlockSt}"/>
+            <TextBlock   Text="{Binding Path=ReportModel.AcceptedValueMH.Ksi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="4"    Grid.Column="1" Style="{StaticResource TextBlockSt}"  />
+            <TextBlock    Text="{Binding Path=ReportModel.AcceptedValueMH.P0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="5"   Grid.Column="1" Style="{StaticResource TextBlockSt}" />
+            <TextBlock        Text="{Binding Path=ReportModel.FolderPath, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Grid.Row="6"  Grid.Column="1" Style="{StaticResource TextBlockSt}"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" x:Name="Parameters">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="114*"/>
                     <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="114*"/>
                     <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="114*"/>
                     <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="129*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="TextBoxMinK" Text="{Binding Path=ReportModel.MetropolisHastings.MinK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBlock x:Name="TextBoxMaxK" Text="{Binding Path=ReportModel.MetropolisHastings.MaxK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBlock x:Name="TextBoxMinKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MinKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBlock x:Name="TextBoxMaxKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBlock x:Name="TextBoxMinKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MinKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"     Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBlock x:Name="TextBoxMaxKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="5" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"  />
-                <TextBlock x:Name="TextBoxMinP0" Text="{Binding Path=ReportModel.MetropolisHastings.MinP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="23"      Grid.Row="6" TextWrapping="Wrap"                 VerticalAlignment="Center" Width="83"    />
-                <TextBlock x:Name="TextBoxMaxP0" Text="{Binding Path=ReportModel.MetropolisHastings.MaxP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"  HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap"                   VerticalAlignment="Center" Width="83"  />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMinK" Text="{Binding Path=ReportModel.MetropolisHastings.MinK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"   />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMaxK" Text="{Binding Path=ReportModel.MetropolisHastings.MaxK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMinKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MinKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMaxKappa" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="3" />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMinKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MinKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4"   />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMaxKsi" Text="{Binding Path=ReportModel.MetropolisHastings.MaxKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="5" />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMinP0" Text="{Binding Path=ReportModel.MetropolisHastings.MinP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="6"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="TextBoxMaxP0" Text="{Binding Path=ReportModel.MetropolisHastings.MaxP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="7"/>
 
 
 
                 <CheckBox x:Name="IncludeK" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="20"    Grid.Row="0"   VerticalAlignment="Center" Width="20"  />
-                <TextBlock x:Name="StepK" Text="{Binding Path=ReportModel.MetropolisHastings.StepK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
+                <TextBlock x:Name="StepK" Text="{Binding Path=ReportModel.MetropolisHastings.StepK, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Grid.Row="1"  Style="{StaticResource TextBlockSt}"  />
                 <CheckBox x:Name="IncludeKappa" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeKappa, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"   HorizontalAlignment="Center" Height="20" Grid.Row="2" VerticalAlignment="Center" Width="20"/>
-                <TextBlock x:Name="StepKappa" Text="{Binding Path=ReportModel.MetropolisHastings.StepKappa, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23"   Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="StepKappa" Text="{Binding Path=ReportModel.MetropolisHastings.StepKappa, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  Grid.Row="3" Style="{StaticResource TextBlockSt}"/>
                 <CheckBox x:Name="IncludeKsi"  IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeKsi, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"  HorizontalAlignment="Center" Height="20" Grid.Row="4" VerticalAlignment="Center" Width="20"  />
-                <TextBlock x:Name="StepKsi" Text="{Binding Path=ReportModel.MetropolisHastings.StepKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
+                <TextBlock x:Name="StepKsi" Text="{Binding Path=ReportModel.MetropolisHastings.StepKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Column="5"  Grid.Row="5" Style="{StaticResource TextBlockSt}"/>
                 <CheckBox x:Name="IncludeP0" IsChecked="{Binding Path=ReportModel.MetropolisHastings.IncludeP0, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="5" HorizontalAlignment="Center" Height="20"   Grid.Row="6" VerticalAlignment="Center" Width="20"   />
-                <TextBlock x:Name="StepP0" Text="{Binding Path=ReportModel.MetropolisHastings.StepP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" HorizontalAlignment="Center" Height="23"   Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="83"   />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Min K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="Max K"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Min Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="Max Kappa" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="Min Ksi" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="Max Ksi"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="0" TextWrapping="Wrap" Text="Min P0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="0" TextWrapping="Wrap" Text="Max P0"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
+                <TextBlock x:Name="StepP0" Text="{Binding Path=ReportModel.MetropolisHastings.StepP0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Grid.Row="7" Style="{StaticResource TextBlockSt}"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="0" Text="Min k"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="0" Text="Max k"    />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="0" Text="Min χ"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="0" Text="Max χ"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="4" Grid.Column="0" Text="Min ξ"  />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="5" Grid.Column="0" Text="Max ξ"  />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="6" Grid.Column="0" >
+                    Min P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="7" Grid.Column="0" >
+                    Max P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="м^2/ч" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="2" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="2" Text="mD"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="2" Text="mD"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="2" >
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="2" >
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="4" Grid.Column="2" Text="-"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="5" Grid.Column="2" Text="-"      />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="6" Grid.Column="2" Text="MPa"    />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="7" Grid.Column="2" Text="MPa"    />
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="4" TextWrapping="Wrap" Text="Include K"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="4" TextWrapping="Wrap" Text="Step K" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" Text="Include Kappa"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="4" TextWrapping="Wrap" Text="Step Kappa"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="4" TextWrapping="Wrap" Text="Include Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="4" TextWrapping="Wrap" Text="Step Ksi"    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="4" TextWrapping="Wrap" Text="Include P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="4" TextWrapping="Wrap" Text="Step P0"   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="4" Text="Include k"    />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="4" Text="Step k"       />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="4" Text="Include χ"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="4" Text="Step χ"   />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="4" Grid.Column="4" Text="Include ξ"  />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="5" Grid.Column="4" Text="Step ξ"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="6" Grid.Column="4"  >
+                    Include P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="7" Grid.Column="4" >
+                    Step P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="6" TextWrapping="Wrap" Text=""   VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="6" TextWrapping="Wrap" Text="мД" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" Text=""    VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="6" TextWrapping="Wrap" Text="м^2/ч"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="6" TextWrapping="Wrap" Text=""     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="6" TextWrapping="Wrap" Text="-"     VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="6" TextWrapping="Wrap" Text="МПа" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="6" Text=""     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="6" Text="mD"   />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="6" Text=""     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="6" >
+                    m<Run BaselineAlignment="Superscript" FontSize="9">2</Run>/h
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="4" Grid.Column="6" Text=""     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="5" Grid.Column="6" Text="-"    />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="6" Grid.Column="6" Text="MPa"  />
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="8" TextWrapping="Wrap" Text="Walks" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="8" TextWrapping="Wrap" Text="Ns"  VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="8" TextWrapping="Wrap" Text="C" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="8" TextWrapping="Wrap" Text="S_0" VerticalAlignment="Center" Height="27" Width="114" FontSize="20" TextAlignment="Center"/>
-                <TextBlock x:Name="Walks" Text="{Binding Path=ReportModel.MetropolisHastings.WalksCount, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"      Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"     />
-                <TextBlock x:Name="Ns" Text="{Binding Path=ReportModel.MetropolisHastings.Ns, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9"  HorizontalAlignment="Center" Height="23"     Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Center" Width="83"  />
-                <TextBlock x:Name="C" Text="{Binding Path=ReportModel.MetropolisHastings.C, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
-                <TextBlock x:Name="S_0" Text="{Binding Path=ReportModel.MetropolisHastings.S_0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" HorizontalAlignment="Center" Height="23"     Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="83"    />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="8" Text="Walks"  />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="8"  >
+                    N<Run BaselineAlignment="Subscript" FontSize="10">s</Run>
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="8" Text="C"     />
+                <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="8"  >
+                    S<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="Walks" Text="{Binding Path=ReportModel.MetropolisHastings.WalksCount, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" Grid.Row="0"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="Ns" Text="{Binding Path=ReportModel.MetropolisHastings.Ns, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" Grid.Row="1"/>
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="C" Text="{Binding Path=ReportModel.MetropolisHastings.C, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" Grid.Row="2" />
+                <TextBlock Style="{StaticResource TextBlockSt}" x:Name="S_0" Text="{Binding Path=ReportModel.MetropolisHastings.S_0, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" Grid.Row="3"/>
             </Grid>
         </Grid>
     </Grid>

@@ -17,63 +17,23 @@
         <Converter:KappaConverter x:Key="kappaConverter" />
         <Converter:TimeConverter x:Key="timeConverter" />
         <Converter:MuConverter x:Key="muConverter" />
-        <DataTemplate x:Key="listTemplate">
-            <StackPanel>
-                <Border BorderBrush="Black" BorderThickness="2">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="30"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="79*"></ColumnDefinition>
-                            <ColumnDefinition Width="110*"></ColumnDefinition>
-                            <ColumnDefinition Width="105*"></ColumnDefinition>
-                            <ColumnDefinition Width="110*"></ColumnDefinition>
-                            <ColumnDefinition Width="120*"></ColumnDefinition>
-                            <ColumnDefinition Width="110*"></ColumnDefinition>
-                            <ColumnDefinition Width="130*"></ColumnDefinition>
-                            <ColumnDefinition Width="110*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center"  FontSize="14"/>
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda"  VerticalAlignment="Center"  FontSize="14"/>
-                        <TextBlock   Text = "{Binding Path=FminQ}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-                        <TextBlock   Text = "{Binding Path=Lambda, Mode=OneWay}" FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-                        
-                        <TextBlock HorizontalAlignment="Center"     Text ="{Binding Path=GradientK}"     Grid.Row="0"    Grid.Column="7" TextWrapping="Wrap"    VerticalAlignment="Center"    Width="80" FontSize="14" TextAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Center" Text ="{Binding Path=GradientKappa}"    Grid.Row="1"     Grid.Column="7" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="80" FontSize="14" TextAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Center"   Text ="{Binding Path=GradientKsi}"    Grid.Row="2"     Grid.Column="7" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="80" FontSize="14" TextAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Center"    Text ="{Binding Path=GradientP0}"     Grid.Row="3"    Grid.Column="7" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="80" FontSize="14" TextAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="6" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                          />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="6" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                      />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="6" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                     />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="6" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                        />
+        <Style x:Key="TextBlockSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="18"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="5,5,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
+        <Style x:Key="TextBoxSt">
+            <Setter Property="TextBlock.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontSize" Value="15"/>
+            <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Control.Margin" Value="0,5,0,0" />
+            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+        </Style>
 
-                        <TextBlock   Text ="{Binding Path=ChangedK, Converter={StaticResource kConverter}}"      Grid.Column="5"  FontSize="14" HorizontalAlignment="Left" Height="23" Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-                        <TextBlock   Text ="{Binding Path=ChangedKappa, Converter={StaticResource kappaConverter}}"  Grid.Column="5"  FontSize="14" HorizontalAlignment="Left" Height="23" Grid.Row="1"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-                        <TextBlock   Text ="{Binding Path=ChangedKsi}"    Grid.Column="5"  FontSize="14" HorizontalAlignment="Left" Height="23" Grid.Row="2" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-                        <TextBlock   Text ="{Binding Path=ChangedP0, Converter={StaticResource pConverter}}"     Grid.Column="5"  FontSize="14" HorizontalAlignment="Left" Height="23" Grid.Row="3" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-                                                
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="4" TextWrapping="Wrap" Text="Cur.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                  />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="4" TextWrapping="Wrap" Text="Cur.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="4" TextWrapping="Wrap" Text="Cur.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"          />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="4" TextWrapping="Wrap" Text="Cur.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"              />
-
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="delta K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Text="delta Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="delta Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
-                        <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="delta P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
-
-                        <TextBlock   HorizontalAlignment="Center"     Text="{Binding Path=DeltaK}"      Grid.Row="0"  Grid.Column="3" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="80" FontSize="14" TextAlignment="Center" />
-                        <TextBlock   HorizontalAlignment="Center" Text="{Binding Path=DeltaKappa}"  Grid.Row="1"      Grid.Column="3" TextWrapping="Wrap"  VerticalAlignment="Center"       Width="80" FontSize="14" TextAlignment="Center"                 />
-                        <TextBlock   HorizontalAlignment="Center"   Text="{Binding Path=DeltaKsi}"    Grid.Row="2"    Grid.Column="3" TextWrapping="Wrap"  VerticalAlignment="Center"       Width="80" FontSize="14" TextAlignment="Center"          />
-                        <TextBlock   HorizontalAlignment="Center"    Text="{Binding Path=DeltaP0}"     Grid.Row="3"   Grid.Column="3" TextWrapping="Wrap"     VerticalAlignment="Center"    Width="80" FontSize="14" TextAlignment="Center"       />
-                    </Grid>
-                </Border>
-            </StackPanel>
-        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -81,14 +41,16 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <oxy:Plot>
+            <oxy:Plot  LegendBackground="LightGray" LegendPosition="BottomRight" Title="Consumptions and Times">
                 <oxy:Plot.Series>
                     <oxy:LineSeries ItemsSource="{Binding ActiveConsumptions, UpdateSourceTrigger=PropertyChanged}"
-                                    Color="Blue"
-                                    StrokeThickness="1"/>
-                    <oxy:LineSeries ItemsSource="{Binding StaticConsumptions, UpdateSourceTrigger=PropertyChanged}"
                                     Color="Red"
-                                    StrokeThickness="1"/>
+                                    StrokeThickness="2"
+                                    Title="Q solved"/>
+                    <oxy:LineSeries ItemsSource="{Binding StaticConsumptions, UpdateSourceTrigger=PropertyChanged}"
+                                    Color="Blue"
+                                    StrokeThickness="2"
+                                    Title="Q expected"/>
                 </oxy:Plot.Series>
             </oxy:Plot>
         </Grid>
@@ -99,76 +61,114 @@
             </Grid.RowDefinitions>
             <Grid x:Name="Parameters" Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="0.2*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="0.2*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="79*"></ColumnDefinition>
+                    <ColumnDefinition Width="110*"></ColumnDefinition>
                     <ColumnDefinition Width="106*"></ColumnDefinition>
                     <ColumnDefinition Width="0"></ColumnDefinition>
-                    <ColumnDefinition Width="110*"></ColumnDefinition>
                     <ColumnDefinition Width="120*"></ColumnDefinition>
-                    <ColumnDefinition Width="110*"></ColumnDefinition>
+                    <ColumnDefinition Width="150*"></ColumnDefinition>
+                    <ColumnDefinition Width="120*"></ColumnDefinition>
                     <ColumnDefinition Width="130*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="FQmin"   Text = "{Binding Path=SelectedGradient.FminQ}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="0" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-                <!--<TextBox x:Name="FPmin"   Text = "{Binding Path=SelectedGradient.FminQ, UpdateSourceTrigger=PropertyChanged}"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center"  Grid.Row="1" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />-->
-                <TextBox x:Name="Lambda" Text = "0"  FontSize = "14"    Grid.Column="1" HorizontalAlignment="Center" Height="23" Grid.Row="2"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="FQ->min" VerticalAlignment="Center"  FontSize="14"/>
-                <!--<TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="FP->min" VerticalAlignment="Center"  FontSize="14"/>-->
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="Lambda"  VerticalAlignment="Center"  FontSize="14"/>
-                <TextBox x:Name="gradK" HorizontalAlignment="Center"     Text ="{Binding Path=SelectedGradient.GradientK, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="0"     Grid.Column="6" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"/>
-                <TextBox x:Name="gradKappa" HorizontalAlignment="Center" Text ="{Binding Path=SelectedGradient.GradientKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
-                <TextBox x:Name="gradKsi" HorizontalAlignment="Center"   Text ="{Binding Path=SelectedGradient.GradientKsi, UpdateSourceTrigger=PropertyChanged}"    Grid.Row="2"     Grid.Column="6" TextWrapping="Wrap"  VerticalAlignment="Center"      Width="110" FontSize="14" TextAlignment="Center"/>
-                <TextBox x:Name="gradP0" HorizontalAlignment="Center"    Text ="{Binding Path=SelectedGradient.GradientP0, UpdateSourceTrigger=PropertyChanged}"     Grid.Row="3"     Grid.Column="6" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"/>
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="5" TextWrapping="Wrap" Text="Grad.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                          />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                      />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="5" TextWrapping="Wrap" Text="Grad.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                     />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="5" TextWrapping="Wrap" Text="Grad.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                        />
+                <TextBox x:Name="FQmin"  Text = "{Binding Path=SelectedGradient.FminQ}" Grid.Column="1" Grid.Row="0" Style="{StaticResource TextBoxSt}" />
+                <TextBox x:Name="Lambda" Text = "0" Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxSt}"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TextBlockSt}">
+                    F<Run BaselineAlignment="Subscript" FontSize="10">Qmin</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="λ"  Style="{StaticResource TextBlockSt}"/>
+                <TextBox x:Name="gradK"         Text ="{Binding Path=SelectedGradient.GradientK, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="0" Grid.Column="6" Style="{StaticResource TextBoxSt}"/>
+                <TextBox x:Name="gradKappa" Text ="{Binding Path=SelectedGradient.GradientKappa, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1" Grid.Column="6" Style="{StaticResource TextBoxSt}"/>
+                <TextBox x:Name="gradKsi"     Text ="{Binding Path=SelectedGradient.GradientKsi, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="2" Grid.Column="6" Style="{StaticResource TextBoxSt}"/>
+                <TextBox x:Name="gradP0"       Text ="{Binding Path=SelectedGradient.GradientP0, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="6" Style="{StaticResource TextBoxSt}"/>
+                <TextBlock Grid.Row="0" Grid.Column="5" Text="Grad.k "    Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0"/>
+                <TextBlock Grid.Row="1" Grid.Column="5" Text="Grad.χ" Style="{StaticResource TextBlockSt}" Margin="10,5,0,0" />
+                <TextBlock Grid.Row="2" Grid.Column="5" Text="Grad.ξ "  Style="{StaticResource TextBlockSt}" Margin="10,5,0,0"/>
+                <TextBlock Grid.Row="3" Grid.Column="5"   Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    Grad.P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
 
-                <TextBox x:Name="CurrentK"     Text ="{Binding Path=SelectedGradient.ChangedK, UpdateSourceTrigger=PropertyChanged}"     FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-                <TextBox x:Name="CurrentKappa" Text ="{Binding Path=SelectedGradient.ChangedKappa, UpdateSourceTrigger=PropertyChanged}" FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="5"  TextWrapping="Wrap"   VerticalAlignment="Center" Width="110" />
-                <TextBox x:Name="CurrentKsi"   Text ="{Binding Path=SelectedGradient.ChangedKsi, UpdateSourceTrigger=PropertyChanged}"   FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"     />
-                <TextBox x:Name="CurrentP0"    Text ="{Binding Path=SelectedGradient.ChangedP0, UpdateSourceTrigger=PropertyChanged}"    FontSize="14" Grid.Column="4" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110"       />
-                <TextBox x:Name="BeginK"       Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="4" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14"   />
-                <TextBox x:Name="BeginKappa"   Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"    />
-                <TextBox x:Name="BeginKsi"     Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Center" Width="110" FontSize="14" />
-                <TextBox x:Name="BeginP0"      Grid.Column="6" HorizontalAlignment="Center" Height="23" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="110" FontSize="14"     />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="3" TextWrapping="Wrap" Text="Cur.K " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"                  />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Kappa "  VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="3" TextWrapping="Wrap" Text="Cur.Ksi " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"          />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="3" TextWrapping="Wrap" Text="Cur.P0 " VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"              />
+                <TextBox x:Name="CurrentK"     Text ="{Binding Path=SelectedGradient.ChangedK, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource kConverter}}"     Grid.Column="4" Grid.Row="4" Style="{StaticResource TextBoxSt}"  />
+                <TextBox x:Name="CurrentKappa" Text ="{Binding Path=SelectedGradient.ChangedKappa, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource kappaConverter}}" Grid.Column="4" Grid.Row="5" Style="{StaticResource TextBoxSt}"/>
+                <TextBox x:Name="CurrentKsi"   Text ="{Binding Path=SelectedGradient.ChangedKsi, UpdateSourceTrigger=PropertyChanged}"   Grid.Column="4" Grid.Row="6" Style="{StaticResource TextBoxSt}"  />
+                <TextBox x:Name="CurrentP0"    Text ="{Binding Path=SelectedGradient.ChangedP0, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource pConverter}}"    Grid.Column="4" Grid.Row="7" Style="{StaticResource TextBoxSt}"    />
+                <TextBox x:Name="BeginK"       Grid.Column="6" Grid.Row="4" Style="{StaticResource TextBoxSt}"  />
+                <TextBox x:Name="BeginKappa"   Grid.Column="6" Grid.Row="5" Style="{StaticResource TextBoxSt}"  />
+                <TextBox x:Name="BeginKsi"     Grid.Column="6" Grid.Row="6" Style="{StaticResource TextBoxSt}"/>
+                <TextBox x:Name="BeginP0"      Grid.Column="6" Grid.Row="7" Style="{StaticResource TextBoxSt}"   />
+                <TextBlock Grid.Row="4" Grid.Column="3" Text="Cur.k "     Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0" />
+                <TextBlock Grid.Row="5" Grid.Column="3" Text="Cur.χ " Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0"/>
+                <TextBlock Grid.Row="6" Grid.Column="3" Text="Cur.ξ "   Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0"/>
+                <TextBlock Grid.Row="7" Grid.Column="3"  Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    Cur.P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="0" Grid.Column="3" TextWrapping="Wrap" Text="delta K" VerticalAlignment="Center"   Width="114"     FontSize="14" TextAlignment="Center"              />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" Text="delta Kappa" VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"         />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" Text="delta Ksi" VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"            />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" Text="delta P0" VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"             />
+                <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource TextBlockSt}" Margin="10,5,0,0">
+                    δ<Run BaselineAlignment="Subscript" FontSize="15">k</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="3" Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    δ<Run BaselineAlignment="Subscript" FontSize="15">χ</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="3" Style="{StaticResource TextBlockSt}" Margin="10,5,0,0" >
+                    δ<Run BaselineAlignment="Subscript" FontSize="15">ξ</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="3" Style="{StaticResource TextBlockSt}" Margin="10,5,0,0" >
+                    δ<Run BaselineAlignment="Subscript" FontSize="15">P0</Run>
+                </TextBlock>
 
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="4" Grid.Column="5" TextWrapping="Wrap" Text="Beg.K "    VerticalAlignment="Center"   Width="114"    FontSize="14" TextAlignment="Center"            />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Kappa " VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"       />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="5" TextWrapping="Wrap" Text="Beg.Ksi "     VerticalAlignment="Center"   Width="114" FontSize="14" TextAlignment="Center"    />
-                <TextBlock HorizontalAlignment="Center"  Grid.Row="7" Grid.Column="5" TextWrapping="Wrap" Text="Beg.P0 "    VerticalAlignment="Center"   Width="114"   FontSize="14" TextAlignment="Center"         />
+                <TextBlock Grid.Row="4" Grid.Column="5" Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    k<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="5" Grid.Column="5" Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    χ<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="6" Grid.Column="5" Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    ξ<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
+                <TextBlock Grid.Row="7" Grid.Column="5" Style="{StaticResource TextBlockSt}"  Margin="10,5,0,0">
+                    P0<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                </TextBlock>
 
-                <TextBox x:Name="deltaK" HorizontalAlignment="Center"      Grid.Row="0" Text ="10^(-3) * K"    Grid.Column="4" TextWrapping="Wrap"    VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center" />
-                <TextBox x:Name="deltaKappa" HorizontalAlignment="Center"  Grid.Row="1" Text ="10^(-3) * Kappa"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"                 />
-                <TextBox x:Name="deltaKsi" HorizontalAlignment="Center"    Grid.Row="2" Text ="10^(-3) * Ksi"    Grid.Column="4" TextWrapping="Wrap"  VerticalAlignment="Center"     Width="110" FontSize="14" TextAlignment="Center"          />
-                <TextBox x:Name="deltaP0" HorizontalAlignment="Center"     Grid.Row="3" Text ="10^(-3) * P0"    Grid.Column="4" TextWrapping="Wrap"     VerticalAlignment="Center"   Width="110" FontSize="14" TextAlignment="Center"       />
+                <TextBox x:Name="deltaK"     Style="{StaticResource TextBoxSt}"    Grid.Row="0" Text ="10^(-3)*k"    Grid.Column="4" />
+                <TextBox x:Name="deltaKappa" Style="{StaticResource TextBoxSt}" Grid.Row="1" Text ="10^(-3)*χ"   Grid.Column="4"             />
+                <TextBox x:Name="deltaKsi"   Style="{StaticResource TextBoxSt}"  Grid.Row="2" Text ="10^(-3)*ξ"    Grid.Column="4"        />
+                <TextBox x:Name="deltaP0"    Style="{StaticResource TextBoxSt}"   Grid.Row="3" Text ="10^(-3)*P0"    Grid.Column="4" />
 
-                <CheckBox x:Name="UsedK"  Content="Use K" VerticalAlignment="Center"     Grid.Row="4" Grid.Column="0"  Grid.ColumnSpan="2"    FontSize="14"  Width="73"  />
-                <CheckBox x:Name="UsedKappa"  Content="Use Kappa" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"  FontSize="14"  Width="87"/>
-                <CheckBox x:Name="UsedKsi"  Content="Use Ksi" VerticalAlignment="Center"   Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"   FontSize="14"  Width="75"/>
-                <CheckBox x:Name="UsedP0"  Content="Use P0" VerticalAlignment="Center"    Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"    FontSize="14"  Width="73"/>
+                <CheckBox x:Name="UsedK"   VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"  Grid.ColumnSpan="2"  >
+                    <TextBlock Style="{StaticResource TextBoxSt}" Margin="0,0,0,0">
+                        Use k
+                    </TextBlock>
+                </CheckBox>
+                <CheckBox x:Name="UsedKappa"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,0,0">
+                    <TextBlock Style="{StaticResource TextBoxSt}" Margin="0,0,0,0">
+                        Use χ
+                    </TextBlock>
+                </CheckBox>
+                <CheckBox x:Name="UsedKsi" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" >
+                    <TextBlock Style="{StaticResource TextBoxSt}" Margin="0,0,0,0">
+                        Use ξ
+                    </TextBlock>
+                </CheckBox>
+                <CheckBox x:Name="UsedP0"  Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" >
+                    <TextBlock Style="{StaticResource TextBoxSt}" Margin="0,0,0,0">
+                        Use P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                    </TextBlock>
+                </CheckBox>
 
 
-                <Button x:Name="NextStep" Grid.Row="8" Grid.Column="3" Command="{Binding NextStep}">
+                <Button x:Name="NextStep" Grid.Row="9" Grid.Column="3" Command="{Binding NextStep}">
                     <TextBlock Text="Next step"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource nextGradientConverter}" >
@@ -188,23 +188,87 @@
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
-                <Button x:Name="PreviousStep" Grid.Row="8" Grid.Column="5" Command="{Binding PreviousStep}">
+                <Button x:Name="PreviousStep" Grid.Row="9" Grid.Column="5" Command="{Binding PreviousStep}">
                     <TextBlock Text="Previous Step"/>
                 </Button>
-                <Button x:Name="Save"   Command="{Binding QSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="8"   Grid.Column="4">
+                <Button x:Name="Save"   Command="{Binding QSave}"  CommandParameter="{Binding Path=SelectedGradient}" Grid.Row="9"   Grid.Column="4">
                     <TextBlock Text="Save"/>
                 </Button>
             </Grid>
             <Grid x:Name="ListParameters" Grid.Row="1">
-                <utils:AutoScrollingListBox x:Name="gradientList" ItemTemplate="{StaticResource listTemplate}" 
+                <utils:AutoScrollingListBox x:Name="gradientList"
                          SelectedItem="{Binding SelectedGradient}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Visible">
+             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                            HorizontalAlignment="Center">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150*"></ColumnDefinition>
+                                            <ColumnDefinition Width="200*"></ColumnDefinition>
+                                            <ColumnDefinition Width="200"></ColumnDefinition>
+                                            <ColumnDefinition Width="120*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="110*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TextBlockSt}">
+                                            F<Run BaselineAlignment="Subscript" FontSize="10">Qmin</Run>
+                                        </TextBlock>
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="λ"  Style="{StaticResource TextBlockSt}"/>
+                                        <TextBlock Text = "{Binding Path=FminQ}" Grid.Column="1" Grid.Row="0" Style="{StaticResource TextBoxSt}"/>
+                                        <TextBlock Text = "{Binding Path=Lambda, Mode=OneWay}" Grid.Column="1" Grid.Row="2"  Style="{StaticResource TextBoxSt}"/>
+
+                                        <!--<TextBlock Style="{StaticResource TextBlockSt}"    Text ="{Binding Path=GradientK}"     Grid.Row="0"    Grid.Column="7"/>
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Text ="{Binding Path=GradientKappa}"    Grid.Row="1"    Grid.Column="7"/>
+                                        <TextBlock Style="{StaticResource TextBlockSt}"  Text ="{Binding Path=GradientKsi}"    Grid.Row="2"     Grid.Column="7"/>
+                                        <TextBlock Style="{StaticResource TextBlockSt}"   Text ="{Binding Path=GradientP0}"     Grid.Row="3"    Grid.Column="7"/>
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="6"    />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="6"     />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="6" />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="6"   />-->
+
+                                        <TextBlock Style="{StaticResource TextBoxSt}" Text ="{Binding Path=ChangedK, Converter={StaticResource kConverter}}"         Grid.Column="5" Grid.Row="0"/>
+                                        <TextBlock Style="{StaticResource TextBoxSt}" Text ="{Binding Path=ChangedKappa, Converter={StaticResource kappaConverter}}" Grid.Column="5" Grid.Row="1"/>
+                                        <TextBlock Style="{StaticResource TextBoxSt}" Text ="{Binding Path=ChangedKsi}"    Grid.Column="5" Grid.Row="2" />
+                                        <TextBlock Style="{StaticResource TextBoxSt}" Text ="{Binding Path=ChangedP0, Converter={StaticResource pConverter}}" Grid.Column="5" Grid.Row="3"/>
+
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Text="k "                />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Text="χ "/>
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Text="ξ "       />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2">
+                                            P<Run BaselineAlignment="Subscript" FontSize="10">0</Run>
+                                        </TextBlock>
+
+                                        <!--<TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="0" Grid.Column="2" Text="delta K"              />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="1" Grid.Column="2" Text="delta Kappa" />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="2" Grid.Column="2" Text="delta Ksi"        />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Grid.Row="3" Grid.Column="2" Text="delta P0"           />-->
+
+                                        <!--<TextBlock Style="{StaticResource TextBlockSt}"    Text="{Binding Path=DeltaK}"      Grid.Row="0"  Grid.Column="3" />
+                                        <TextBlock Style="{StaticResource TextBlockSt}" Text="{Binding Path=DeltaKappa}"  Grid.Row="1"      Grid.Column="3"                />
+                                        <TextBlock Style="{StaticResource TextBlockSt}"  Text="{Binding Path=DeltaKsi}"    Grid.Row="2"    Grid.Column="3"          />
+                                        <TextBlock Style="{StaticResource TextBlockSt}"   Text="{Binding Path=DeltaP0}"     Grid.Row="3"   Grid.Column="3"       />-->
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </utils:AutoScrollingListBox>
             </Grid>
         </Grid>

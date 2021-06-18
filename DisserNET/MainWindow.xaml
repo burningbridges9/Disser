@@ -28,17 +28,17 @@
                         <pr:PGradientCalc x:Name="PGradientClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2" DataContext="{Binding PGradientViewModel}"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="SurfaceTI" Width="80" Height="50" Header="Surface" FontSize="20">
+                <!--<TabItem x:Name="SurfaceTI" Width="80" Height="50" Header="Surface" FontSize="20">
                     <Grid>
                         <pr:SurfaceCalc x:Name="SurfaceClc" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
-                </TabItem>
-                <TabItem x:Name="MHTI" Width="190" Height="50" Header="Metropolis-Hastings" FontSize="20">
+                </TabItem>-->
+                <TabItem x:Name="MHTI" Width="210" Height="50" Header="Metropolis-Hastings" FontSize="20">
                     <Grid>
                         <pr:MetropolisHastingsView x:Name="MHView" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2" DataContext="{Binding MetropolisHastingsViewModel}"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="RTI" Width="190" Height="50" Header="Report Metropolis-Hastings" FontSize="20">
+                <TabItem x:Name="RTI" Width="255" Height="50" Header="Report Metropolis-Hastings" FontSize="20">
                     <Grid>
                         <pr:ReportView x:Name="RView" Grid.Column="0"  Grid.Row="1" Grid.ColumnSpan="2" DataContext="{Binding ReportViewModel}"/>
                     </Grid>
